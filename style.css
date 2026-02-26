@@ -1,0 +1,461 @@
+/* Grundopsætning */
+body {
+    font-family: "Roboto", "Segoe UI", sans-serif;
+    background-color: #f9fbfc;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Header med branding-look */
+header {
+    background: linear-gradient(to right, #6c63ff, #5149db);
+    color: white;
+    text-align: center;
+    padding: 3em 1em;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 3em;
+    margin-bottom: 0.3em;
+    font-weight: 700;
+}
+
+header p {
+    font-size: 1.2em;
+    font-style: italic;
+}
+
+nav {
+    margin-top: 1.5em;
+}
+
+nav a {
+    color: #ffffff;
+    margin: 0 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1em;
+    transition: opacity 0.3s ease;
+}
+
+nav a:hover {
+    opacity: 0.8;
+}
+
+/* Hovedsektion */
+main {
+    padding: 2em 1em;
+    max-width: 1000px;
+    margin: auto;
+}
+
+main section,
+article {
+    background-color: #ffffff;
+    padding: 2em;
+    margin-bottom: 3em;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.6s ease-in;
+}
+
+/* Overskrifter */
+h2 {
+    font-size: 2em;
+    color: #5149db;
+    border-left: 6px solid #6c63ff;
+    padding-left: 1em;
+    margin-bottom: 1em;
+}
+
+h3,
+h4 {
+    color: #34495e;
+}
+
+/* Formularer og inputs */
+form input,
+form button,
+input[type="number"],
+button,
+select,
+textarea {
+    font-size: 1em;
+    padding: 0.5em 1em;
+    margin-top: 0.5em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 300px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input[type="radio"] {
+    margin: 0.5em 0;
+    display: block;
+}
+
+input[type="number"]:hover,
+textarea:hover,
+select:hover {
+    border-color: #6c63ff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.2);
+}
+
+button {
+    background-color: #6c63ff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    width: auto;
+    min-width: 150px;
+    text-align: center;
+}
+
+button:hover {
+    background-color: #5149db;
+}
+
+/* Responsivt billede */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 1em auto;
+    display: block;
+    border-radius: 8px;
+}
+
+/* Lagkage timer centrering */
+#lagkagetimer canvas {
+    display: block;
+    margin: 2em auto;
+}
+
+/* Footer */
+footer {
+    background-color: #eeeeee;
+    text-align: center;
+    padding: 1.5em;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* Feedback og dynamiske sektioner */
+#feedback,
+#kalenderFeedback,
+#clockFeedback,
+#sortFeedback,
+#rabatFeedback,
+#urSvar,
+#patternFeedback,
+#largestFeedback,
+#roundFeedback {
+    margin-top: 1em;
+    font-weight: 500;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+}
+
+/* Animation ved indlæsning */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsivt design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    nav a {
+        display: block;
+        margin: 10px 0;
+    }
+
+    form input,
+    form button {
+        width: 100%;
+    }
+}
+
+/* Container for enkelt-indstillinger */
+#visuelleIndstillinger .setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.6em 0;
+}
+
+/* Selve switchen */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+/* Skjuler checkboxen */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Baggrundsskive */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+
+/* Den bevægelige “knap” */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* Når afkrydset – skifte farve og flyt knap */
+.switch input:checked+.slider {
+    background-color: #6c63ff;
+}
+
+.switch input:checked+.slider:before {
+    transform: translateX(26px);
+}
+
+/* Tidsstyring */
+#tidsstyring {
+    background: #FFFF;
+    padding: 2em;
+    margin: 2em 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+#tidsstyring h2 {
+    color: #5149db;
+    border-left: 6px solid #6c63ff;
+    padding-left: 1em;
+}
+
+#tidsstyring label,
+#tidsstyring input,
+#tidsstyring button {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin-top: 0.5em;
+}
+
+.buttons {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+}
+
+.buttons button {
+    flex: 1;
+    max-width: unset;
+}
+
+#taskInputs {
+    margin-top: 1em;
+}
+
+.task-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5em;
+}
+
+.task-row label {
+    flex: 1;
+}
+
+.task-row input {
+    width: 80px;
+    text-align: right;
+}
+
+.chart-container {
+    max-width: 400px;
+    margin: 2em auto;
+}
+
+/* Drag and drop styling */
+.sortable-container,
+.drop-zone {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    padding: 1em;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    background-color: #f0f4ff;
+    margin-top: 1em;
+}
+
+.number-tile {
+    background-color: #6c63ff;
+    color: white;
+    padding: 0.5em 1em;
+    border-radius: 6px;
+    cursor: grab;
+    font-weight: bold;
+    user-select: none;
+}
+
+/* Klikbar header-link */
+header h1 a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+header h1 a:hover {
+    opacity: 0.8;
+}
+
+#gridContainer {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
+    gap: 2px;
+    margin: 1em 0;
+}
+
+.grid-cell {
+    width: 30px;
+    height: 30px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.grid-cell.clicked {
+    background-color: #6c63ff;
+}
+
+#feedbackBox {
+    margin-top: 1.5em;
+    padding: 1em;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f0f4ff;
+}
+
+#linjeFeedback,
+#refleksionFeedback {
+    font-weight: bold;
+    margin-top: 1em;
+}
+
+.plusOpgave {
+    margin-bottom: 1em;
+}
+
+.plusOpgave input {
+    margin-left: 1em;
+    padding: 0.4em;
+    width: 80px;
+}
+
+.minusOpgave {
+    margin-bottom: 1em;
+}
+
+.minusOpgave input {
+    margin-left: 1em;
+    padding: 0.4em;
+    width: 80px;
+}
+
+.divisionOpgave {
+    margin-bottom: 1em;
+}
+
+.divisionOpgave input {
+    margin-left: 1em;
+    padding: 0.4em;
+    width: 80px;
+}
+
+.brokOpgave {
+    margin-bottom: 1em;
+}
+
+.brokOpgave input {
+    margin-left: 1em;
+    padding: 0.4em;
+    width: 80px;
+}
+
+#kagekaosOpgave {
+    margin: 2em 0;
+    padding: 1em;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff8f0;
+}
+
+#historieTekst {
+    background-color: #f0f4ff;
+    padding: 1em;
+    border-radius: 6px;
+    margin-bottom: 1em;
+}
+
+input {
+    margin: 0.5em 0 1em 0;
+    padding: 0.4em;
+    width: 80px;
+}
+
+#datoOpgave {
+    margin: 2em 0;
+    padding: 1em;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f0f8ff;
+}
+
+#datoHistorie {
+    background-color: #fff;
+    padding: 1em;
+    border-radius: 6px;
+    margin-bottom: 1em;
+}
+
+input {
+    margin: 0.5em 0 1em 0;
+    padding: 0.4em;
+    width: 140px;
+}

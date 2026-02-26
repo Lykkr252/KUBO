@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KUBO - Læring for Talblinde</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1><a href="kubo.html">Velkommen til KUBO</a></h1>
+        <p>Kalender-ur-bog-organisering</p>
+        <p>En tryg læringsplatform for dig der har lidt sværere ved tal</p>
+        <nav>
+            <a href="moduler.html">Læringsmoduler</a>
+            <a href="spil.html">Spil</a>
+            <a href="kalender.html">Visuel Kalender</a>
+            <a href="tidsstyring.html">Tidsstyring</a>
+
+        </nav>
+    </header>
+
+    <main>
+
+        <section id="visuelKalender">
+            <h2>📅 Visuel Kalender</h2>
+            <p>Vælg dit læringsniveau og justér dagene direkte i kalenderen!</p>
+
+            <select id="niveau" onchange="opdaterKalender()">
+            </select>
+
+            <!-- NYT: Toggle-modul -->
+            <div id="visuelleIndstillinger">
+                <h3>Tilpas visning</h3>
+
+                <div class="setting">
+                    <span>Vis symboler</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleSymboler" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting">
+                    <span>Brug farver</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleFarver" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting">
+                    <span>Vis tal</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleTal" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+
+            <div id="kalenderGrid"
+                style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 20px;">
+            </div>
+
+        </section>
+
+
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Kubo</p>
+    </footer>
+
+    <!-- Eksisterende script til clock-quiz & timer -->
+    <script>
+        function checkAnswer(event) {
+            event.preventDefault();
+            const options = document.getElementsByName("tid");
+            let selected;
+            for (const option of options) {
+                if (option.checked) {
+                    selected = option.value;
+                    break;
+                }
+            }
+            const feedback = document.getElementById("feedback");
+            if (selected === "2") {
+                feedback.textContent = "✅ Rigtigt! Klokken er 16:30.";
+            } else {
+                feedback.textContent = "❌ Prøv igen. Kig godt på viserne.";
+            }
+        }
+
+        let chart;
+        let currentTask = 0;
+        let remainingTime = 0;
+        let timerInterval;
+
+        function startCountdown() {
+            const totalTime = parseInt(document.getElementById("tid").value);
+            const taskCount = parseInt(document.getElementById("opgaver").value);
+            const timePerTask = Math.floor(totalTime / taskCount);
+            const labels = Array(taskCount).fill().map((_, i) => `Opgave ${i + 1}`);
+            const data = Array(taskCount).fill(timePerTask);
+
+            currentTask = 0;
+            remainingTime = timePerTask;
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(document.getElementById("lagkageDiagram"), {
+                type: "pie",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data, backgroundColor: [
+                            "#FF6384", "#36A2EB", "#FFCE56", "#8E44AD",
+                            "#2ECC71", "#E67E22", "#3498DB", "#D35400"
+                        ]
+                    }]
+                },
+                options: { plugins: { legend: { position: "bottom" } } }
+            });
+
+            timerInterval = setInterval(() => {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    chart.data.datasets[0].data[currentTask] = remainingTime;
+                    chart.update();
+                } else {
+                    currentTask++;
+                    if (currentTask < taskCount) {
+                        remainingTime = timePerTask;
+                    } else {
+                        clearInterval(timerInterval);
+                    }
+                }
+            }, 1000);
+        }
+    </script>
+
+    <!-- OPDATERET script til visuel kalender med toggles -->
+    <script>
+        const kalenderGrid = document.getElementById("kalenderGrid");
+        const symboler = ["🌞", "📚", "🎯", "💡", "🔔", "🔢", "🧩"];
+        const farver = ["#FFB6C1", "#87CEFA", "#FFD700", "#90EE90", "#FFA07A", "#DDA0DD", "#ADD8E6"];
+
+        function opdaterKalender() {
+            const niveau = document.getElementById("niveau").value;
+            const visSymboler = document.getElementById("toggleSymboler").checked;
+            const visFarver = document.getElementById("toggleFarver").checked;
+            const visTal = document.getElementById("toggleTal").checked;
+
+            kalenderGrid.innerHTML = "";
+
+            for (let i = 1; i <= 31; i++) {
+                const dagElement = document.createElement("div");
+                dagElement.className = "dag";
+                dagElement.contentEditable = true;
+                dagElement.style.border = "1px solid #ccc";
+                dagElement.style.padding = "10px";
+                dagElement.style.textAlign = "center";
+                dagElement.style.borderRadius = "8px";
+                dagElement.style.cursor = "text";
+                dagElement.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)";
+
+                // hover-effekt
+                dagElement.onmouseover = () => {
+                    dagElement.style.transform = "scale(1.05)";
+                    dagElement.style.boxShadow = "0 4px 10px rgba(0,0,0,0.08)";
+                };
+                dagElement.onmouseleave = () => {
+                    dagElement.style.transform = "scale(1)";
+                    dagElement.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)";
+                };
+
+                // baggrundsfarve
+                if (visFarver) {
+                    dagElement.style.backgroundColor = farver[i % farver.length];
+                } else {
+                    dagElement.style.backgroundColor = "transparent";
+                }
+
+                // indhold: symbol + tal + label
+                const symbol = visSymboler ? symboler[i % symboler.length] : "";
+                const tal = visTal ? `<strong>${i}</strong>` : "";
+                let label;
+                if (niveau === "begynder") {
+                    label = "<span style='font-size:12px;color:#333;'>Klik for at redigere</span>";
+                } else if (niveau === "øvet") {
+                    label = "<span style='font-size:12px;color:#666;'>Klik for at skrive</span>";
+                } else {
+                    label = "<span style='font-size:12px;color:#999;'>Redigerbar</span>";
+                }
+
+                dagElement.innerHTML = `${symbol}<br>${tal}<br>${label}`;
+                kalenderGrid.appendChild(dagElement);
+            }
+        }
+
+        // live-opdater når en toggle skifter
+        document.querySelectorAll('#toggleSymboler, #toggleFarver, #toggleTal')
+            .forEach(el => el.addEventListener('change', opdaterKalender));
+
+        window.onload = opdaterKalender;
+
+    </script>
+
+    <script>
+        // 1) Generer opgavefelter
+        document.getElementById("setupTasks").addEventListener("click", () => {
+            const totalMin = parseInt(document.getElementById("totalTime").value, 10);
+            const count = parseInt(document.getElementById("taskCount").value, 10);
+            const container = document.getElementById("taskInputs");
+            container.innerHTML = "";
+
+            if (!totalMin || !count || count < 1) {
+                alert("Angiv total tid (min) og antal opgaver (≥1).");
+                return;
+            }
+
+            // Standardvægt = 100% / count
+            const defaultPct = (100 / count).toFixed(2);
+            for (let i = 1; i <= count; i++) {
+                const row = document.createElement("div");
+                row.className = "task-row";
+                row.innerHTML = `
+        <label>Opgave ${i} (%):</label>
+        <input type="number" class="task-pct" min="1" max="100" step="0.01" value="${defaultPct}">
+      `;
+                container.appendChild(row);
+            }
+        });
+
+        // 2) Lige fordeling af procentsatser
+        document.getElementById("autoDivide").addEventListener("click", () => {
+            const pctInputs = Array.from(document.querySelectorAll(".task-pct"));
+            if (pctInputs.length === 0) {
+                alert("Generer først opgaverne.");
+                return;
+            }
+            const equal = (100 / pctInputs.length).toFixed(2);
+            pctInputs.forEach(inp => inp.value = equal);
+        });
+
+        // 3) Start timer & pie-diagram
+        let timeChart, current = 0, remaining = 0, timerHandle;
+
+        document.getElementById("startTimer").addEventListener("click", () => {
+            const totalMin = parseFloat(document.getElementById("totalTime").value);
+            const pctInputs = Array.from(document.querySelectorAll(".task-pct"));
+            if (!totalMin || pctInputs.length === 0) {
+                alert("Indtast total tid og generer opgaver.");
+                return;
+            }
+
+            // Beregn sekunder per segment ud fra procent
+            const segments = pctInputs.map(inp => {
+                const pct = parseFloat(inp.value);
+                return Math.floor((pct / 100) * totalMin * 60);
+            });
+
+            // Reset
+            currentTask = 0;
+            remaining = segments[0];
+
+            // Destroy hvis eksisterer
+            if (timeChart) timeChart.destroy();
+
+            // Opret pie-diagram
+            timeChart = new Chart(document.getElementById("timeChart"), {
+                type: "pie",
+                data: {
+                    labels: segments.map((_, i) => `Opgave ${i + 1}`),
+                    datasets: [{
+                        data: [...segments],
+                        backgroundColor: [
+                            "#FF6384", "#36A2EB", "#FFCE56", "#8E44AD",
+                            "#2ECC71", "#E67E22", "#3498DB", "#D35400"
+                        ]
+                    }]
+                },
+                options: {
+                    plugins: { legend: { position: "bottom" } },
+                    animation: { duration: 0 }  // Fjern animation ved init, for real-time smoothness
+                }
+            });
+
+            clearInterval(timerHandle);
+            timerHandle = setInterval(() => {
+                if (remaining > 0) {
+                    remaining--;
+                    timeChart.data.datasets[0].data[currentTask] = remaining;
+                    timeChart.update();
+                } else if (currentTask < segments.length - 1) {
+                    currentTask++;
+                    remaining = segments[currentTask];
+                } else {
+                    clearInterval(timerHandle);
+                }
+            }, 1000);
+        });
+    </script>
+
+
+</body>
+
+</html>

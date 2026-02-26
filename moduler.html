@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KUBO - Læring for Talblinde</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <h1><a href="kubo.html">Velkommen til KUBO</a></h1>
+        <p>Kalender-ur-bog-organisering</p>
+        <p>En tryg læringsplatform for dig der har lidt sværere ved tal</p>
+        <nav>
+            <a href="moduler.html">Læringsmoduler</a>
+            <a href="spil.html">Spil</a>
+            <a href="kalender.html">Visuel Kalender</a>
+            <a href="tidsstyring.html">Tidsstyring</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Klokkeopgave -->
+        <section id="klokken">
+            <h2>🕒 Forstå klokken</h2>
+            <p>Et ur har to visere: en lille viser (timer) og en stor viser (minutter)...</p>
+            <img src="download.png" alt="Et ur der viser klokken 4:30" width="200">
+
+            <form onsubmit="return checkClockAnswer(event)">
+                <input type="radio" name="tid" value="1"> Klokken er 16:00<br>
+                <input type="radio" name="tid" value="2"> Klokken er 16:30<br>
+                <input type="radio" name="tid" value="3"> Klokken er 17:00<br><br>
+                <button type="submit">Tjek svar</button>
+            </form>
+            <p id="clockFeedback"></p>
+        </section>
+
+        <hr>
+
+        <!-- Ur-præference -->
+        <section>
+            <h3>Hvilken type ur foretrækker du?</h3>
+            <img src="analogur_1723.png.png" alt="Analogt ur med viserne klokken 17:23" width="300">
+            <label for="urPref">Foretrækker du digitalt eller analogt ur?</label>
+            <select id="urPref">
+                <option value="">-- Vælg --</option>
+                <option value="digitalt">Digitalt ur</option>
+                <option value="analogt">Analogt ur</option>
+                <option value="begge">Begge er fine</option>
+            </select>
+
+            <label for="urKommentar">Hvorfor?</label>
+            <textarea id="urKommentar" rows="3" placeholder="Skriv hvorfor..."></textarea>
+            <button onclick="gemUrPræference()">Send feedback</button>
+            <p id="urSvar" style="color: green;"></p>
+        </section>
+
+        <hr>
+
+        <!-- Tal-sortering -->
+        <section>
+            <h3>🧠 Opgave: Sæt tallene i rækkefølge</h3>
+            <p>Træk tallene fra boksen og sæt dem fra <strong>mindste</strong> til <strong>største</strong>.</p>
+            <div class="sortable-container" id="tiles">
+                <div class="number-tile" draggable="true">0,7</div>
+                <div class="number-tile" draggable="true">0,07</div>
+                <div class="number-tile" draggable="true">7</div>
+                <div class="number-tile" draggable="true">700</div>
+                <div class="number-tile" draggable="true">70</div>
+                <div class="number-tile" draggable="true">0,007</div>
+            </div>
+
+            <div class="drop-zone" id="dropzone"></div>
+            <button onclick="checkOrder()">Tjek rækkefølge</button>
+            <p id="sortFeedback"></p>
+        </section>
+
+        <hr>
+
+        <!-- Mental Aritmetik -->
+        <section>
+            <h3>📘 Opgave: Rabat på bøger</h3>
+            <p>Du køber 3 bøger til 79,95 kr. stykket og får 15% rabat.</p>
+            <label for="answer">Indtast dit svar (kun tal):</label>
+            <input type="number" id="rabatAnswer" step="0.01">
+            <button onclick="checkRabatAnswer()">Tjek svar</button>
+            <div id="rabatFeedback"></div>
+        </section>
+
+        <hr>
+
+        <!-- Talmønstre -->
+        <section>
+            <h3>🔢 Opgave: Hvad er det næste tal?</h3>
+            <p>Find mønsteret i rækken og skriv det næste tal:</p>
+            <p><strong>2, 4, 8, 16, ?</strong></p>
+            <label for="patternAnswer">Dit svar:</label>
+            <input type="number" id="patternAnswer">
+            <button onclick="checkPattern()">Tjek svar</button>
+            <p id="patternFeedback"></p>
+        </section>
+
+        <hr>
+
+        <!-- Største tal -->
+        <section>
+            <h3>📊 Opgave: Hvilket tal er størst?</h3>
+            <p>Vælg det største tal blandt følgende:</p>
+            <form onsubmit="return checkLargest(event)">
+                <input type="radio" name="largest" value="1"> 0,9<br>
+                <input type="radio" name="largest" value="2"> 0,99<br>
+                <input type="radio" name="largest" value="3"> 0,909<br><br>
+                <button type="submit">Tjek svar</button>
+            </form>
+            <p id="largestFeedback"></p>
+        </section>
+
+        <hr>
+
+        <!-- Afrunding -->
+        <section>
+            <h3>💡 Opgave: Rund tallet af</h3>
+            <p>Hvordan runder du 4,76 til nærmeste hele tal?</p>
+            <label for="roundAnswer">Dit svar:</label>
+            <input type="number" id="roundAnswer">
+            <button onclick="checkRound()">Tjek svar</button>
+            <p id="roundFeedback"></p>
+        </section>
+        <hr>
+
+        <section id="vinkelOpgave">
+            <h3>📐 Opgave: Tæl 90-graders vinkler</h3>
+            <p>Se på figurerne og skriv, hvor mange 90-graders vinkler der er i alt. Fx har en firkant 4 vinkler af 90°.
+            </p>
+            <img src="hvormangefigurehar90grader.png" alt="opgave med optælling af vinkel" width="400">
+            <label for="vinkelSvar">Antal 90° vinkler:</label>
+            <input type="number" id="vinkelSvar">
+            <button onclick="checkVinkel()">Tjek svar</button>
+            <p id="vinkelFeedback"></p>
+        </section>
+        <hr>
+
+        <section id="gulvOpgave">
+            <h3>🧱 Opgave: Beregn areal og pris for gulvtæppe</h3>
+            <p>Figuren nedenfor viser et gulvareal sammensat af rektangler. Beregn først arealet i m² og derefter prisen
+                for at lægge gulvtæppe, hvis det koster <strong>77 kr pr. m²</strong>.</p>
+            <img src="udregnafarealminus1.png" alt="Sammensat figur af rektangler" width="400">
+
+            <label for="arealSvar">1️⃣ Areal i m²:</label>
+            <input type="number" id="arealSvar" step="0.01">
+
+            <label for="prisSvar">2️⃣ Pris i kr:</label>
+            <input type="number" id="prisSvar" step="0.01">
+
+            <button onclick="checkGulvOpgave()">Tjek svar</button>
+            <p id="gulvFeedback"></p>
+        </section>
+        <hr>
+
+        <section id="ArealOpgave">
+            <h3>🧮 Opgave: Lav figur</h3>
+            <p>Lav en figur med et areal på 23</p>
+            <div id="gridContainer"></div>
+            <button onclick="checkAreal()">Tjek omkreds</button>
+            <p id="arealFeedback"></p>
+        </section>
+
+
+        <hr>
+        <section id="OmkredsOpgave">
+            <h3>🧮 Opgave: Tæl omkredsen af figuren</h3>
+            <p>Klik på hver kant af figuren for at tælle omkredsen. Hver kasse svarer til 1 meter.</p>
+            <img src="aflæsningsmodelnem.png" alt="Et 6x5 grid hvor nogle felter er udfyldt" width="400">
+            <label for="omkredsSvar"> Areal i m²:</label>
+            <input type="number" id="omkredsSvar" step="1">
+            <button onclick="checkOmkreds()">Tjek omkreds</button>
+            <p id="omkredsFeedback"></p>
+        </section>
+
+
+        <hr>
+        <section id="OmkredsOpgave">
+            <h3>🧮 Opgave: Tæl omkredsen af figuren</h3>
+            <p>Klik på hver kant af figuren for at tælle omkredsen. Hver kasse svarer til 1 meter.</p>
+            <img src="aflæsningsmodelsvær.png" alt="Et 6x5 grid hvor nogle felter er udfyldt" width="400">
+            <label for="omkredsSvar1"> Areal i m²:</label>
+            <input type="number" id="omkredsSvar1" step="1">
+            <button onclick="checkOmkreds()">Tjek omkreds</button>
+            <p id="omkredsFeedback1"></p>
+        </section>
+
+        <hr>
+        <div id="feedbackBox">
+            <p id="linjeFeedback"></p>
+
+            <label for="refleksionSvar">🧠 Refleksion: Gør det en forskel hvis gitteret rykkes?</label><br>
+            <textarea id="refleksionSvar" rows="4" cols="50" placeholder="Skriv din refleksion her..."></textarea><br>
+            <button onclick="checkRefleksion()">Send refleksion</button>
+            <p id="refleksionFeedback"></p>
+        </div>
+        </section>
+        <section id="plusOpgaver">
+            <h3>➕ Opgave: Svære plusstykker</h3>
+
+            <div class="plusOpgave">
+                <label for="plus1">1. 69 + 96 =</label>
+                <input type="number" id="plus1">
+                <p id="feedback1"></p>
+            </div>
+
+            <div class="plusOpgave">
+                <label for="plus2">2. 80 + 19 =</label>
+                <input type="number" id="plus2">
+                <p id="feedback2"></p>
+            </div>
+
+            <div class="plusOpgave">
+                <label for="plus3">3. 47 + 38 =</label>
+                <input type="number" id="plus3">
+                <p id="feedback3"></p>
+            </div>
+
+            <button onclick="checkPlus()">Tjek svar</button>
+        </section>
+        <section id="minusOpgaver">
+            <h3>➖ Opgave: Svære minusstykker</h3>
+
+            <div class="minusOpgave">
+                <label for="minus1">1. 102 − 29 =</label>
+                <input type="number" id="minus1">
+                <p id="feedbackMinus1"></p>
+            </div>
+
+            <div class="minusOpgave">
+                <label for="minus2">2. 70 − 48 =</label>
+                <input type="number" id="minus2">
+                <p id="feedbackMinus2"></p>
+            </div>
+
+            <div class="minusOpgave">
+                <label for="minus3">3. 63 − 27 =</label>
+                <input type="number" id="minus3">
+                <p id="feedbackMinus3"></p>
+            </div>
+
+            <button onclick="checkMinus()">Tjek svar</button>
+        </section>
+        <section id="divisionOpgaver">
+            <h3>➗ Opgave: Svære divisionsstykker</h3>
+
+            <div class="divisionOpgave">
+                <label for="div1">1. 144 ÷ 12 =</label>
+                <input type="number" id="div1">
+                <p id="feedbackDiv1"></p>
+            </div>
+
+            <div class="divisionOpgave">
+                <label for="div2">2. 96 ÷ 8 =</label>
+                <input type="number" id="div2">
+                <p id="feedbackDiv2"></p>
+            </div>
+
+            <div class="divisionOpgave">
+                <label for="div3">3. 135 ÷ 9 =</label>
+                <input type="number" id="div3">
+                <p id="feedbackDiv3"></p>
+            </div>
+
+            <button onclick="checkDivision()">Tjek svar</button>
+        </section>
+        <section id="brokOpgaver">
+            <h3>🔢 Opgave: Omregn brøker til procenter</h3>
+
+            <div class="brokOpgave">
+                <label for="brok1">1. ½ =</label>
+                <input type="number" id="brok1"> %
+                <p id="feedbackBrok1"></p>
+            </div>
+
+            <div class="brokOpgave">
+                <label for="brok2">2. ¾ =</label>
+                <input type="number" id="brok2"> %
+                <p id="feedbackBrok2"></p>
+            </div>
+
+            <div class="brokOpgave">
+                <label for="brok3">3. ⅖ =</label>
+                <input type="number" id="brok3"> %
+                <p id="feedbackBrok3"></p>
+            </div>
+
+            <button onclick="checkBrok()">Tjek svar</button>
+        </section>
+        <section id="kagekaosOpgave">
+            <h3>🎂 Kagekaos i kantinen</h3>
+            <p><strong>Læs kun én gang:</strong></p>
+            <div id="historieTekst">
+                På Gørløse Skole skulle 7.A holde kagefest. De havde bagt 5 forskellige slags kager: 2 chokoladekager, 1
+                citronmåne, 3 gulerodskager, 4 muffins og 1 stor lagkage. Hver chokoladekage blev skåret i 8 stykker,
+                citronmånen i 10, gulerodskagerne i 6 stykker hver, muffins blev ikke delt, og lagkagen blev skåret i 12
+                stykker.
+
+                Der var 24 elever til festen, men 3 var allergiske over for nødder og måtte ikke få gulerodskage. 2
+                elever kom for sent og fik kun muffins. Resten fik mindst 2 stykker kage hver.
+
+                Efter festen blev der 5 stykker chokoladekage, 2 stykker citronmåne og 1 muffin tilbage. En lærer tog 1
+                stykke lagkage og 1 gulerodskage med hjem.
+            </div>
+
+            <h4>✍️ Skriv de vigtigste informationer:</h4>
+            <label for="antalElever">Hvor mange elever deltog?</label>
+            <input type="number" id="antalElever"><br>
+
+            <label for="antalKager">Hvor mange slags kager blev der bagt?</label>
+            <input type="number" id="antalKager"><br>
+
+            <label for="stykkerChoko">Hvor mange stykker chokoladekage blev der i alt?</label>
+            <input type="number" id="stykkerChoko"><br>
+
+            <label for="stykkerLagkage">Hvor mange stykker lagkage blev der?</label>
+            <input type="number" id="stykkerLagkage"><br>
+
+            <label for="tilbageCitron">Hvor mange stykker citronmåne var tilbage?</label>
+            <input type="number" id="tilbageCitron"><br>
+
+            <button onclick="tjekKagekaos()">Tjek svar</button>
+            <p id="kageFeedback"></p>
+        </section>
+        <section id="datoOpgave">
+            <h3>📅 Opgave: Regn med datoer</h3>
+            <p>Læs historien og svar på spørgsmålene.</p>
+
+            <div id="datoHistorie">
+                Emma tog på ferie den 12. oktober 2025. Hun skulle være væk i 17 dage. Hendes ven Lucas tog afsted 5
+                dage senere og kom hjem 2 dage før Emma. De skulle begge starte i skole igen den første mandag efter de
+                kom hjem.
+            </div>
+
+            <h4>✍️ Skriv dine svar:</h4>
+            <label for="emmaRetur">Hvornår kom Emma hjem? (dd-mm-yyyy)</label>
+            <input type="text" id="emmaRetur"><br>
+
+            <label for="lucasAfrejse">Hvornår tog Lucas afsted? (dd-mm-yyyy)</label>
+            <input type="text" id="lucasAfrejse"><br>
+
+            <label for="skolestart">Hvornår startede de i skole igen? (dd-mm-yyyy)</label>
+            <input type="text" id="skolestart"><br>
+
+            <button onclick="tjekDatoer()">Tjek svar</button>
+            <p id="datoFeedback"></p>
+        </section>
+        <section id="maaleOpgaveAlm">
+            <h3>📏 Opgave: Omregn måleenheder</h3>
+
+            <p>1. Omregn 3,2 meter til centimeter:</p>
+            <input type="number" id="svar1"> cm
+            <p id="feedback1"></p>
+
+            <p>2. Omregn 1,5 liter til deciliter:</p>
+            <input type="number" id="svar2"> dl
+            <p id="feedback2"></p>
+
+            <p>3. Hvor mange sekunder er der i 4 minutter og 30 sekunder?</p>
+            <input type="number" id="svar3"> sekunder
+            <p id="feedback3"></p>
+
+            <button onclick="tjekMaaleAlm()">Tjek svar</button>
+        </section>
+
+
+    </main>
+
+
+
+
+
+    <footer>
+        <p>&copy; 2025 KUBO</p>
+    </footer>
+
+    <script>
+        function checkClockAnswer(event) {
+            event.preventDefault();
+            const selected = document.querySelector('input[name="tid"]:checked');
+            const feedback = document.getElementById("clockFeedback");
+            if (!selected) {
+                feedback.textContent = "⚠️ Vælg et svar.";
+                feedback.style.color = "orange";
+                return;
+            }
+            if (selected.value === "2") {
+                feedback.textContent = "✅ Rigtigt! Klokken er 16:30.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = "❌ Prøv igen.";
+                feedback.style.color = "red";
+            }
+        }
+
+        function gemUrPræference() {
+            const val = document.getElementById("urPref").value;
+            const kommentar = document.getElementById("urKommentar").value;
+            const feedback = document.getElementById("urSvar");
+
+            if (!val) {
+                feedback.textContent = "⚠️ Vælg en ur-type.";
+                feedback.style.color = "orange";
+            } else {
+                feedback.textContent = "✅ Tak for din feedback!";
+                feedback.style.color = "green";
+            }
+        }
+
+        const tiles = document.querySelectorAll('.number-tile');
+        const dropzone = document.getElementById('dropzone');
+        tiles.forEach(tile => {
+            tile.addEventListener('dragstart', e => {
+                e.dataTransfer.setData("text/plain", tile.textContent);
+            });
+        });
+
+        dropzone.addEventListener('dragover', e => e.preventDefault());
+        dropzone.addEventListener('drop', e => {
+            e.preventDefault();
+            const value = e.dataTransfer.getData("text/plain");
+            if ([...dropzone.children].some(c => c.textContent === value)) return;
+            const newTile = document.createElement("div");
+            newTile.className = "number-tile";
+            newTile.textContent = value;
+            dropzone.appendChild(newTile);
+        });
+
+        function checkOrder() {
+            const correct = ["0,007", "0,07", "0,7", "7", "70", "700"];
+            const current = [...dropzone.children].map(el => el.textContent);
+            const feedback = document.getElementById("sortFeedback");
+            if (current.length !== 6) {
+                feedback.textContent = "⚠️ Du skal placere alle 6 tal.";
+                feedback.style.color = "orange";
+                return;
+            }
+            if (JSON.stringify(current) === JSON.stringify(correct)) {
+                feedback.textContent = "✅ Godt gået!";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = "❌ Prøv igen.";
+                feedback.style.color = "red";
+            }
+        }
+
+        function checkRabatAnswer() {
+            const answer = parseFloat(document.getElementById("rabatAnswer").value);
+            const correct = Math.round((3 * 79.95 * 0.85) * 100) / 100;
+            const feedback = document.getElementById("rabatFeedback");
+            if (isNaN(answer)) {
+                feedback.textContent = "⚠️ Indtast et tal.";
+                feedback.style.color = "orange";
+                return;
+            }
+            if (Math.abs(answer - correct) < 0.01) {
+                feedback.textContent = "✅ Korrekt!";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = `❌ Forkert. Rigtigt svar: ${correct.toFixed(2)} kr.`;
+                feedback.style.color = "red";
+            }
+        }
+
+        function checkPattern() {
+            const answer = parseInt(document.getElementById("patternAnswer").value);
+            const feedback = document.getElementById("patternFeedback");
+            if (isNaN(answer)) {
+                feedback.textContent = "⚠️ Indtast et tal.";
+                feedback.style.color = "orange";
+                return;
+            }
+            if (answer === 32) {
+                feedback.textContent = "✅ Rigtigt! Mønsteret er en fordobling.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = "❌ Forkert. Prøv at kigge på mønsteret igen.";
+                feedback.style.color = "red";
+            }
+        }
+        function checkLargest(event) {
+            event.preventDefault();
+            const selected = document.querySelector('input[name="largest"]:checked');
+            const feedback = document.getElementById("largestFeedback");
+            if (!selected) {
+                feedback.textContent = "⚠️ Vælg et svar.";
+                feedback.style.color = "orange";
+                return;
+            }
+            if (selected.value === "2") {
+                feedback.textContent = "✅ Rigtigt! 0,99 er størst.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = "❌ Forkert. Prøv igen.";
+                feedback.style.color = "red";
+            }
+        }
+        function checkRound() {
+            const answer = parseInt(document.getElementById("roundAnswer").value);
+            const feedback = document.getElementById("roundFeedback");
+            if (isNaN(answer)) {
+                feedback.textContent = "⚠️ Indtast et helt tal.";
+                feedback.style.color = "orange";
+                return;
+            }
+            if (answer === 5) {
+                feedback.textContent = "✅ Korrekt! 4,76 rundes op til 5.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = "❌ Forkert. Prøv igen.";
+                feedback.style.color = "red";
+            }
+        }
+        function checkVinkel() {
+            const svar = parseInt(document.getElementById("vinkelSvar").value);
+            const feedback = document.getElementById("vinkelFeedback");
+
+            // Her angiver du det korrekte antal 90-graders vinkler baseret på billedet
+            const korrektAntal = 28; // Justér dette tal efter hvor mange vinkler du har talt
+
+            if (isNaN(svar)) {
+                feedback.textContent = "⚠️ Indtast et tal.";
+                feedback.style.color = "orange";
+                return;
+            }
+
+            if (svar === korrektAntal) {
+                feedback.textContent = "✅ Rigtigt! Du har talt alle 90° vinkler.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = `❌ Forkert. Prøv igen.`;
+                feedback.style.color = "red";
+            }
+        }
+        function checkVinkel() {
+            const svar = parseInt(document.getElementById("vinkelSvar").value);
+            const feedback = document.getElementById("vinkelFeedback");
+
+            // Her angiver du det korrekte antal 90-graders vinkler baseret på billedet
+            const korrektAntal = 23; // Justér dette tal efter hvor mange vinkler du har talt
+
+            if (isNaN(svar)) {
+                feedback.textContent = "⚠️ Indtast et tal.";
+                feedback.style.color = "orange";
+                return;
+            }
+
+            if (svar === korrektAntal) {
+                feedback.textContent = "✅ Rigtigt! Du har talt alle 90° vinkler.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = `❌ Forkert. Prøv igen.`;
+                feedback.style.color = "red";
+            }
+        }
+        function checkGulvOpgave() {
+            const areal = parseFloat(document.getElementById("arealSvar").value);
+            const pris = parseFloat(document.getElementById("prisSvar").value);
+            const feedback = document.getElementById("gulvFeedback");
+
+            // Udregn korrekt areal baseret på figuren (fx 18 m²)
+            const korrektAreal = 13;
+            const korrektPris = korrektAreal * 77;
+
+            if (isNaN(areal) || isNaN(pris)) {
+                feedback.textContent = "⚠️ Udfyld begge felter med tal.";
+                feedback.style.color = "orange";
+                return;
+            }
+
+            const arealOK = Math.abs(areal - korrektAreal) < 0.1;
+            const prisOK = Math.abs(pris - korrektPris) < 1;
+
+            if (arealOK && prisOK) {
+                feedback.textContent = "✅ Rigtigt! Du har både areal og pris korrekt.";
+                feedback.style.color = "green";
+            } else if (!arealOK && prisOK) {
+                feedback.textContent = "❌ Prisen er korrekt, men arealet er forkert.";
+                feedback.style.color = "red";
+            } else if (arealOK && !prisOK) {
+                feedback.textContent = "❌ Arealet er korrekt, men prisen er forkert.";
+                feedback.style.color = "red";
+            } else {
+                feedback.textContent = `❌ Begge svar er forkerte. Prøv igen.`;
+                feedback.style.color = "red";
+            }
+        }
+        const gridContainer = document.getElementById("gridContainer");
+
+        // Generér 10x10 grid
+        for (let i = 0; i < 100; i++) {
+            const cell = document.createElement("div");
+            cell.className = "grid-cell";
+            cell.addEventListener("click", () => {
+                cell.classList.toggle("clicked");
+            });
+            gridContainer.appendChild(cell);
+        }
+
+        function checkAreal() {
+            const clicked = document.querySelectorAll(".grid-cell.clicked").length;
+            const feedback = document.getElementById("arealFeedback");
+
+            const korrektOmkreds = 23; // Justér efter din figur
+
+            if (clicked === korrektOmkreds) {
+                feedback.textContent = "✅ Rigtigt! Arealet er 23.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = `❌ Du har valgt ${clicked} felter. Prøv igen.`;
+                feedback.style.color = "red";
+            }
+        }
+
+        function checkOmkreds() {
+            const input = document.getElementById("omkredsSvar");
+            const feedback = document.getElementById("omkredsFeedback");
+
+            const brugerSvar = parseInt(input.value); // Henter tallet brugeren har skrevet
+            const korrektOmkreds = 11; // Justér efter din figur
+
+            if (brugerSvar === korrektOmkreds) {
+                feedback.textContent = "✅ Rigtigt! Omkredsen er 11 meter.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = `❌ Forkert. Prøv igen.`;
+                feedback.style.color = "red";
+            }
+        }
+        function checkOmkreds() {
+            const input = document.getElementById("omkredsSvar1");
+            const feedback = document.getElementById("omkredsFeedback1");
+
+            const brugerSvar = parseInt(input.value); // Henter tallet brugeren har skrevet
+            const korrektOmkreds = 11; // Justér efter din figur
+
+            if (brugerSvar === korrektOmkreds) {
+                feedback.textContent = "✅ Rigtigt! Omkredsen er 11 meter.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = `❌ Forkert. Prøv igen.`;
+                feedback.style.color = "red";
+            }
+        }
+        function checkLinjer() {
+            const feedback = document.getElementById("linjeFeedback");
+            const korrektAntal = omkredsLinjer.length;
+
+            if (clickedLines.size === korrektAntal) {
+                feedback.textContent = "✅ Rigtigt! Du har klikket på hele omkredsen.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = `❌ Du har valgt ${clickedLines.size} linjer. Der er ${korrektAntal} i alt.`;
+                feedback.style.color = "red";
+            }
+        }
+
+        function checkRefleksion() {
+            const svar = document.getElementById("refleksionSvar").value.trim();
+            const feedback = document.getElementById("refleksionFeedback");
+
+            if (svar.length < 10) {
+                feedback.textContent = "⚠️ Skriv lidt mere – prøv at forklare med dine egne ord.";
+                feedback.style.color = "orange";
+            } else {
+                feedback.textContent = "✅ Tak for din refleksion! Det er vigtigt at tænke over hvordan gitteret påvirker målingen.";
+                feedback.style.color = "green";
+            }
+        }
+        function checkPlus() {
+            const svar1 = parseInt(document.getElementById("plus1").value);
+            const svar2 = parseInt(document.getElementById("plus2").value);
+            const svar3 = parseInt(document.getElementById("plus3").value);
+
+            const feedback1 = document.getElementById("feedback1");
+            const feedback2 = document.getElementById("feedback2");
+            const feedback3 = document.getElementById("feedback3");
+
+            feedback1.textContent = svar1 === 165 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+            feedback2.textContent = svar2 === 99 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+            feedback3.textContent = svar3 === 85 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+
+            feedback1.style.color = svar1 === 165 ? "green" : "red";
+            feedback2.style.color = svar2 === 99 ? "green" : "red";
+            feedback3.style.color = svar3 === 85 ? "green" : "red";
+        }
+        function checkMinus() {
+            const svar1 = parseInt(document.getElementById("minus1").value);
+            const svar2 = parseInt(document.getElementById("minus2").value);
+            const svar3 = parseInt(document.getElementById("minus3").value);
+
+            const feedback1 = document.getElementById("feedbackMinus1");
+            const feedback2 = document.getElementById("feedbackMinus2");
+            const feedback3 = document.getElementById("feedbackMinus3");
+
+            feedback1.textContent = svar1 === 73 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+            feedback2.textContent = svar2 === 22 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+            feedback3.textContent = svar3 === 36 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+
+            feedback1.style.color = svar1 === 73 ? "green" : "red";
+            feedback2.style.color = svar2 === 22 ? "green" : "red";
+            feedback3.style.color = svar3 === 36 ? "green" : "red";
+        }
+        function checkDivision() {
+            const svar1 = parseInt(document.getElementById("div1").value);
+            const svar2 = parseInt(document.getElementById("div2").value);
+            const svar3 = parseInt(document.getElementById("div3").value);
+
+            const feedback1 = document.getElementById("feedbackDiv1");
+            const feedback2 = document.getElementById("feedbackDiv2");
+            const feedback3 = document.getElementById("feedbackDiv3");
+
+            feedback1.textContent = svar1 === 12 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+            feedback2.textContent = svar2 === 12 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+            feedback3.textContent = svar3 === 15 ? "✅ Rigtigt!" : "❌ Forkert. Prøv igen.";
+
+            feedback1.style.color = svar1 === 12 ? "green" : "red";
+            feedback2.style.color = svar2 === 12 ? "green" : "red";
+            feedback3.style.color = svar3 === 15 ? "green" : "red";
+        }
+        function checkBrok() {
+            const svar1 = parseInt(document.getElementById("brok1").value);
+            const svar2 = parseInt(document.getElementById("brok2").value);
+            const svar3 = parseInt(document.getElementById("brok3").value);
+
+            const feedback1 = document.getElementById("feedbackBrok1");
+            const feedback2 = document.getElementById("feedbackBrok2");
+            const feedback3 = document.getElementById("feedbackBrok3");
+
+            feedback1.textContent = svar1 === 50 ? "✅ Rigtigt! ½ = 50%" : "❌ Forkert. Prøv igen.";
+            feedback2.textContent = svar2 === 75 ? "✅ Rigtigt! ¾ = 75%" : "❌ Forkert. Prøv igen.";
+            feedback3.textContent = svar3 === 40 ? "✅ Rigtigt! ⅖ = 40%" : "❌ Forkert. Prøv igen.";
+
+            feedback1.style.color = svar1 === 50 ? "green" : "red";
+            feedback2.style.color = svar2 === 75 ? "green" : "red";
+            feedback3.style.color = svar3 === 40 ? "green" : "red";
+        }
+        function tjekKagekaos() {
+            const elevSvar = parseInt(document.getElementById("antalElever").value);
+            const kageSvar = parseInt(document.getElementById("antalKager").value);
+            const chokoSvar = parseInt(document.getElementById("stykkerChoko").value);
+            const lagkageSvar = parseInt(document.getElementById("stykkerLagkage").value);
+            const citronSvar = parseInt(document.getElementById("tilbageCitron").value);
+
+            const feedback = document.getElementById("kageFeedback");
+
+            const korrekt =
+                elevSvar === 24 &&
+                kageSvar === 5 &&
+                chokoSvar === 16 &&
+                lagkageSvar === 12 &&
+                citronSvar === 2;
+
+            if (korrekt) {
+                feedback.textContent = "✅ Super! Du har husket alle de vigtigste detaljer.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = "❌ Noget er forkert. Prøv igen eller læs historien én gang mere.";
+                feedback.style.color = "red";
+            }
+        }
+        function tjekDatoer() {
+            const emmaSvar = document.getElementById("emmaRetur").value.trim();
+            const lucasSvar = document.getElementById("lucasAfrejse").value.trim();
+            const skoleSvar = document.getElementById("skolestart").value.trim();
+            const feedback = document.getElementById("datoFeedback");
+
+            const korrektEmma = "29-10-2025";
+            const korrektLucas = "17-10-2025";
+            const korrektSkole = "03-11-2025";
+
+            if (
+                emmaSvar === korrektEmma &&
+                lucasSvar === korrektLucas &&
+                skoleSvar === korrektSkole
+            ) {
+                feedback.textContent = "✅ Rigtigt! Du har styr på datoerne.";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = "❌ Noget er forkert. Tjek dine beregninger og prøv igen.";
+                feedback.style.color = "red";
+            }
+        }
+        function tjekMaaleAlm() {
+            const svar1 = parseFloat(document.getElementById("svar1").value);
+            const svar2 = parseFloat(document.getElementById("svar2").value);
+            const svar3 = parseInt(document.getElementById("svar3").value);
+
+            const feedback1 = document.getElementById("feedback1");
+            const feedback2 = document.getElementById("feedback2");
+            const feedback3 = document.getElementById("feedback3");
+
+            feedback1.textContent = svar1 === 320 ? "✅ Rigtigt! 3,2 m = 320 cm." : "❌ Forkert. Prøv igen.";
+            feedback1.style.color = svar1 === 320 ? "green" : "red";
+
+            feedback2.textContent = svar2 === 15 ? "✅ Rigtigt! 1,5 l = 15 dl." : "❌ Forkert. Prøv igen.";
+            feedback2.style.color = svar2 === 15 ? "green" : "red";
+
+            feedback3.textContent = svar3 === 270 ? "✅ Rigtigt! 4 min 30 sek = 270 sek." : "❌ Forkert. Prøv igen.";
+            feedback3.style.color = svar3 === 270 ? "green" : "red";
+        }
+
+    </script>
+
+</body>
+
+</html>
