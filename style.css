@@ -459,3 +459,23 @@ input {
     padding: 0.4em;
     width: 140px;
 }
+
+/* Contact page styling */
+.contact-section {
+    max-width: 500px;
+    margin: auto;
+}
+
+.contact-section form {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-section label {
+    margin-top: 1em;
+    font-weight: 600;
+}
+
+.contact-section textarea {
+    max-width: 100%;
+}
