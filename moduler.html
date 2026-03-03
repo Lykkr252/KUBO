@@ -10,6 +10,11 @@
 
 <body>
 
+    <div id="pageTimer">
+        ⏱️ <span id="timeDisplay">00:00</span>
+        <button onclick="resetTimer()">↻</button>
+    </div>
+
     <header>
         <h1><a href="kubo.html">Velkommen til KUBO</a></h1>
         <p>Kalender-ur-bog-organisering</p>
@@ -807,7 +812,34 @@
             feedback3.style.color = svar3 === 270 ? "green" : "red";
         }
 
+
+        let seconds = 0;
+        let timerInterval = null;
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                seconds++;
+
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+
+                document.getElementById("timeDisplay").textContent =
+                    String(minutes).padStart(2, '0') + ":" +
+                    String(remainingSeconds).padStart(2, '0');
+            }, 1000);
+        }
+        function resetTimer() {
+            clearInterval(timerInterval);
+            seconds = 0;
+            document.getElementById("timeDisplay").textContent = "00:00";
+            startTimer();
+        }
+
+        // Start automatically when page loads
+        startTimer();
+
     </script>
+
 
 </body>
 

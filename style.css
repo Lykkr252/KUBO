@@ -479,3 +479,85 @@ input {
 .contact-section textarea {
     max-width: 100%;
 }
+
+/* CONTACT PAGE ONLY */
+.contact-page main {
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.contact-page section {
+    background: white;
+    padding: 50px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 700px;
+}
+
+.contact-page section h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #6a5acd;
+    border-left: 6px solid #7b68ee;
+    padding-left: 15px;
+}
+
+/* Floating Timer */
+#pageTimer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #6a5acd, #7b68ee);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+}
+
+#pageTimer button {
+    background: white;
+    color: #6a5acd;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#pageTimer button:hover {
+    opacity: 0.8;
+}
+
+.month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.month-header h2 {
+    margin: 0;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.dag {
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    background: #f9f9f9;
+}
