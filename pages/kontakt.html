@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUBO - Kontakt</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <ul class="navbar-nav">
+                <li><a href="../index.html">Forside</a></li>
+                <li><a href="moduler.html">Læringsmoduler</a></li>
+                <li><a href="spil.html">Spil</a></li>
+                <li><a href="kalender.html">Visuel Kalender</a></li>
+                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="kontakt.html" class="active">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>✉️ Kontakt os</h1>
+        <p>Har du spørgsmål, feedback eller ønsker du at samarbejde med KUBO? Vi hører gerne fra dig!</p>
+    </div>
+
+    <main class="section">
+        <div class="container">
+            <div class="contact-grid">
+
+                <!-- Kontaktformular -->
+                <div class="contact-form-card">
+                    <h2>Send os en besked</h2>
+                    <form action="https://formsubmit.co/your@email.com" method="POST">
+
+                        <label for="name">Navn</label>
+                        <input type="text" id="name" name="name" required placeholder="Dit fulde navn">
+
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="din@email.dk">
+
+                        <label for="message">Besked</label>
+                        <textarea id="message" name="message" rows="6" required placeholder="Skriv din besked her..."></textarea>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top:1.25rem;width:100%;text-align:center;border:none;">Send besked</button>
+                    </form>
+                </div>
+
+                <!-- Kontaktinfo -->
+                <div class="contact-info-card">
+                    <h3>Om KUBO</h3>
+                    <p>KUBO er en læringsplatform skabt til elever med talblindhed (dyscalculia). Vi tror på, at alle kan lære matematik — det handler bare om at finde den rigtige tilgang.</p>
+
+                    <div class="contact-info-item" style="margin-top:1.5rem;">
+                        <span class="icon">🎯</span>
+                        <div>
+                            <strong>Vores mission</strong>
+                            <p style="margin:0;color:var(--text-muted);font-size:0.95rem;">At minimere det spildte talent ved at gøre matematik tilgængeligt for alle.</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <span class="icon">📚</span>
+                        <div>
+                            <strong>Læringsmoduler</strong>
+                            <p style="margin:0;color:var(--text-muted);font-size:0.95rem;">Interaktive øvelser tilpasset elever med talblindhed.</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <span class="icon">💡</span>
+                        <div>
+                            <strong>Feedback er velkomment</strong>
+                            <p style="margin:0;color:var(--text-muted);font-size:0.95rem;">Har du ideer til nye øvelser eller spil? Vi vil meget gerne høre dem!</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:2rem;padding:1.25rem;background:linear-gradient(135deg,#FFF7ED,#EEF2FF);border-radius:var(--radius);border:1px solid var(--border);">
+                        <p style="margin:0;font-weight:700;color:var(--secondary);font-size:0.95rem;">"KUBO minimerer det spildte talent"</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
+    </footer>
+
+    <script src="../js/floating-timer.js" defer></script>
+
+</body>
+</html>

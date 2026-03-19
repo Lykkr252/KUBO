@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUBO - Tidsstyring</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <ul class="navbar-nav">
+                <li><a href="../index.html">Forside</a></li>
+                <li><a href="moduler.html">Læringsmoduler</a></li>
+                <li><a href="spil.html">Spil</a></li>
+                <li><a href="kalender.html">Visuel Kalender</a></li>
+                <li><a href="tidsstyring.html" class="active">Tidsstyring</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>⏳ Tidsstyring</h1>
+        <p>Fordel din tid på opgaver visuelt — med farverige lagkagediagrammer der tæller ned i realtid.</p>
+    </div>
+
+    <main class="section">
+        <div class="container-narrow">
+            <div class="section-card" id="tidsstyring">
+                <h2>⏳ Planlæg din tid</h2>
+                <p>Fordel din tid på opgaver ved lige fordeling eller procentbaseret vægt. Perfekt til eksamen!</p>
+
+                <label for="totalTime">Total tid (min):</label>
+                <input type="number" id="totalTime" min="1" placeholder="fx 60">
+
+                <label for="taskCount">Antal opgaver:</label>
+                <input type="number" id="taskCount" min="1" placeholder="fx 4">
+
+                <div class="buttons">
+                    <button type="button" id="setupTasks">Generer opgaver</button>
+                    <button type="button" id="autoDivide">Lige fordeling</button>
+                </div>
+
+                <div id="taskInputs" style="margin-top:1rem;"></div>
+
+                <button type="button" id="startTimer" class="primary" style="margin-top:1.5rem;">Start timer</button>
+
+                <div class="chart-container">
+                    <canvas id="timeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="section-card" style="background:linear-gradient(135deg,#EEF2FF,#FFF7ED);border-color:#C7D2FE;">
+                <h3>💡 Sådan bruger du tidsstyring</h3>
+                <ol style="margin-top:0.5rem;">
+                    <li>Skriv den totale tid du har til rådighed (fx 60 minutter)</li>
+                    <li>Skriv antallet af opgaver du skal nå</li>
+                    <li>Klik "Generer opgaver" og justér procentfordelingen</li>
+                    <li>Klik "Start timer" og se lagkagen tælle ned</li>
+                </ol>
+                <p style="margin-top:1rem;color:var(--text-muted);font-size:0.9rem;">Tip: Brug "Lige fordeling" for at dele tiden ligeligt mellem alle opgaver.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
+    </footer>
+
+    <script src="../js/tidsstyring.js" defer></script>
+    <script src="../js/floating-timer.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUBO - Læringsmoduler</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <ul class="navbar-nav">
+                <li><a href="../index.html">Forside</a></li>
+                <li><a href="moduler.html" class="active">Læringsmoduler</a></li>
+                <li><a href="spil.html">Spil</a></li>
+                <li><a href="kalender.html">Visuel Kalender</a></li>
+                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Floating page timer -->
+    <div id="pageTimer">⏱️ <span id="timeDisplay">00:00</span><button onclick="resetTimer()">↻</button></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>📚 Læringsmoduler</h1>
+        <p>Interaktive øvelser i klokken, tal, geometri, brøker og meget mere. Tag det i dit eget tempo!</p>
+    </div>
+
+    <main class="section">
+        <div class="container-narrow">
+
+            <!-- Klokkeopgave -->
+            <div class="section-card" id="klokken">
+                <h2>🕒 Forstå klokken</h2>
+                <p>Et ur har to visere: en lille viser (timer) og en stor viser (minutter). Se på uret nedenfor og svar på spørgsmålet.</p>
+                <img src="../assets/images/download.png" alt="Et ur der viser klokken 4:30" width="200">
+                <form onsubmit="return checkClockAnswer(event)" style="margin-top:1rem;">
+                    <p><strong>Hvad viser uret?</strong></p>
+                    <label><input type="radio" name="tid" value="1"> Klokken er 16:00</label>
+                    <label><input type="radio" name="tid" value="2"> Klokken er 16:30</label>
+                    <label><input type="radio" name="tid" value="3"> Klokken er 17:00</label>
+                    <br>
+                    <button type="submit">Tjek svar</button>
+                </form>
+                <p id="clockFeedback"></p>
+            </div>
+
+            <!-- Ur-præference -->
+            <div class="section-card">
+                <h3>Hvilken type ur foretrækker du?</h3>
+                <img src="../assets/images/analogur_1723.png.png" alt="Analogt ur med viserne klokken 17:23" width="300" style="margin-bottom:1rem;">
+                <label for="urPref">Foretrækker du digitalt eller analogt ur?</label>
+                <select id="urPref">
+                    <option value="">-- Vælg --</option>
+                    <option value="digitalt">Digitalt ur</option>
+                    <option value="analogt">Analogt ur</option>
+                    <option value="begge">Begge er fine</option>
+                </select>
+                <label for="urKommentar">Hvorfor?</label>
+                <textarea id="urKommentar" rows="3" placeholder="Skriv hvorfor..."></textarea>
+                <button onclick="gemUrPræference()">Send feedback</button>
+                <p id="urSvar" style="color: green;"></p>
+            </div>
+
+            <!-- Tal-sortering -->
+            <div class="section-card">
+                <h3>🧠 Opgave: Sæt tallene i rækkefølge</h3>
+                <p>Træk tallene fra boksen og sæt dem fra <strong>mindste</strong> til <strong>største</strong>.</p>
+                <div class="sortable-container" id="tiles">
+                    <div class="number-tile" draggable="true">0,7</div>
+                    <div class="number-tile" draggable="true">0,07</div>
+                    <div class="number-tile" draggable="true">7</div>
+                    <div class="number-tile" draggable="true">700</div>
+                    <div class="number-tile" draggable="true">70</div>
+                    <div class="number-tile" draggable="true">0,007</div>
+                </div>
+                <p style="color:var(--text-muted);font-size:0.9rem;">Træk tallene herned i den rigtige rækkefølge:</p>
+                <div class="drop-zone" id="dropzone"></div>
+                <button onclick="checkOrder()">Tjek rækkefølge</button>
+                <p id="sortFeedback"></p>
+            </div>
+
+            <!-- Mental Aritmetik -->
+            <div class="section-card">
+                <h3>📘 Opgave: Rabat på bøger</h3>
+                <p>Du køber 3 bøger til 79,95 kr. stykket og får 15% rabat.</p>
+                <label for="rabatAnswer">Hvad er den samlede pris med rabat? (kun tal)</label>
+                <input type="number" id="rabatAnswer" step="0.01" placeholder="Skriv dit svar her...">
+                <button onclick="checkRabatAnswer()">Tjek svar</button>
+                <div id="rabatFeedback"></div>
+            </div>
+
+            <!-- Talmønstre -->
+            <div class="section-card">
+                <h3>🔢 Opgave: Hvad er det næste tal?</h3>
+                <p>Find mønsteret i rækken og skriv det næste tal:</p>
+                <p><strong>2, 4, 8, 16, ?</strong></p>
+                <label for="patternAnswer">Dit svar:</label>
+                <input type="number" id="patternAnswer" placeholder="Skriv dit svar...">
+                <button onclick="checkPattern()">Tjek svar</button>
+                <p id="patternFeedback"></p>
+            </div>
+
+            <!-- Største tal -->
+            <div class="section-card">
+                <h3>📊 Opgave: Hvilket tal er størst?</h3>
+                <p>Vælg det største tal blandt følgende:</p>
+                <form onsubmit="return checkLargest(event)">
+                    <label><input type="radio" name="largest" value="1"> 0,9</label>
+                    <label><input type="radio" name="largest" value="2"> 0,99</label>
+                    <label><input type="radio" name="largest" value="3"> 0,909</label>
+                    <br>
+                    <button type="submit">Tjek svar</button>
+                </form>
+                <p id="largestFeedback"></p>
+            </div>
+
+            <!-- Afrunding -->
+            <div class="section-card">
+                <h3>💡 Opgave: Rund tallet af</h3>
+                <p>Hvordan runder du 4,76 til nærmeste hele tal?</p>
+                <label for="roundAnswer">Dit svar:</label>
+                <input type="number" id="roundAnswer" placeholder="Skriv et helt tal...">
+                <button onclick="checkRound()">Tjek svar</button>
+                <p id="roundFeedback"></p>
+            </div>
+
+            <!-- Vinkel -->
+            <div class="section-card" id="vinkelOpgave">
+                <h3>📐 Opgave: Tæl 90-graders vinkler</h3>
+                <p>Se på figurerne og skriv, hvor mange 90-graders vinkler der er i alt. Fx har en firkant 4 vinkler af 90°.</p>
+                <img src="../assets/images/hvormangefigurehar90grader.png" alt="opgave med optælling af vinkel" width="400">
+                <label for="vinkelSvar">Antal 90° vinkler:</label>
+                <input type="number" id="vinkelSvar" placeholder="Skriv dit svar...">
+                <button onclick="checkVinkel()">Tjek svar</button>
+                <p id="vinkelFeedback"></p>
+            </div>
+
+            <!-- Gulvopgave -->
+            <div class="section-card" id="gulvOpgave">
+                <h3>🧱 Opgave: Beregn areal og pris for gulvtæppe</h3>
+                <p>Figuren nedenfor viser et gulvareal sammensat af rektangler. Beregn først arealet i m² og derefter prisen for at lægge gulvtæppe, hvis det koster <strong>77 kr pr. m²</strong>.</p>
+                <img src="../assets/images/udregnafarealminus1.png" alt="Sammensat figur af rektangler" width="400">
+                <label for="arealSvar">1️⃣ Areal i m²:</label>
+                <input type="number" id="arealSvar" step="0.01" placeholder="Skriv areal...">
+                <label for="prisSvar">2️⃣ Pris i kr:</label>
+                <input type="number" id="prisSvar" step="0.01" placeholder="Skriv pris...">
+                <button onclick="checkGulvOpgave()">Tjek svar</button>
+                <p id="gulvFeedback"></p>
+            </div>
+
+            <!-- Grid areal -->
+            <div class="section-card" id="ArealOpgave">
+                <h3>🧮 Opgave: Lav figur</h3>
+                <p>Klik på felterne for at lave en figur med et areal på 23.</p>
+                <div id="gridContainer"></div>
+                <button onclick="checkAreal()" style="margin-top:0.75rem;">Tjek areal</button>
+                <p id="arealFeedback"></p>
+            </div>
+
+            <!-- Omkreds nem -->
+            <div class="section-card" id="OmkredsOpgaveNem">
+                <h3>🧮 Opgave: Tæl omkredsen af figuren</h3>
+                <p>Klik på hver kant af figuren for at tælle omkredsen. Hver kasse svarer til 1 meter.</p>
+                <img src="../assets/images/aflæsningsmodelnem.png" alt="Et 6x5 grid hvor nogle felter er udfyldt" width="400">
+                <label for="omkredsSvar"> Omkreds i meter:</label>
+                <input type="number" id="omkredsSvar" step="1" placeholder="Skriv dit svar...">
+                <button onclick="checkOmkreds()">Tjek omkreds</button>
+                <p id="omkredsFeedback"></p>
+            </div>
+
+            <!-- Omkreds svær -->
+            <div class="section-card" id="OmkredsOpgaveSvaer">
+                <h3>🧮 Opgave: Tæl omkredsen af figuren (svær)</h3>
+                <p>Klik på hver kant af figuren for at tælle omkredsen. Hver kasse svarer til 1 meter.</p>
+                <img src="../assets/images/aflæsningsmodelsvær.png" alt="Et 6x5 grid hvor nogle felter er udfyldt" width="400">
+                <label for="omkredsSvar1"> Omkreds i meter:</label>
+                <input type="number" id="omkredsSvar1" step="1" placeholder="Skriv dit svar...">
+                <button onclick="checkOmkreds()">Tjek omkreds</button>
+                <p id="omkredsFeedback1"></p>
+            </div>
+
+            <!-- Refleksion -->
+            <div class="section-card">
+                <p id="linjeFeedback"></p>
+                <label for="refleksionSvar">🧠 Refleksion: Gør det en forskel hvis gitteret rykkes?</label>
+                <textarea id="refleksionSvar" rows="4" placeholder="Skriv din refleksion her..."></textarea>
+                <button onclick="checkRefleksion()">Send refleksion</button>
+                <p id="refleksionFeedback"></p>
+            </div>
+
+            <!-- Plus -->
+            <div class="section-card" id="plusOpgaver">
+                <h3>➕ Opgave: Svære plusstykker</h3>
+                <div class="plusOpgave">
+                    <label for="plus1">1. 69 + 96 =</label>
+                    <input type="number" id="plus1">
+                    <p id="feedback1"></p>
+                </div>
+                <div class="plusOpgave">
+                    <label for="plus2">2. 80 + 19 =</label>
+                    <input type="number" id="plus2">
+                    <p id="feedback2"></p>
+                </div>
+                <div class="plusOpgave">
+                    <label for="plus3">3. 47 + 38 =</label>
+                    <input type="number" id="plus3">
+                    <p id="feedback3"></p>
+                </div>
+                <button onclick="checkPlus()">Tjek svar</button>
+            </div>
+
+            <!-- Minus -->
+            <div class="section-card" id="minusOpgaver">
+                <h3>➖ Opgave: Svære minusstykker</h3>
+                <div class="minusOpgave">
+                    <label for="minus1">1. 102 − 29 =</label>
+                    <input type="number" id="minus1">
+                    <p id="feedbackMinus1"></p>
+                </div>
+                <div class="minusOpgave">
+                    <label for="minus2">2. 70 − 48 =</label>
+                    <input type="number" id="minus2">
+                    <p id="feedbackMinus2"></p>
+                </div>
+                <div class="minusOpgave">
+                    <label for="minus3">3. 63 − 27 =</label>
+                    <input type="number" id="minus3">
+                    <p id="feedbackMinus3"></p>
+                </div>
+                <button onclick="checkMinus()">Tjek svar</button>
+            </div>
+
+            <!-- Division -->
+            <div class="section-card" id="divisionOpgaver">
+                <h3>➗ Opgave: Svære divisionsstykker</h3>
+                <div class="divisionOpgave">
+                    <label for="div1">1. 144 ÷ 12 =</label>
+                    <input type="number" id="div1">
+                    <p id="feedbackDiv1"></p>
+                </div>
+                <div class="divisionOpgave">
+                    <label for="div2">2. 96 ÷ 8 =</label>
+                    <input type="number" id="div2">
+                    <p id="feedbackDiv2"></p>
+                </div>
+                <div class="divisionOpgave">
+                    <label for="div3">3. 135 ÷ 9 =</label>
+                    <input type="number" id="div3">
+                    <p id="feedbackDiv3"></p>
+                </div>
+                <button onclick="checkDivision()">Tjek svar</button>
+            </div>
+
+            <!-- Brøker -->
+            <div class="section-card" id="brokOpgaver">
+                <h3>🔢 Opgave: Omregn brøker til procenter</h3>
+                <div class="brokOpgave">
+                    <label for="brok1">1. ½ =</label>
+                    <input type="number" id="brok1"> %
+                    <p id="feedbackBrok1"></p>
+                </div>
+                <div class="brokOpgave">
+                    <label for="brok2">2. ¾ =</label>
+                    <input type="number" id="brok2"> %
+                    <p id="feedbackBrok2"></p>
+                </div>
+                <div class="brokOpgave">
+                    <label for="brok3">3. ⅖ =</label>
+                    <input type="number" id="brok3"> %
+                    <p id="feedbackBrok3"></p>
+                </div>
+                <button onclick="checkBrok()">Tjek svar</button>
+            </div>
+
+            <!-- Kagekaos -->
+            <div class="section-card" id="kagekaosOpgave">
+                <h3>🎂 Kagekaos i kantinen</h3>
+                <p><strong>Læs kun én gang:</strong></p>
+                <div class="historia-box" id="historieTekst">
+                    På Gørløse Skole skulle 7.A holde kagefest. De havde bagt 5 forskellige slags kager: 2 chokoladekager, 1 citronmåne, 3 gulerodskager, 4 muffins og 1 stor lagkage. Hver chokoladekage blev skåret i 8 stykker, citronmånen i 10, gulerodskagerne i 6 stykker hver, muffins blev ikke delt, og lagkagen blev skåret i 12 stykker.
+
+                    Der var 24 elever til festen, men 3 var allergiske over for nødder og måtte ikke få gulerodskage. 2 elever kom for sent og fik kun muffins. Resten fik mindst 2 stykker kage hver.
+
+                    Efter festen blev der 5 stykker chokoladekage, 2 stykker citronmåne og 1 muffin tilbage. En lærer tog 1 stykke lagkage og 1 gulerodskage med hjem.
+                </div>
+                <h4>✍️ Skriv de vigtigste informationer:</h4>
+                <label for="antalElever">Hvor mange elever deltog?</label>
+                <input type="number" id="antalElever">
+                <label for="antalKager">Hvor mange slags kager blev der bagt?</label>
+                <input type="number" id="antalKager">
+                <label for="stykkerChoko">Hvor mange stykker chokoladekage blev der i alt?</label>
+                <input type="number" id="stykkerChoko">
+                <label for="stykkerLagkage">Hvor mange stykker lagkage blev der?</label>
+                <input type="number" id="stykkerLagkage">
+                <label for="tilbageCitron">Hvor mange stykker citronmåne var tilbage?</label>
+                <input type="number" id="tilbageCitron">
+                <button onclick="tjekKagekaos()">Tjek svar</button>
+                <p id="kageFeedback"></p>
+            </div>
+
+            <!-- Datoer -->
+            <div class="section-card" id="datoOpgave">
+                <h3>📅 Opgave: Regn med datoer</h3>
+                <p>Læs historien og svar på spørgsmålene.</p>
+                <div class="historia-box" id="datoHistorie">
+                    Emma tog på ferie den 12. oktober 2025. Hun skulle være væk i 17 dage. Hendes ven Lucas tog afsted 5 dage senere og kom hjem 2 dage før Emma. De skulle begge starte i skole igen den første mandag efter de kom hjem.
+                </div>
+                <h4>✍️ Skriv dine svar:</h4>
+                <label for="emmaRetur">Hvornår kom Emma hjem? (dd-mm-yyyy)</label>
+                <input type="text" id="emmaRetur" placeholder="fx 29-10-2025">
+                <label for="lucasAfrejse">Hvornår tog Lucas afsted? (dd-mm-yyyy)</label>
+                <input type="text" id="lucasAfrejse" placeholder="fx 17-10-2025">
+                <label for="skolestart">Hvornår startede de i skole igen? (dd-mm-yyyy)</label>
+                <input type="text" id="skolestart" placeholder="fx 03-11-2025">
+                <button onclick="tjekDatoer()">Tjek svar</button>
+                <p id="datoFeedback"></p>
+            </div>
+
+            <!-- Måleenheder -->
+            <div class="section-card" id="maaleOpgaveAlm">
+                <h3>📏 Opgave: Omregn måleenheder</h3>
+                <p>1. Omregn 3,2 meter til centimeter:</p>
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                    <input type="number" id="svar1" style="max-width:120px;"> <span>cm</span>
+                </div>
+                <p id="feedback1"></p>
+                <p style="margin-top:0.75rem;">2. Omregn 1,5 liter til deciliter:</p>
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                    <input type="number" id="svar2" style="max-width:120px;"> <span>dl</span>
+                </div>
+                <p id="feedback2"></p>
+                <p style="margin-top:0.75rem;">3. Hvor mange sekunder er der i 4 minutter og 30 sekunder?</p>
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                    <input type="number" id="svar3" style="max-width:120px;"> <span>sekunder</span>
+                </div>
+                <p id="feedback3"></p>
+                <button onclick="tjekMaaleAlm()">Tjek svar</button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
+    </footer>
+
+    <script src="../js/moduler.js" defer></script>
+    <script src="../js/floating-timer.js" defer></script>
+
+</body>
+</html>

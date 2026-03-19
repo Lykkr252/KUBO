@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUBO - Visuel Kalender</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <ul class="navbar-nav">
+                <li><a href="../index.html">Forside</a></li>
+                <li><a href="moduler.html">Læringsmoduler</a></li>
+                <li><a href="spil.html">Spil</a></li>
+                <li><a href="kalender.html" class="active">Visuel Kalender</a></li>
+                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>📅 Visuel Kalender</h1>
+        <p>Klik på en dag for at tilføje begivenheder. Tilpas farver, symboler og udseende frit.</p>
+    </div>
+
+    <main class="section">
+        <div class="container-narrow">
+
+            <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+                <button id="openSettings" class="settings-btn">⚙ Tilpas kalender</button>
+            </div>
+
+            <div class="calendar-wrapper">
+                <div class="month-header">
+                    <button id="prevBtn">◀ Forrige</button>
+                    <div class="month-title">
+                        <h2 id="monthName"></h2>
+                        <p id="year"></p>
+                    </div>
+                    <button id="nextBtn">Næste ▶</button>
+                </div>
+
+                <div class="weekdays">
+                    <div>Man</div>
+                    <div>Tir</div>
+                    <div>Ons</div>
+                    <div>Tor</div>
+                    <div>Fre</div>
+                    <div>Lør</div>
+                    <div>Søn</div>
+                </div>
+
+                <div id="calendarGrid" class="calendar-grid"></div>
+            </div>
+
+            <p class="calendar-hint">💡 Klik på en dag for at tilføje begivenheder. De gemmes automatisk i din browser.</p>
+
+        </div>
+    </main>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content settings-modal-content">
+            <div class="event-modal-header">
+                <h2>⚙ Tilpas kalender</h2>
+                <button id="closeSettings" class="modal-close-btn">✕</button>
+            </div>
+
+            <!-- Toggles -->
+            <div class="settings-toggles">
+                <label class="toggle-row">
+                    <span class="toggle-label">Vis dagstal</span>
+                    <span class="switch">
+                        <input type="checkbox" id="toggleNumbers" checked>
+                        <span class="slider"></span>
+                    </span>
+                </label>
+                <label class="toggle-row">
+                    <span class="toggle-label">Vis symboler</span>
+                    <span class="switch">
+                        <input type="checkbox" id="toggleSymbols" checked>
+                        <span class="slider"></span>
+                    </span>
+                </label>
+                <label class="toggle-row">
+                    <span class="toggle-label">Vis baggrundsfarver</span>
+                    <span class="switch">
+                        <input type="checkbox" id="toggleColors" checked>
+                        <span class="slider"></span>
+                    </span>
+                </label>
+            </div>
+
+            <!-- Color customization -->
+            <div class="settings-section">
+                <h3>Baggrundsfarver <span class="settings-hint">(7 farver, der gentages)</span></h3>
+                <div id="colorPickers" class="color-pickers-grid"></div>
+            </div>
+
+            <!-- Symbol customization -->
+            <div class="settings-section">
+                <h3>Symboler <span class="settings-hint">(emoji eller tekst, gentages)</span></h3>
+                <div id="symbolInputs" class="symbol-inputs-grid"></div>
+            </div>
+
+            <div style="margin-top:1.5rem;display:flex;justify-content:flex-end;">
+                <button id="resetSettings" class="btn btn-secondary btn-sm">Nulstil til standard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EVENT MODAL -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content event-modal-content">
+            <div class="event-modal-header">
+                <h2 id="eventModalTitle"></h2>
+                <button id="closeEventModal" class="modal-close-btn">✕</button>
+            </div>
+
+            <div id="eventList" class="event-list"></div>
+
+            <div class="event-add-row">
+                <input type="text" id="newEventInput" placeholder="Tilføj begivenhed, fx 'Matematik aflevering'..." maxlength="100">
+                <button id="addEventBtn" class="btn btn-primary btn-sm">Tilføj</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
+    </footer>
+
+    <script src="../js/kalender.js" defer></script>
+    <script src="../js/floating-timer.js" defer></script>
+
+</body>
+</html>
