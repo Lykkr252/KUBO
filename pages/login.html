@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KUBO - Log ind</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="../js/firebase-init.js"></script>
+</head>
+
+<body>
+    <!-- INGEN navbar her — brugeren er ikke logget ind endnu -->
+
+    <div class="auth-wrapper"> <!-- tilføj denne CSS-klasse til style.css -->
+        <div class="auth-card">
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <p class="auth-subtitle">Log ind for at gemme din kalender</p>
+
+            <!-- TABS -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Log ind</button>
+                <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Opret konto</button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>Brugernavn</label>
+                    <input type="text" id="loginUser" placeholder="Dit brugernavn">
+                </div>
+                <div class="form-group">
+                    <label>Adgangskode</label>
+                    <input type="password" id="loginPass" placeholder="Din adgangskode">
+                </div>
+                <button class="btn btn-primary" style="width:100%" onclick="handleLogin()">Log ind</button>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <div id="registerForm" style="display:none">
+                <div class="form-group">
+                    <label>Brugernavn</label>
+                    <input type="text" id="regUser" placeholder="Vælg et brugernavn">
+                </div>
+                <div class="form-group">
+                    <label>Adgangskode</label>
+                    <input type="password" id="regPass" placeholder="Vælg en adgangskode">
+                </div>
+                <div class="form-group">
+                    <label>Bekræft adgangskode</label>
+                    <input type="password" id="regPass2" placeholder="Gentag adgangskode">
+                </div>
+                <button class="btn btn-primary" style="width:100%" onclick="handleRegister()">Opret konto</button>
+            </div>
+
+            <p id="authMsg" style="color:red;margin-top:1rem;display:none"></p>
+        </div>
+    </div>
+
+    <script src="../js/auth.js" defer></script>
+    <script>
+        function switchTab(tab) {
+            document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? '' : 'none';
+            document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+        }
+
+        async function handleLogin() {
+            const u = document.getElementById('loginUser').value.trim();
+            const p = document.getElementById('loginPass').value;
+            if (!u || !p) return showMsg('Udfyld alle felter.');
+            const ok = await doLogin(u, p);
+            if (ok) window.location.href = '../index.html';
+            else showMsg('Forkert brugernavn eller adgangskode.');
+        }
+
+        async function handleRegister() {
+            const u = document.getElementById('regUser').value.trim();
+            const p = document.getElementById('regPass').value;
+            const p2 = document.getElementById('regPass2').value;
+            if (!u || !p || !p2) return showMsg('Udfyld alle felter.');
+            if (p !== p2) return showMsg('Adgangskoderne matcher ikke.');
+            if (u.length < 3) return showMsg('Brugernavn skal være mindst 3 tegn.');
+            if (p.length < 4) return showMsg('Adgangskode skal være mindst 4 tegn.');
+            const result = await doRegister(u, p);
+            if (result === 'taken') return showMsg('Brugernavnet er allerede taget.');
+            showMsg('Konto oprettet! Logger ind...', 'green');
+            await doLogin(u, p);
+            setTimeout(() => window.location.href = '../index.html', 800);
+        }
+
+        function showMsg(txt, color = 'red') {
+            const el = document.getElementById('authMsg');
+            el.textContent = txt; el.style.color = color; el.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

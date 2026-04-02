@@ -1,4 +1,23 @@
-document.addEventListener("DOMContentLoaded", function () {
+const currentUser = getCurrentUser(); // henter brugernavn fra auth.js
+
+async function loadEvents() {
+    try {
+        const snapshot = await db.ref('events/' + currentUser).once('value');
+        return snapshot.exists() ? (snapshot.val() || {}) : {};
+    } catch {
+        return {};
+    }
+}
+
+async function saveAllEvents(allEvents) {
+    try {
+        await db.ref('events/' + currentUser).set(allEvents);
+    } catch {
+        // silent fail
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
     let currentDate = new Date();
 
     const grid = document.getElementById("calendarGrid");
@@ -23,7 +42,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadSettings() {
         try {
             return JSON.parse(localStorage.getItem("kubo_cal_settings")) || defaultSettings();
-        } catch { return defaultSettings(); }
+        } catch {
+            return defaultSettings();
+        }
     }
 
     function defaultSettings() {
@@ -40,11 +61,36 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("kubo_cal_settings", JSON.stringify(settings));
     }
 
+    // ── Events storage ───────────────────────────────────────────────────────
+    let activeDay = null;
+    let allEvents = await loadEvents();
+
+    function eventKey(year, month, day) {
+        return `${year}-${month}-${day}`;
+    }
+
+    function getEvents(year, month, day) {
+        return allEvents[eventKey(year, month, day)] || [];
+    }
+
+    async function saveEvents(year, month, day, events) {
+        const key = eventKey(year, month, day);
+
+        if (events.length === 0) {
+            delete allEvents[key];
+        } else {
+            allEvents[key] = events;
+        }
+
+        await saveAllEvents(allEvents);
+    }
+
     // ── Navigation ───────────────────────────────────────────────────────────
     document.getElementById("prevBtn").addEventListener("click", () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
         render();
     });
+
     document.getElementById("nextBtn").addEventListener("click", () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
         render();
@@ -76,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const wrap = document.createElement("label");
             wrap.className = "color-picker-wrap";
             wrap.title = `Dag ${i + 1}'s farve`;
+
             const inp = document.createElement("input");
             inp.type = "color";
             inp.value = color;
@@ -85,10 +132,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 saveSettings();
                 render();
             });
+
             const swatch = document.createElement("span");
             swatch.className = "color-swatch";
             swatch.style.background = color;
             inp.addEventListener("input", () => swatch.style.background = inp.value);
+
             wrap.appendChild(inp);
             wrap.appendChild(swatch);
             colorGrid.appendChild(wrap);
@@ -100,6 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
         settings.symbols.forEach((sym, i) => {
             const wrap = document.createElement("div");
             wrap.className = "symbol-input-wrap";
+
             const inp = document.createElement("input");
             inp.type = "text";
             inp.value = sym;
@@ -111,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 saveSettings();
                 render();
             });
+
             wrap.appendChild(inp);
             symbolGrid.appendChild(wrap);
         });
@@ -122,11 +173,13 @@ document.addEventListener("DOMContentLoaded", function () {
         saveSettings();
         render();
     });
+
     document.getElementById("toggleSymbols").addEventListener("change", (e) => {
         settings.showSymbols = e.target.checked;
         saveSettings();
         render();
     });
+
     document.getElementById("toggleColors").addEventListener("change", (e) => {
         settings.showColors = e.target.checked;
         saveSettings();
@@ -140,25 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
         render();
     });
 
-    // ── Events ───────────────────────────────────────────────────────────────
-    let activeDay = null;
-
-    function storageKey(year, month, day) {
-        return `kubo_event_${year}_${month}_${day}`;
-    }
-
-    function getEvents(year, month, day) {
-        try {
-            return JSON.parse(localStorage.getItem(storageKey(year, month, day))) || [];
-        } catch { return []; }
-    }
-
-    function saveEvents(year, month, day, events) {
-        const key = storageKey(year, month, day);
-        if (events.length === 0) localStorage.removeItem(key);
-        else localStorage.setItem(key, JSON.stringify(events));
-    }
-
+    // ── Event modal ──────────────────────────────────────────────────────────
     closeEventModal.addEventListener("click", () => {
         eventModal.style.display = "none";
         activeDay = null;
@@ -173,29 +208,41 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    addEventBtn.addEventListener("click", addEvent);
-    newEventInput.addEventListener("keydown", (e) => { if (e.key === "Enter") addEvent(); });
+    addEventBtn.addEventListener("click", () => {
+        addEvent();
+    });
 
-    function addEvent() {
+    newEventInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") addEvent();
+    });
+
+    async function addEvent() {
         const text = newEventInput.value.trim();
         if (!text || !activeDay) return;
+
         const { year, month, day } = activeDay;
-        const events = getEvents(year, month, day);
+        const events = [...getEvents(year, month, day)];
         events.push(text);
-        saveEvents(year, month, day, events);
+
+        await saveEvents(year, month, day, events);
         newEventInput.value = "";
         renderEventList();
+        render();
     }
 
     function renderEventList() {
         if (!activeDay) return;
+
         const { year, month, day } = activeDay;
         const events = getEvents(year, month, day);
+
         eventList.innerHTML = "";
+
         if (events.length === 0) {
             eventList.innerHTML = `<p class="no-events">Ingen begivenheder endnu.</p>`;
             return;
         }
+
         events.forEach((ev, idx) => {
             const item = document.createElement("div");
             item.className = "event-item";
@@ -204,12 +251,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="event-text">${escapeHtml(ev)}</span>
                 <button class="event-delete-btn" data-idx="${idx}">✕</button>
             `;
-            item.querySelector(".event-delete-btn").addEventListener("click", () => {
-                const evs = getEvents(year, month, day);
+
+            item.querySelector(".event-delete-btn").addEventListener("click", async () => {
+                const evs = [...getEvents(year, month, day)];
                 evs.splice(idx, 1);
-                saveEvents(year, month, day, evs);
+                await saveEvents(year, month, day, evs);
                 renderEventList();
+                render();
             });
+
             eventList.appendChild(item);
         });
     }
@@ -220,17 +270,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function escapeHtml(str) {
-        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
     }
 
     function openDayModal(year, month, day) {
         const weekdayNames = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
         const date = new Date(year, month, day);
+
         eventModalTitle.textContent = `${weekdayNames[date.getDay()]} d. ${day}. ${monthNames[month]} ${year}`;
         activeDay = { year, month, day };
         renderEventList();
         newEventInput.value = "";
         eventModal.style.display = "flex";
+
         setTimeout(() => newEventInput.focus(), 100);
     }
 
@@ -249,11 +304,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const offset = (firstDay + 6) % 7;
 
-        for (let i = 0; i < offset; i++) grid.appendChild(document.createElement("div"));
+        for (let i = 0; i < offset; i++) {
+            grid.appendChild(document.createElement("div"));
+        }
 
         for (let day = 1; day <= daysInMonth; day++) {
             const events = getEvents(year, month, day);
-            const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+            const isToday =
+                today.getFullYear() === year &&
+                today.getMonth() === month &&
+                today.getDate() === day;
+
             const colorIdx = (day - 1) % settings.colors.length;
             const symIdx = (day - 1) % settings.symbols.length;
 
@@ -282,6 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (events.length > 0) {
                 const dotsEl = document.createElement("div");
                 dotsEl.className = "event-dots";
+
                 const max = Math.min(events.length, 3);
                 for (let d = 0; d < max; d++) {
                     const dot = document.createElement("span");
@@ -289,12 +351,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     dot.style.background = getEventColor(d);
                     dotsEl.appendChild(dot);
                 }
+
                 if (events.length > 3) {
                     const more = document.createElement("span");
                     more.className = "event-more";
                     more.textContent = `+${events.length - 3}`;
                     dotsEl.appendChild(more);
                 }
+
                 el.appendChild(dotsEl);
 
                 const preview = document.createElement("div");
