@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Læring for Talblinde</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/i18n.js"></script>
 </head>
 
 <body>
@@ -28,13 +29,13 @@
     <!-- HERO -->
     <section class="hero">
         <div class="hero-inner">
-            <span class="hero-badge">Kalender · Ur · Bog · Organisering</span>
-            <h1>Matematik er ikke svært —<br><span>den skal bare forklares rigtigt</span></h1>
-            <p>KUBO er en tryg læringsplatform for elever med talblindhed. Vi gør tal, tid og struktur forståelig som
+            <span class="hero-badge" data-i18n="index.badge">Kalender · Ur · Bog · Organisering</span>
+            <h1 data-i18n-html="index.hero.h1">Matematik er ikke svært —<br><span>den skal bare forklares rigtigt</span></h1>
+            <p data-i18n="index.hero.p">KUBO er en tryg læringsplatform for elever med talblindhed. Vi gør tal, tid og struktur forståelig som
                 med farver, billeder og tålmodighed.</p>
             <div class="hero-buttons">
-                <a href="pages/moduler.html" class="btn btn-primary">Start læringsmoduler</a>
-                <a href="pages/kalender.html" class="btn btn-secondary">Visuel Kalender</a>
+                <a href="pages/moduler.html" class="btn btn-primary" data-i18n="index.hero.btn1">Start læringsmoduler</a>
+                <a href="pages/kalender.html" class="btn btn-secondary" data-i18n="index.hero.btn2">Visuel Kalender</a>
             </div>
         </div>
     </section>
@@ -42,34 +43,33 @@
     <!-- FEATURES GRID -->
     <section class="section">
         <div class="section-title">
-            <h2>Alt hvad du behøver</h2>
-            <p>KUBO samler de vigtigste redskaber for elever med talblindhed på ét sted.</p>
+            <h2 data-i18n="feat.title">Alt hvad du behøver</h2>
+            <p data-i18n="feat.sub">KUBO samler de vigtigste redskaber for elever med talblindhed på ét sted.</p>
         </div>
         <div class="feature-grid">
             <div class="feature-card">
                 <span class="icon">📚</span>
-                <h3>Læringsmoduler</h3>
-                <p>Interaktive øvelser i klokken, tal, geometri, brøker og meget mere -> personliggør det til præcis det
-                    niveau, du er på.</p>
-                <a href="pages/moduler.html">Gå til moduler &rarr;</a>
+                <h3 data-i18n="feat.mod.title">Læringsmoduler</h3>
+                <p data-i18n="feat.mod.p">Interaktive øvelser i klokken, tal, geometri, brøker og meget mere — personliggør det til præcis det niveau, du er på.</p>
+                <a href="pages/moduler.html" data-i18n="feat.mod.link">Gå til moduler →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">🎮</span>
-                <h3>Spil</h3>
-                <p>Lær gennem leg med sjove og farverige spil, der gør matematik til en positiv oplevelse.</p>
-                <a href="pages/spil.html">Se spil &rarr;</a>
+                <h3 data-i18n="feat.games.title">Spil</h3>
+                <p data-i18n="feat.games.p">Lær gennem leg med sjove og farverige spil, der gør matematik til en positiv oplevelse.</p>
+                <a href="pages/spil.html" data-i18n="feat.games.link">Se spil →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">📅</span>
-                <h3>Visuel Kalender</h3>
-                <p>En farverig kalender med symboler, der gør det nemt at holde styr på dage og opgaver.</p>
-                <a href="pages/kalender.html">Åbn kalender &rarr;</a>
+                <h3 data-i18n="feat.cal.title">Visuel Kalender</h3>
+                <p data-i18n="feat.cal.p">En farverig kalender med symboler, der gør det nemt at holde styr på dage og opgaver.</p>
+                <a href="pages/kalender.html" data-i18n="feat.cal.link">Åbn kalender →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">⏳</span>
-                <h3>Tidsstyring</h3>
-                <p>Del din tid op på opgaver med lagkagediagrammer —> visuelt, enkelt og effektivt til eksamen.</p>
-                <a href="pages/tidsstyring.html">Prøv tidsstyring &rarr;</a>
+                <h3 data-i18n="feat.time.title">Tidsstyring</h3>
+                <p data-i18n="feat.time.p">Del din tid op på opgaver med lagkagediagrammer — visuelt, enkelt og effektivt til eksamen.</p>
+                <a href="pages/tidsstyring.html" data-i18n="feat.time.link">Prøv tidsstyring →</a>
             </div>
         </div>
     </section>
@@ -78,12 +78,12 @@
     <section class="section section-alt">
         <div class="container">
             <div class="section-title">
-                <h2>Hvem er KUBO til?</h2>
-                <p>KUBO er skabt til elever med talblindhed af talblinde.</p>
+                <h2 data-i18n="who.title">Hvem er KUBO til?</h2>
+                <p data-i18n="who.sub">KUBO er skabt til elever med talblindhed af talblinde.</p>
             </div>
             <div class="audience-grid">
                 <div class="audience-card">
-                    <h3>👨‍👩‍👧 Til forældre</h3>
+                    <h3 data-i18n="who.parents.title">👨‍👩‍👧 Til forældre</h3>
                     <p>Talblindhed handler ikke bare om matematik. Det handler om hverdagen. Når børn har svært ved at
                         læse klokken, huske mængder eller forstå skemaer, kan det sætte spor i selvtillid og trivsel.
                     </p>
@@ -101,7 +101,7 @@
                         cifrenes barrierer sænkes.</p>
                 </div>
                 <div class="audience-card">
-                    <h3>🧠 Til fagpersoner</h3>
+                    <h3 data-i18n="who.experts.title">🧠 Til fagpersoner</h3>
                     <p>Ifølge Sunde &amp; Pind (2016) er det centralt at identificere matematisk sårbarhed tidligt og
                         arbejde med det gennem både forebyggende og diagnosticerende indsats. Det handler om at afdække,
                         hvordan barnet forstår tal og tid
@@ -127,9 +127,8 @@
     <section class="section">
         <div class="container">
             <div class="callout">
-                <blockquote>"KUBO minimerer det spildte talent"</blockquote>
-                <p>En platform, hvor talblindhed ikke er en barriere, men en udfordring vi møder med forståelse,
-                    struktur og varme.</p>
+                <blockquote data-i18n="callout.quote">"KUBO minimerer det spildte talent"</blockquote>
+                <p data-i18n="callout.p">En platform, hvor talblindhed ikke er en barriere, men en udfordring vi møder med forståelse, struktur og varme.</p>
             </div>
         </div>
     </section>

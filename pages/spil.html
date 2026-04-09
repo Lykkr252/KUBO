@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Spil</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/i18n.js"></script>
 </head>
 <body>
 
@@ -25,8 +26,8 @@
 
     <!-- Page Header -->
     <div class="page-header">
-        <h1>🎮 Spil og aktiviteter</h1>
-        <p>Leg dig til læring med sjove og farverige spil, der gør matematik til en oplevelse.</p>
+        <h1 data-i18n="games.h1">🎮 Spil og aktiviteter</h1>
+        <p data-i18n="games.sub">Leg dig til læring med sjove og farverige spil, der gør matematik til en oplevelse.</p>
     </div>
 
     <main class="section">
@@ -34,14 +35,14 @@
 
             <!-- SUDOKU -->
             <div class="section-card" id="sudoku-section">
-                <h2>🔢 Sudoku</h2>
-                <p>Udfyld gitteret så hvert tal fra <strong>1–9</strong> optræder præcis én gang i hver <strong>række</strong>, <strong>kolonne</strong> og <strong>3×3-boks</strong>. De grå felter er forudfyldte.</p>
+                <h2 data-i18n="games.sud.h2">🔢 Sudoku</h2>
+                <p data-i18n="games.sud.p">Udfyld gitteret så hvert tal fra 1–9 optræder præcis én gang i hver række, kolonne og 3×3-boks. De grå felter er forudfyldte.</p>
 
                 <div class="sudoku-controls top-controls">
-                    <button onclick="newGame(0)">Nyt spil (Let)</button>
-                    <button onclick="newGame(1)">Nyt spil (Middel)</button>
-                    <button id="checkBtn" onclick="checkSudoku()">Tjek svar</button>
-                    <button onclick="solveSudoku()" class="btn-hint">Vis løsning</button>
+                    <button onclick="newGame(0)" data-i18n="games.sud.easy">Nyt spil (Let)</button>
+                    <button onclick="newGame(1)" data-i18n="games.sud.med">Nyt spil (Middel)</button>
+                    <button id="checkBtn" onclick="checkSudoku()" data-i18n="games.sud.check">Tjek svar</button>
+                    <button onclick="solveSudoku()" class="btn-hint" data-i18n="games.sud.solve">Vis løsning</button>
                 </div>
 
                 <div id="sudokuBoard" class="sudoku-board"></div>
@@ -50,13 +51,13 @@
 
             <!-- COMING SOON -->
             <div class="section-title" style="margin-top:3rem;">
-                <h2>Flere spil er på vej</h2>
-                <p>Vi arbejder på flere sjove og lærerige spil til dig.</p>
+                <h2 data-i18n="games.coming.h2">Flere spil er på vej</h2>
+                <p data-i18n="games.coming.p">Vi arbejder på flere sjove og lærerige spil til dig.</p>
             </div>
 
             <div class="game-preview-grid">
                 <div class="game-preview-card">
-                    <span class="badge-soon">Kommer snart</span>
+                    <span class="badge-soon" data-i18n="games.soon">Kommer snart</span>
                     <span class="icon">🕐</span>
                     <h4>Klokke-spil</h4>
                     <p>Aflæs ure og konkurrér mod uret — øv dig på digitale og analoge ure.</p>

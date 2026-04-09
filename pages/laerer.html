@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUBO - Læreroversigt</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="../js/firebase-init.js"></script>
+    <script src="../js/i18n.js"></script>
+    <style>
+        /* ── Teacher gate overlay ── */
+        #gate {
+            position: fixed; inset: 0;
+            background: linear-gradient(135deg, #FFF7ED, #EEF2FF);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+        .gate-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 2.5rem 2rem;
+            width: 100%; max-width: 360px;
+            text-align: center;
+        }
+        .gate-card .navbar-logo { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+        .gate-card p { color: #64748b; margin-bottom: 1.5rem; }
+        .gate-card input {
+            width: 100%; padding: 0.7rem 1rem;
+            border: 2px solid #e2e8f0; border-radius: 10px;
+            font-size: 1rem; font-family: inherit; margin-bottom: 1rem;
+        }
+        .gate-card input:focus { outline: none; border-color: #4f46e5; }
+        #gateError { color: #dc2626; font-size: 0.9rem; margin-top: 0.5rem; min-height: 1.2rem; }
+
+        /* ── Dashboard layout ── */
+        #dashboard { display: none; }
+        .teacher-nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 64px; background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            z-index: 100; display: flex; align-items: center;
+            padding: 0 2rem; justify-content: space-between;
+        }
+        .teacher-nav .logo { font-size: 1.5rem; font-weight: 800; color: #f97316; text-decoration: none; }
+        .teacher-nav .logo span { color: #4f46e5; }
+        .teacher-nav h1 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0; }
+        .teacher-nav .right { display: flex; align-items: center; gap: 1rem; }
+        .teacher-nav .teacher-name { font-size: 0.85rem; color: #64748b; }
+
+        .dash-body { padding-top: 80px; max-width: 1100px; margin: 0 auto; padding-left: 1.5rem; padding-right: 1.5rem; }
+
+        /* ── Summary cards ── */
+        .summary-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem; margin: 1.5rem 0;
+        }
+        .stat-card {
+            background: #fff; border-radius: 14px; padding: 1.25rem 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            border-left: 4px solid #e2e8f0;
+        }
+        .stat-card.orange { border-left-color: #f97316; }
+        .stat-card.indigo { border-left-color: #4f46e5; }
+        .stat-card.green  { border-left-color: #16a34a; }
+        .stat-card.red    { border-left-color: #dc2626; }
+        .stat-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #64748b; margin-bottom: 0.3rem; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: #1e293b; line-height: 1; }
+        .stat-sub { font-size: 0.8rem; color: #94a3b8; margin-top: 0.25rem; }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .toolbar input[type="search"] {
+            padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 10px;
+            font-size: 0.9rem; font-family: inherit; width: 220px;
+        }
+        .toolbar input[type="search"]:focus { outline: none; border-color: #4f46e5; }
+        .toolbar select {
+            padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 10px;
+            font-size: 0.9rem; font-family: inherit; background: #fff; cursor: pointer;
+        }
+        .toolbar select:focus { outline: none; border-color: #4f46e5; }
+        .toolbar-right { margin-left: auto; font-size: 0.85rem; color: #94a3b8; }
+
+        /* ── Student table ── */
+        .table-wrap { background: #fff; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; margin-bottom: 2rem; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            background: #f8fafc; padding: 0.75rem 1rem;
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.04em; color: #64748b; text-align: left;
+            border-bottom: 1px solid #e2e8f0; cursor: pointer; user-select: none;
+            white-space: nowrap;
+        }
+        thead th:hover { color: #1e293b; }
+        thead th.sorted { color: #4f46e5; }
+        tbody tr { border-bottom: 1px solid #f1f5f9; transition: background 0.15s; cursor: pointer; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: #f8fafc; }
+        tbody td { padding: 0.85rem 1rem; font-size: 0.95rem; }
+        td.username { font-weight: 700; color: #1e293b; }
+        td.time-cell { color: #64748b; font-size: 0.9rem; }
+
+        /* ── Score bar ── */
+        .score-bar-wrap { display: flex; align-items: center; gap: 0.6rem; }
+        .score-bar-bg { flex: 1; height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden; max-width: 100px; }
+        .score-bar-fill { height: 100%; border-radius: 99px; transition: width 0.4s; }
+        .score-text { font-size: 0.85rem; font-weight: 700; color: #1e293b; white-space: nowrap; }
+
+        /* ── Risk badge ── */
+        .badge {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.25rem 0.7rem; border-radius: 99px;
+            font-size: 0.78rem; font-weight: 700;
+        }
+        .badge-green  { background: #dcfce7; color: #15803d; }
+        .badge-yellow { background: #fef9c3; color: #92400e; }
+        .badge-red    { background: #fee2e2; color: #991b1b; }
+
+        /* ── Expanded detail row ── */
+        .detail-row td { padding: 0; background: #f8fafc; }
+        .detail-inner { padding: 1.25rem 1.5rem; }
+        .detail-inner h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #64748b; margin-bottom: 0.75rem; }
+        .module-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 0.5rem;
+        }
+        .module-chip {
+            display: flex; align-items: center; gap: 0.4rem;
+            padding: 0.4rem 0.75rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+        }
+        .chip-ok   { background: #dcfce7; color: #15803d; }
+        .chip-part { background: #fef9c3; color: #92400e; }
+        .chip-miss { background: #fee2e2; color: #991b1b; }
+        .chip-none { background: #f1f5f9; color: #94a3b8; }
+        .detail-note {
+            margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 10px;
+            background: #fef3c7; border-left: 3px solid #f59e0b;
+            font-size: 0.88rem; color: #78350f;
+        }
+
+        /* ── Empty state ── */
+        .empty-state { text-align: center; padding: 4rem 2rem; color: #94a3b8; }
+        .empty-state p { font-size: 1.1rem; margin-top: 0.5rem; }
+
+        /* ── Loading ── */
+        #loadingMsg { text-align: center; padding: 3rem; color: #94a3b8; font-size: 1rem; }
+    </style>
+</head>
+<body>
+
+<!-- ── Teacher password gate ───────────────────────────────────────────── -->
+<div id="gate">
+    <div class="gate-card">
+        <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+        <p data-i18n="laerer.gate.p">Læreroversigt — kun for lærere</p>
+        <input type="password" id="pinInput" data-i18n-ph="laerer.gate.ph" placeholder="Indtast lærerkode" autocomplete="off"
+               onkeydown="if(event.key==='Enter') tryLogin()">
+        <button class="btn btn-primary" style="width:100%" onclick="tryLogin()" data-i18n="laerer.gate.btn">Vis oversigt</button>
+        <p id="gateError"></p>
+    </div>
+</div>
+
+<!-- ── Dashboard (hidden until authenticated) ───────────────────────────── -->
+<div id="dashboard">
+    <nav class="teacher-nav">
+        <div style="display:flex;align-items:center;gap:1rem">
+            <a href="../index.html" class="logo">KU<span>BO</span></a>
+            <h1>Læreroversigt</h1>
+        </div>
+        <div class="right">
+            <span class="teacher-name" id="teacherLabel"></span>
+            <button class="btn btn-secondary" style="padding:0.3rem 0.8rem;font-size:0.85rem" onclick="teacherLogout()">Log ud</button>
+        </div>
+    </nav>
+
+    <div class="dash-body">
+
+        <!-- Summary cards -->
+        <div class="summary-grid">
+            <div class="stat-card orange">
+                <div class="stat-label">Elever i alt</div>
+                <div class="stat-value" id="statTotal">—</div>
+            </div>
+            <div class="stat-card indigo">
+                <div class="stat-label">Gns. score</div>
+                <div class="stat-value" id="statAvgScore">—</div>
+                <div class="stat-sub">ud af 27 point</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-label">Fuldført (≥ 20 pt)</div>
+                <div class="stat-value" id="statCompleted">—</div>
+            </div>
+            <div class="stat-card red">
+                <div class="stat-label">Dyskalkulirisiko</div>
+                <div class="stat-value" id="statRisk">—</div>
+                <div class="stat-sub">mistænkt eller høj risiko</div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <input type="search" id="searchInput" placeholder="Søg elev..." oninput="renderTable()">
+            <select id="filterRisk" onchange="renderTable()">
+                <option value="">Alle elever</option>
+                <option value="high">Høj risiko</option>
+                <option value="medium">Middel risiko</option>
+                <option value="low">Lav risiko</option>
+            </select>
+            <select id="sortBy" onchange="renderTable()">
+                <option value="name">Sorter: Navn</option>
+                <option value="score-desc">Sorter: Bedste score</option>
+                <option value="score-asc">Sorter: Laveste score</option>
+                <option value="time-desc">Sorter: Mest tid</option>
+                <option value="risk">Sorter: Risiko</option>
+            </select>
+            <span class="toolbar-right" id="countLabel"></span>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+            <div id="loadingMsg">Henter elevdata...</div>
+            <table id="studentTable" style="display:none">
+                <thead>
+                    <tr>
+                        <th>Elev</th>
+                        <th>Score</th>
+                        <th>Fremgang</th>
+                        <th>Tid brugt</th>
+                        <th>Senest aktiv</th>
+                        <th>Dyskalkulirisiko</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="emptyState" class="empty-state" style="display:none">
+                <div style="font-size:3rem">📭</div>
+                <p>Ingen elever fundet</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="../js/laerer.js"></script>
+</body>
+</html>

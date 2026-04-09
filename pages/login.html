@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>KUBO - Log ind</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/i18n.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <script src="../js/firebase-init.js"></script>
@@ -16,42 +17,42 @@
     <div class="auth-wrapper"> <!-- tilføj denne CSS-klasse til style.css -->
         <div class="auth-card">
             <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
-            <p class="auth-subtitle">Log ind for at gemme din kalender</p>
+            <p class="auth-subtitle" data-i18n="login.subtitle">Log ind for at gemme din kalender</p>
 
             <!-- TABS -->
             <div class="auth-tabs">
-                <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Log ind</button>
-                <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Opret konto</button>
+                <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')" data-i18n="login.tab.in">Log ind</button>
+                <button class="auth-tab" id="tabRegister" onclick="switchTab('register')" data-i18n="login.tab.reg">Opret konto</button>
             </div>
 
             <!-- LOGIN FORM -->
             <div id="loginForm">
                 <div class="form-group">
-                    <label>Brugernavn</label>
-                    <input type="text" id="loginUser" placeholder="Dit brugernavn">
+                    <label data-i18n="login.user.lbl">Brugernavn</label>
+                    <input type="text" id="loginUser" data-i18n-ph="login.user.ph" placeholder="Dit brugernavn">
                 </div>
                 <div class="form-group">
-                    <label>Adgangskode</label>
-                    <input type="password" id="loginPass" placeholder="Din adgangskode">
+                    <label data-i18n="login.pass.lbl">Adgangskode</label>
+                    <input type="password" id="loginPass" data-i18n-ph="login.pass.ph" placeholder="Din adgangskode">
                 </div>
-                <button class="btn btn-primary" style="width:100%" onclick="handleLogin()">Log ind</button>
+                <button class="btn btn-primary" style="width:100%" onclick="handleLogin()" data-i18n="login.btn">Log ind</button>
             </div>
 
             <!-- REGISTER FORM -->
             <div id="registerForm" style="display:none">
                 <div class="form-group">
-                    <label>Brugernavn</label>
-                    <input type="text" id="regUser" placeholder="Vælg et brugernavn">
+                    <label data-i18n="reg.user.lbl">Brugernavn</label>
+                    <input type="text" id="regUser" data-i18n-ph="reg.user.ph" placeholder="Vælg et brugernavn">
                 </div>
                 <div class="form-group">
-                    <label>Adgangskode</label>
-                    <input type="password" id="regPass" placeholder="Vælg en adgangskode">
+                    <label data-i18n="reg.pass.lbl">Adgangskode</label>
+                    <input type="password" id="regPass" data-i18n-ph="reg.pass.ph" placeholder="Vælg en adgangskode">
                 </div>
                 <div class="form-group">
-                    <label>Bekræft adgangskode</label>
-                    <input type="password" id="regPass2" placeholder="Gentag adgangskode">
+                    <label data-i18n="reg.pass2.lbl">Bekræft adgangskode</label>
+                    <input type="password" id="regPass2" data-i18n-ph="reg.pass2.ph" placeholder="Gentag adgangskode">
                 </div>
-                <button class="btn btn-primary" style="width:100%" onclick="handleRegister()">Opret konto</button>
+                <button class="btn btn-primary" style="width:100%" onclick="handleRegister()" data-i18n="reg.btn">Opret konto</button>
             </div>
 
             <p id="authMsg" style="color:red;margin-top:1rem;display:none"></p>

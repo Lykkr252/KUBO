@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Kontakt</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/i18n.js"></script>
 </head>
 <body>
 
@@ -25,8 +26,8 @@
 
     <!-- Page Header -->
     <div class="page-header">
-        <h1>✉️ Kontakt os</h1>
-        <p>Har du spørgsmål, feedback eller ønsker du at samarbejde med KUBO? Vi hører gerne fra dig!</p>
+        <h1 data-i18n="contact.h1">✉️ Kontakt os</h1>
+        <p data-i18n="contact.sub">Har du spørgsmål, feedback eller ønsker du at samarbejde med KUBO? Vi hører gerne fra dig!</p>
     </div>
 
     <main class="section">
@@ -35,26 +36,26 @@
 
                 <!-- Kontaktformular -->
                 <div class="contact-form-card">
-                    <h2>Send os en besked</h2>
+                    <h2 data-i18n="contact.form.h2">Send os en besked</h2>
                     <form action="https://formsubmit.co/your@email.com" method="POST">
 
-                        <label for="name">Navn</label>
-                        <input type="text" id="name" name="name" required placeholder="Dit fulde navn">
+                        <label for="name" data-i18n="contact.name.lbl">Navn</label>
+                        <input type="text" id="name" name="name" required data-i18n-ph="contact.name.ph" placeholder="Dit fulde navn">
 
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required placeholder="din@email.dk">
+                        <label for="email" data-i18n="contact.email.lbl">Email</label>
+                        <input type="email" id="email" name="email" required data-i18n-ph="contact.email.ph" placeholder="din@email.dk">
 
-                        <label for="message">Besked</label>
-                        <textarea id="message" name="message" rows="6" required placeholder="Skriv din besked her..."></textarea>
+                        <label for="message" data-i18n="contact.msg.lbl">Besked</label>
+                        <textarea id="message" name="message" rows="6" required data-i18n-ph="contact.msg.ph" placeholder="Skriv din besked her..."></textarea>
 
-                        <button type="submit" class="btn btn-primary" style="margin-top:1.25rem;width:100%;text-align:center;border:none;">Send besked</button>
+                        <button type="submit" class="btn btn-primary" style="margin-top:1.25rem;width:100%;text-align:center;border:none;" data-i18n="contact.btn">Send besked</button>
                     </form>
                 </div>
 
                 <!-- Kontaktinfo -->
                 <div class="contact-info-card">
-                    <h3>Om KUBO</h3>
-                    <p>KUBO er en læringsplatform skabt til elever med talblindhed (dyscalculia). Vi tror på, at alle kan lære matematik — det handler bare om at finde den rigtige tilgang.</p>
+                    <h3 data-i18n="contact.info.h3">Om KUBO</h3>
+                    <p data-i18n="contact.info.p">KUBO er en læringsplatform skabt til elever med talblindhed (dyscalculia). Vi tror på, at alle kan lære matematik — det handler bare om at finde den rigtige tilgang.</p>
 
                     <div class="contact-info-item" style="margin-top:1.5rem;">
                         <span class="icon">🎯</span>

@@ -6,8 +6,14 @@
     <title>KUBO - Læringsmoduler</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="../js/firebase-init.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/i18n.js"></script>
 </head>
 <body>
+    <script>requireLogin();</script>
 
     <!-- NAVBAR -->
     <nav class="navbar">
@@ -21,16 +27,24 @@
                 <li><a href="tidsstyring.html">Tidsstyring</a></li>
                 <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
+            <div style="display:flex;align-items:center;gap:1rem">
+                <span id="navUser" style="font-size:0.85rem;color:#888"></span>
+                <button onclick="doLogout()" class="btn btn-secondary"
+                    style="padding:0.3rem 0.8rem;font-size:0.85rem">Log ud</button>
+            </div>
         </div>
     </nav>
+    <script>
+        document.getElementById('navUser').textContent = '👤 ' + getCurrentUser();
+    </script>
 
     <!-- Floating page timer -->
     <div id="pageTimer">⏱️ <span id="timeDisplay">00:00</span><button onclick="resetTimer()">↻</button></div>
 
     <!-- Page Header -->
     <div class="page-header">
-        <h1>📚 Læringsmoduler</h1>
-        <p>Interaktive øvelser i klokken, tal, geometri, brøker og meget mere. Tag det i dit eget tempo!</p>
+        <h1 data-i18n="mod.h1">📚 Læringsmoduler</h1>
+        <p data-i18n="mod.sub">Interaktive øvelser i klokken, tal, geometri, brøker og meget mere. Tag det i dit eget tempo!</p>
     </div>
 
     <main class="section">
@@ -38,14 +52,14 @@
 
             <!-- Klokkeopgave -->
             <div class="section-card" id="klokken">
-                <h2>🕒 Forstå klokken</h2>
-                <p>Et ur har to visere: en lille viser (timer) og en stor viser (minutter). Se på uret nedenfor og svar på spørgsmålet.</p>
+                <h2 data-i18n="mod.clock.h2">🕒 Forstå klokken</h2>
+                <p data-i18n="mod.clock.p">Et ur har to visere: en lille viser (timer) og en stor viser (minutter). Se på uret nedenfor og svar på spørgsmålet.</p>
                 <img src="../assets/images/download.png" alt="Et ur der viser klokken 4:30" width="200">
                 <form onsubmit="return checkClockAnswer(event)" style="margin-top:1rem;">
-                    <p><strong>Hvad viser uret?</strong></p>
-                    <label><input type="radio" name="tid" value="1"> Klokken er 16:00</label>
-                    <label><input type="radio" name="tid" value="2"> Klokken er 16:30</label>
-                    <label><input type="radio" name="tid" value="3"> Klokken er 17:00</label>
+                    <p><strong data-i18n="mod.clock.q">Hvad viser uret?</strong></p>
+                    <label><input type="radio" name="tid" value="1"> <span data-i18n="mod.clock.opt1">Klokken er 16:00</span></label>
+                    <label><input type="radio" name="tid" value="2"> <span data-i18n="mod.clock.opt2">Klokken er 16:30</span></label>
+                    <label><input type="radio" name="tid" value="3"> <span data-i18n="mod.clock.opt3">Klokken er 17:00</span></label>
                     <br>
                     <button type="submit">Tjek svar</button>
                 </form>
@@ -54,7 +68,7 @@
 
             <!-- Ur-præference -->
             <div class="section-card">
-                <h3>Hvilken type ur foretrækker du?</h3>
+                <h3 data-i18n="mod.urpref.h3">Hvilken type ur foretrækker du?</h3>
                 <img src="../assets/images/analogur_1723.png.png" alt="Analogt ur med viserne klokken 17:23" width="300" style="margin-bottom:1rem;">
                 <label for="urPref">Foretrækker du digitalt eller analogt ur?</label>
                 <select id="urPref">
@@ -71,8 +85,8 @@
 
             <!-- Tal-sortering -->
             <div class="section-card">
-                <h3>🧠 Opgave: Sæt tallene i rækkefølge</h3>
-                <p>Træk tallene fra boksen og sæt dem fra <strong>mindste</strong> til <strong>største</strong>.</p>
+                <h3 data-i18n="mod.sort.h3">🧠 Opgave: Sæt tallene i rækkefølge</h3>
+                <p data-i18n="mod.sort.p">Træk tallene fra boksen og sæt dem fra mindste til største.</p>
                 <div class="sortable-container" id="tiles">
                     <div class="number-tile" draggable="true">0,7</div>
                     <div class="number-tile" draggable="true">0,07</div>
@@ -89,9 +103,9 @@
 
             <!-- Mental Aritmetik -->
             <div class="section-card">
-                <h3>📘 Opgave: Rabat på bøger</h3>
-                <p>Du køber 3 bøger til 79,95 kr. stykket og får 15% rabat.</p>
-                <label for="rabatAnswer">Hvad er den samlede pris med rabat? (kun tal)</label>
+                <h3 data-i18n="mod.rabat.h3">📘 Opgave: Rabat på bøger</h3>
+                <p data-i18n="mod.rabat.p">Du køber 3 bøger til 79,95 kr. stykket og får 15% rabat.</p>
+                <label for="rabatAnswer" data-i18n="mod.rabat.lbl">Hvad er den samlede pris med rabat? (kun tal)</label>
                 <input type="number" id="rabatAnswer" step="0.01" placeholder="Skriv dit svar her...">
                 <button onclick="checkRabatAnswer()">Tjek svar</button>
                 <div id="rabatFeedback"></div>
@@ -99,8 +113,8 @@
 
             <!-- Talmønstre -->
             <div class="section-card">
-                <h3>🔢 Opgave: Hvad er det næste tal?</h3>
-                <p>Find mønsteret i rækken og skriv det næste tal:</p>
+                <h3 data-i18n="mod.pattern.h3">🔢 Opgave: Hvad er det næste tal?</h3>
+                <p data-i18n="mod.pattern.p">Find mønsteret i rækken og skriv det næste tal:</p>
                 <p><strong>2, 4, 8, 16, ?</strong></p>
                 <label for="patternAnswer">Dit svar:</label>
                 <input type="number" id="patternAnswer" placeholder="Skriv dit svar...">
@@ -110,8 +124,8 @@
 
             <!-- Største tal -->
             <div class="section-card">
-                <h3>📊 Opgave: Hvilket tal er størst?</h3>
-                <p>Vælg det største tal blandt følgende:</p>
+                <h3 data-i18n="mod.largest.h3">📊 Opgave: Hvilket tal er størst?</h3>
+                <p data-i18n="mod.largest.p">Vælg det største tal blandt følgende:</p>
                 <form onsubmit="return checkLargest(event)">
                     <label><input type="radio" name="largest" value="1"> 0,9</label>
                     <label><input type="radio" name="largest" value="2"> 0,99</label>
@@ -124,8 +138,8 @@
 
             <!-- Afrunding -->
             <div class="section-card">
-                <h3>💡 Opgave: Rund tallet af</h3>
-                <p>Hvordan runder du 4,76 til nærmeste hele tal?</p>
+                <h3 data-i18n="mod.round.h3">💡 Opgave: Rund tallet af</h3>
+                <p data-i18n="mod.round.p">Hvordan runder du 4,76 til nærmeste hele tal?</p>
                 <label for="roundAnswer">Dit svar:</label>
                 <input type="number" id="roundAnswer" placeholder="Skriv et helt tal...">
                 <button onclick="checkRound()">Tjek svar</button>
@@ -134,8 +148,8 @@
 
             <!-- Vinkel -->
             <div class="section-card" id="vinkelOpgave">
-                <h3>📐 Opgave: Tæl 90-graders vinkler</h3>
-                <p>Se på figurerne og skriv, hvor mange 90-graders vinkler der er i alt. Fx har en firkant 4 vinkler af 90°.</p>
+                <h3 data-i18n="mod.angle.h3">📐 Opgave: Tæl 90-graders vinkler</h3>
+                <p data-i18n="mod.angle.p">Se på figurerne og skriv, hvor mange 90-graders vinkler der er i alt. Fx har en firkant 4 vinkler af 90°.</p>
                 <img src="../assets/images/hvormangefigurehar90grader.png" alt="opgave med optælling af vinkel" width="400">
                 <label for="vinkelSvar">Antal 90° vinkler:</label>
                 <input type="number" id="vinkelSvar" placeholder="Skriv dit svar...">
@@ -145,7 +159,7 @@
 
             <!-- Gulvopgave -->
             <div class="section-card" id="gulvOpgave">
-                <h3>🧱 Opgave: Beregn areal og pris for gulvtæppe</h3>
+                <h3 data-i18n="mod.floor.h3">🧱 Opgave: Beregn areal og pris for gulvtæppe</h3>
                 <p>Figuren nedenfor viser et gulvareal sammensat af rektangler. Beregn først arealet i m² og derefter prisen for at lægge gulvtæppe, hvis det koster <strong>77 kr pr. m²</strong>.</p>
                 <img src="../assets/images/udregnafarealminus1.png" alt="Sammensat figur af rektangler" width="400">
                 <label for="arealSvar">1️⃣ Areal i m²:</label>
@@ -158,8 +172,8 @@
 
             <!-- Grid areal -->
             <div class="section-card" id="ArealOpgave">
-                <h3>🧮 Opgave: Lav figur</h3>
-                <p>Klik på felterne for at lave en figur med et areal på 23.</p>
+                <h3 data-i18n="mod.grid.h3">🧮 Opgave: Lav figur</h3>
+                <p data-i18n="mod.grid.p">Klik på felterne for at lave en figur med et areal på 23.</p>
                 <div id="gridContainer"></div>
                 <button onclick="checkAreal()" style="margin-top:0.75rem;">Tjek areal</button>
                 <p id="arealFeedback"></p>
@@ -198,7 +212,7 @@
 
             <!-- Plus -->
             <div class="section-card" id="plusOpgaver">
-                <h3>➕ Opgave: Svære plusstykker</h3>
+                <h3 data-i18n="mod.plus.h3">➕ Opgave: Svære plusstykker</h3>
                 <div class="plusOpgave">
                     <label for="plus1">1. 69 + 96 =</label>
                     <input type="number" id="plus1">
@@ -219,7 +233,7 @@
 
             <!-- Minus -->
             <div class="section-card" id="minusOpgaver">
-                <h3>➖ Opgave: Svære minusstykker</h3>
+                <h3 data-i18n="mod.minus.h3">➖ Opgave: Svære minusstykker</h3>
                 <div class="minusOpgave">
                     <label for="minus1">1. 102 − 29 =</label>
                     <input type="number" id="minus1">
@@ -240,7 +254,7 @@
 
             <!-- Division -->
             <div class="section-card" id="divisionOpgaver">
-                <h3>➗ Opgave: Svære divisionsstykker</h3>
+                <h3 data-i18n="mod.div.h3">➗ Opgave: Svære divisionsstykker</h3>
                 <div class="divisionOpgave">
                     <label for="div1">1. 144 ÷ 12 =</label>
                     <input type="number" id="div1">
@@ -261,7 +275,7 @@
 
             <!-- Brøker -->
             <div class="section-card" id="brokOpgaver">
-                <h3>🔢 Opgave: Omregn brøker til procenter</h3>
+                <h3 data-i18n="mod.brok.h3">🔢 Opgave: Omregn brøker til procenter</h3>
                 <div class="brokOpgave">
                     <label for="brok1">1. ½ =</label>
                     <input type="number" id="brok1"> %
@@ -282,7 +296,7 @@
 
             <!-- Kagekaos -->
             <div class="section-card" id="kagekaosOpgave">
-                <h3>🎂 Kagekaos i kantinen</h3>
+                <h3 data-i18n="mod.cake.h3">🎂 Kagekaos i kantinen</h3>
                 <p><strong>Læs kun én gang:</strong></p>
                 <div class="historia-box" id="historieTekst">
                     På Gørløse Skole skulle 7.A holde kagefest. De havde bagt 5 forskellige slags kager: 2 chokoladekager, 1 citronmåne, 3 gulerodskager, 4 muffins og 1 stor lagkage. Hver chokoladekage blev skåret i 8 stykker, citronmånen i 10, gulerodskagerne i 6 stykker hver, muffins blev ikke delt, og lagkagen blev skåret i 12 stykker.
@@ -308,8 +322,8 @@
 
             <!-- Datoer -->
             <div class="section-card" id="datoOpgave">
-                <h3>📅 Opgave: Regn med datoer</h3>
-                <p>Læs historien og svar på spørgsmålene.</p>
+                <h3 data-i18n="mod.dates.h3">📅 Opgave: Regn med datoer</h3>
+                <p data-i18n="mod.dates.p">Læs historien og svar på spørgsmålene.</p>
                 <div class="historia-box" id="datoHistorie">
                     Emma tog på ferie den 12. oktober 2025. Hun skulle være væk i 17 dage. Hendes ven Lucas tog afsted 5 dage senere og kom hjem 2 dage før Emma. De skulle begge starte i skole igen den første mandag efter de kom hjem.
                 </div>
@@ -326,7 +340,7 @@
 
             <!-- Måleenheder -->
             <div class="section-card" id="maaleOpgaveAlm">
-                <h3>📏 Opgave: Omregn måleenheder</h3>
+                <h3 data-i18n="mod.units.h3">📏 Opgave: Omregn måleenheder</h3>
                 <p>1. Omregn 3,2 meter til centimeter:</p>
                 <div style="display:flex;align-items:center;gap:0.5rem;">
                     <input type="number" id="svar1" style="max-width:120px;"> <span>cm</span>
