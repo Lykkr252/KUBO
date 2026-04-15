@@ -291,22 +291,33 @@ function tjekMaaleAlm() {
 
 let seconds = 0;
 let timerInterval = null;
+let timerRunning = false;
 
-function startTimer() {
-    timerInterval = setInterval(() => {
-        seconds++;
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        document.getElementById("timeDisplay").textContent =
-            String(minutes).padStart(2, '0') + ":" + String(remainingSeconds).padStart(2, '0');
-    }, 1000);
+function toggleTimer() {
+    if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById("timerToggleBtn").textContent = "▶";
+        document.getElementById("timerToggleBtn").title = "Start";
+    } else {
+        timerInterval = setInterval(() => {
+            seconds++;
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            document.getElementById("timeDisplay").textContent =
+                String(m).padStart(2, '0') + ":" + String(s).padStart(2, '0');
+        }, 1000);
+        timerRunning = true;
+        document.getElementById("timerToggleBtn").textContent = "⏸";
+        document.getElementById("timerToggleBtn").title = "Pause";
+    }
 }
 
 function resetTimer() {
     clearInterval(timerInterval);
+    timerRunning = false;
     seconds = 0;
     document.getElementById("timeDisplay").textContent = "00:00";
-    startTimer();
+    document.getElementById("timerToggleBtn").textContent = "▶";
+    document.getElementById("timerToggleBtn").title = "Start";
 }
-
-startTimer();
