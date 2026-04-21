@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUBO - Abonnementer</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <ul class="navbar-nav">
+                <li><a href="../index.html">Forside</a></li>
+                <li><a href="moduler.html">Læringsmoduler</a></li>
+                <li><a href="spil.html">Spil</a></li>
+                <li><a href="kalender.html">Visuel Kalender</a></li>
+                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="abonnement.html" class="active">Abonnementer</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Vælg dit KUBO-abonnement</h2>
+                    <p>Få adgang til visuelle værktøjer, der gør hverdagen nemmere.</p>
+                </div>
+
+                <div class="pricing-container">
+                    <article class="pricing-card">
+                        <h3>KUBO Basis</h3>
+                        <p class="pris">49 kr. <span>/ md.</span></p>
+                        <p class="maalgruppe">Til elever og forældre</p>
+                        <ul class="features">
+                            <li>Visuel kalender</li>
+                            <li>Lagkage-timer</li>
+                            <li>Gemmer personlige indstillinger</li>
+                        </ul>
+                        <a href="checkout.html?pakke=basis" class="buy-button">Vælg Basis</a>
+                    </article>
+
+                    <article class="pricing-card highlight">
+                        <h3>KUBO Klasse</h3>
+                        <p class="pris">399 kr. <span>/ md.</span></p>
+                        <p class="maalgruppe">Til lærere (Op til 30 elever)</p>
+                        <ul class="features">
+                            <li>Alt i Basis</li>
+                            <li>Diagnostisk minitest <span class="info-ikon" id="åbenInfo">?</span></li>
+                            <li>Digital portfolio til evaluering</li>
+                        </ul>
+                        <a href="checkout.html?pakke=klasse" class="buy-button">Vælg Klasse</a>
+                    </article>
+
+                    <article class="pricing-card">
+                        <h3>KUBO Skole</h3>
+                        <p class="pris">Kontakt os</p>
+                        <p class="maalgruppe">Til hele skolen</p>
+                        <ul class="features">
+                            <li>Ubegrænset antal elever</li>
+                            <li>Dataeksport til administration</li>
+                            <li>Fuld systemintegration</li>
+                        </ul>
+                        <a href="kontakt.html" class="buy-button outline">Kontakt os</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="infoModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" id="lukInfo">&times;</span>
+            <h3 style="color: #3498DB;">Diagnostisk Minitest</h3>
+            <p>Dette er en kort test, der hjælper læreren med at spotte elevens strategiske forståelse fremfor blot at måle rigtigt/forkert.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
+    </footer>
+
+    <script>
+        const infoModal = document.getElementById("infoModal");
+        const åbenInfo = document.getElementById("åbenInfo");
+        const lukInfo = document.getElementById("lukInfo");
+
+        åbenInfo.onclick = function() { infoModal.style.display = "block"; }
+        lukInfo.onclick = function() { infoModal.style.display = "none"; }
+
+        window.onclick = function(event) {
+            if (event.target == infoModal) { infoModal.style.display = "none"; }
+        }
+    </script>
+    
+    <script src="../js/floating-timer.js" defer></script>
+</body>
+</html>
