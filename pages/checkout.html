@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUBO - Bestilling</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <ul class="navbar-nav">
+                <li><a href="../index.html">Forside</a></li>
+                <li><a href="moduler.html">Læringsmoduler</a></li>
+                <li><a href="spil.html">Spil</a></li>
+                <li><a href="kalender.html">Visuel Kalender</a></li>
+                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="abonnement.html">Abonnementer</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Gennemfør din bestilling</h2>
+                    <p>Udfyld oplysningerne for at oprette din KUBO-profil og starte dit abonnement.</p>
+                </div>
+
+                <div class="form-container">
+                    <form id="bestillingsForm" class="checkout-form">
+                        
+                        <h3>1. Valgt Abonnement</h3>
+                        <div class="form-group">
+                            <label for="valgtPakke">Din pakke:</label>
+                            <select id="valgtPakke" name="pakke">
+                                <option value="basis">KUBO Basis (49 kr./md.)</option>
+                                <option value="klasse">KUBO Klasse (399 kr./md.)</option>
+                                <option value="skole">KUBO Skole (Tilbud)</option>
+                            </select>
+                        </div>
+
+                        <h3>2. Brugeroplysninger</h3>
+                        <div class="form-group">
+                            <label for="navn">Fulde Navn:</label>
+                            <input type="text" id="navn" name="navn" required placeholder="F.eks. Anders Andersen">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">E-mail adresse:</label>
+                            <input type="email" id="email" name="email" required placeholder="din@email.dk">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="adresse">Adresse:</label>
+                            <input type="text" id="adresse" name="adresse" required placeholder="Vejnavn 123, 4567 By">
+                        </div>
+
+                        <h3>3. Betaling</h3>
+                        <div class="form-group">
+                            <label for="betaling">Betalingsmetode:</label>
+                            <select id="betaling" name="betalingsmetode">
+                                <option value="kort">Kreditkort</option>
+                                <option value="mobilepay">MobilePay</option>
+                                <option value="ean">EAN (Til skoler og kommuner)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="submit-button">Godkend og Opret Profil</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="succesModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" id="lukSucces">&times;</span>
+            <h3 style="color: #2ECC71;">✅ Tak for din bestilling!</h3>
+            <p>Din profil er nu oprettet i vores system. Vi har sendt en kvittering til din e-mailadresse.</p>
+            <a href="../index.html" class="buy-button outline" style="display: block; margin-top: 20px;">Gå til forsiden</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
+    </footer>
+
+    <script>
+        // Auto-valg af pakke
+        const urlParams = new URLSearchParams(window.location.search);
+        const valgtPakke = urlParams.get('pakke');
+        const dropdown = document.getElementById('valgtPakke');
+        if (valgtPakke) {
+            dropdown.value = valgtPakke;
+        }
+
+        // Succes popup logik
+        const form = document.getElementById("bestillingsForm");
+        const succesModal = document.getElementById("succesModal");
+        const lukSucces = document.getElementById("lukSucces");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); 
+            succesModal.style.display = "block"; 
+        });
+
+        lukSucces.onclick = function() {
+            succesModal.style.display = "none";
+        }
+    </script>
+    
+    <script src="../js/floating-timer.js" defer></script>
+</body>
+</html>
