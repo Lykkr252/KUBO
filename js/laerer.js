@@ -25,30 +25,51 @@ const MAX_TOTAL = MODULES.reduce((s, m) => s + m.max, 0);       // 27
 const MAX_RISK  = MODULES.filter(m => m.risiko).reduce((s, m) => s + m.max, 0); // 15
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
-// Teacher PIN is stored in Firebase at config/teacherPin.
-// Default fallback: LAERER2025
-
-const DEFAULT_PIN = 'LAERER2025';
+// Teachers have individual accounts stored at teachers/{teacherId}.
+// Auth functions (doTeacherLogin, doTeacherRegister, etc.) live in auth.js.
 
 async function tryLogin() {
-    const entered = document.getElementById('pinInput').value.trim();
-    if (!entered) return showGateError('Indtast lærerkode.');
+    const idVal  = (document.getElementById('teacherIdInput').value  || '').trim();
+    const pwVal  = (document.getElementById('teacherPwInput').value  || '');
+    const isReg  = document.getElementById('gateRegMode') &&
+                   document.getElementById('gateRegMode').checked;
 
-    let correctPin = DEFAULT_PIN;
-    try {
-        const snap = await db.ref('config/teacherPin').once('value');
-        if (snap.exists()) correctPin = snap.val();
-    } catch (_) { /* use default */ }
+    if (!idVal || !pwVal) return showGateError('Udfyld ID og adgangskode.');
 
-    if (entered !== correctPin) {
-        return showGateError('Forkert lærerkode. Prøv igen.');
+    if (isReg) {
+        // Registration mode
+        const profile = {
+            teachernumber: idVal,
+            email:     (document.getElementById('gateEmail')     || {}).value || '',
+            studyline: (document.getElementById('gateStudyline') || {}).value || '',
+            class:     (document.getElementById('gateClass')     || {}).value || '',
+            subject:   (document.getElementById('gateSubject')   || {}).value || '',
+        };
+        const result = await doTeacherRegister(idVal, pwVal, profile);
+        if (result === 'taken') return showGateError('Lærer-ID er allerede i brug.');
+        if (result !== 'ok')   return showGateError(result);
+        // Fall through to login after registration
     }
 
-    sessionStorage.setItem('kubo_laerer', '1');
+    const ok = await doTeacherLogin(idVal, pwVal);
+    if (!ok) return showGateError('Forkert ID eller adgangskode.');
+
+    openDashboard(idVal);
+    loadData();
+}
+
+function openDashboard(teacherId) {
     document.getElementById('gate').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('teacherLabel').textContent = 'Logget ind som laerer';
-    loadData();
+    document.getElementById('teacherLabel').textContent = 'Lærer: ' + teacherId;
+}
+
+function updateTeacherLabel(teacherId, teacherClass) {
+    const label = document.getElementById('teacherLabel');
+    if (!label) return;
+    label.textContent = teacherClass
+        ? `Lærer: ${teacherId} · Klasse: ${teacherClass}`
+        : `Lærer: ${teacherId}`;
 }
 
 function showGateError(msg) {
@@ -61,32 +82,91 @@ function teacherLogout() {
 }
 
 // Resume session if already authenticated
-if (sessionStorage.getItem('kubo_laerer')) {
-    document.getElementById('gate').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('teacherLabel').textContent = 'Logget ind som laerer';
+const _savedTeacher = sessionStorage.getItem('kubo_laerer');
+if (_savedTeacher) {
+    openDashboard(_savedTeacher);
     loadData();
 }
 
 // ── Data loading ──────────────────────────────────────────────────────────────
+// testscores/{username}  — scores + class field (the shared link between students & teachers)
+// students/{username}    — full student profile (email, studyline, etc.)
+// evaluations/{username} — teacher evaluations
+// Teacher and students are linked by matching class field.
 
-let allStudents = [];
+let allStudents  = [];
+let _teacherClass = '';   // class of the logged-in teacher
 
 async function loadData() {
+    const teacherId = sessionStorage.getItem('kubo_laerer') || '';
+
+    // 1. Load teacher's own profile to get their class
     try {
-        const snap = await db.ref('results').once('value');
-        const raw = snap.val() || {};
-        allStudents = Object.entries(raw).map(([username, data]) => parseStudent(username, data));
-    } catch (e) {
+        const tSnap = await db.ref('teachers/' + teacherId).once('value');
+        _teacherClass = (tSnap.val() || {}).class || '';
+        updateTeacherLabel(teacherId, _teacherClass);
+    } catch {
+        _teacherClass = '';
+    }
+
+    // 2. Load testscores, student profiles, and evaluations in parallel
+    try {
+        const [scoresSnap, profilesSnap, evalsSnap] = await Promise.all([
+            db.ref('testscores').once('value'),
+            db.ref('students').once('value'),
+            db.ref('evaluations').once('value'),
+        ]);
+
+        const scores   = scoresSnap.val()   || {};
+        const profiles = profilesSnap.val() || {};
+        const evals    = evalsSnap.val()    || {};
+
+        // Union of every username that appears in either node
+        const usernames = new Set([...Object.keys(scores), ...Object.keys(profiles)]);
+
+        allStudents = [...usernames]
+            .filter(username => {
+                // If the teacher has a class set, only show students in that same class.
+                // Class is stored in both students/{u}/class and testscores/{u}/class.
+                if (!_teacherClass) return true;
+                const cls = (profiles[username] || {}).class
+                         || (scores[username]   || {}).class
+                         || '';
+                return cls === _teacherClass;
+            })
+            .map(username =>
+                parseStudent(username, scores[username] || {}, profiles[username] || {}, evals[username] || null)
+            );
+    } catch {
         allStudents = [];
     }
+
     document.getElementById('loadingMsg').style.display = 'none';
     document.getElementById('studentTable').style.display = '';
     updateSummary();
     renderTable();
 }
 
-function parseStudent(username, data) {
+// ── Evaluations ───────────────────────────────────────────────────────────────
+// A teacher saves an evaluation for a student.
+// It is written to evaluations/{studentUsername} AND administration/evaluations/{studentUsername}.
+
+async function saveEvaluation(studentUsername, text) {
+    const teacherId = sessionStorage.getItem('kubo_laerer') || 'unknown';
+    const riskLevel = (allStudents.find(s => s.username === studentUsername) || {}).riskLevel || 'unknown';
+    const entry = {
+        text,
+        teacherId,
+        riskLevel,
+        date: Date.now(),
+    };
+    await Promise.all([
+        db.ref('evaluations/' + studentUsername).set(entry),
+        db.ref('administration/evaluations/' + studentUsername).set(entry),
+    ]);
+}
+
+function parseStudent(username, data, profile, evalEntry) {
     const scores = data.scores || {};
     let total = 0;
     let riskScore = 0;
@@ -112,8 +192,16 @@ function parseStudent(username, data) {
         riskLevel,
         moduleResults,
         attempted,
-        timeSpent: data.timeSpent || 0,
+        timeSpent:    data.timeSpent    || 0,
         lastActivity: data.lastActivity || 0,
+        // Profile fields from students/{username}
+        email:        profile.email        || '',
+        studynumber:  profile.studynumber  || '',
+        studyline:    profile.studyline    || '',
+        subject:      profile.subject      || '',
+        class:        profile.class        || '',
+        // Existing teacher evaluation (if any)
+        evaluation:   evalEntry ? evalEntry.text : '',
     };
 }
 
@@ -209,15 +297,55 @@ function toggleDetail(st, tr) {
 
     const riskNote = st.riskLevel !== 'low' ? buildRiskNote(st) : '';
 
+    const profileRows = [
+        st.studynumber ? `<span><strong>Studienr.:</strong> ${escHtml(st.studynumber)}</span>` : '',
+        st.email       ? `<span><strong>E-mail:</strong> ${escHtml(st.email)}</span>`          : '',
+        st.studyline   ? `<span><strong>Retning:</strong> ${escHtml(st.studyline)}</span>`     : '',
+        st.subject     ? `<span><strong>Fag:</strong> ${escHtml(st.subject)}</span>`           : '',
+        st.class       ? `<span><strong>Klasse:</strong> ${escHtml(st.class)}</span>`          : '',
+    ].filter(Boolean).join(' &nbsp;|&nbsp; ');
+
     detailTr.innerHTML = `
         <td colspan="7">
             <div class="detail-inner">
                 <h4>Moduler — ${escHtml(st.username)}</h4>
+                ${profileRows ? `<p style="font-size:0.85rem;color:#64748b;margin-bottom:0.75rem">${profileRows}</p>` : ''}
                 <div class="module-grid">${st.moduleResults.map(moduleChip).join('')}</div>
                 ${riskNote}
+                <div class="eval-section" style="margin-top:1rem">
+                    <label style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b">
+                        Lærervurdering
+                    </label>
+                    <textarea id="eval-${escHtml(st.username)}"
+                        style="width:100%;margin-top:0.4rem;padding:0.6rem 0.8rem;border:2px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:0.9rem;resize:vertical;min-height:80px"
+                        placeholder="Skriv din vurdering her...">${escHtml(st.evaluation)}</textarea>
+                    <button onclick="submitEvaluation('${escHtml(st.username)}')"
+                        style="margin-top:0.5rem;padding:0.4rem 1.2rem;background:#4f46e5;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.88rem;cursor:pointer">
+                        Send til administration
+                    </button>
+                    <span id="eval-msg-${escHtml(st.username)}" style="font-size:0.82rem;margin-left:0.75rem;color:#16a34a"></span>
+                </div>
             </div>
         </td>`;
     tr.after(detailTr);
+}
+
+async function submitEvaluation(username) {
+    const ta  = document.getElementById('eval-' + username);
+    const msg = document.getElementById('eval-msg-' + username);
+    if (!ta) return;
+    const text = ta.value.trim();
+    if (!text) { msg.style.color = '#dc2626'; msg.textContent = 'Skriv en vurdering først.'; return; }
+    msg.style.color = '#94a3b8'; msg.textContent = 'Gemmer...';
+    try {
+        await saveEvaluation(username, text);
+        msg.style.color = '#16a34a'; msg.textContent = 'Sendt til administration!';
+        // Update cached student so re-opening shows the saved text
+        const st = allStudents.find(s => s.username === username);
+        if (st) st.evaluation = text;
+    } catch {
+        msg.style.color = '#dc2626'; msg.textContent = 'Fejl – prøv igen.';
+    }
 }
 
 function moduleChip(m) {
