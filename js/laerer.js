@@ -89,54 +89,63 @@ if (_savedTeacher) {
 }
 
 // ── Data loading ──────────────────────────────────────────────────────────────
-// testscores/{username}  — scores + class field (the shared link between students & teachers)
-// students/{username}    — full student profile (email, studyline, etc.)
-// evaluations/{username} — teacher evaluations
-// Teacher and students are linked by matching class field.
+// students table      — profile (email, class, studyline, etc.)
+// testscores table    — module scores, linked by student_id
+// evaluations table   — teacher evaluations, linked by student_id + teacher_id
+// Teacher sees only students in the same class (teachers.class = students.class)
 
-let allStudents  = [];
-let _teacherClass = '';   // class of the logged-in teacher
+let allStudents   = [];
+let _teacherClass = '';
 
 async function loadData() {
-    const teacherId = sessionStorage.getItem('kubo_laerer') || '';
+    const teacherDbId = sessionStorage.getItem('kubo_laerer_id') || '';
+    const teacherName = sessionStorage.getItem('kubo_laerer')    || '';
 
-    // 1. Load teacher's own profile to get their class
-    try {
-        const tSnap = await db.ref('teachers/' + teacherId).once('value');
-        _teacherClass = (tSnap.val() || {}).class || '';
-        updateTeacherLabel(teacherId, _teacherClass);
-    } catch {
-        _teacherClass = '';
+    // 1. Load teacher's class
+    if (teacherDbId) {
+        const { data: teacher } = await db
+            .from('teachers')
+            .select('class')
+            .eq('id', teacherDbId)
+            .maybeSingle();
+        _teacherClass = teacher?.class || '';
+        updateTeacherLabel(teacherName, _teacherClass);
     }
 
-    // 2. Load testscores, student profiles, and evaluations in parallel
+    // 2. Load students with their scores and evaluations
     try {
-        const [scoresSnap, profilesSnap, evalsSnap] = await Promise.all([
-            db.ref('testscores').once('value'),
-            db.ref('students').once('value'),
-            db.ref('evaluations').once('value'),
-        ]);
+        let query = db
+            .from('students')
+            .select(`
+                id, studynumber, email, studyline, subject, class, time_spent,
+                users!inner ( username ),
+                testscores ( module, score, last_activity ),
+                evaluations ( evaluation_text, risk_level )
+            `);
 
-        const scores   = scoresSnap.val()   || {};
-        const profiles = profilesSnap.val() || {};
-        const evals    = evalsSnap.val()    || {};
+        if (_teacherClass) query = query.eq('class', _teacherClass);
 
-        // Union of every username that appears in either node
-        const usernames = new Set([...Object.keys(scores), ...Object.keys(profiles)]);
+        const { data: rows } = await query;
 
-        allStudents = [...usernames]
-            .filter(username => {
-                // If the teacher has a class set, only show students in that same class.
-                // Class is stored in both students/{u}/class and testscores/{u}/class.
-                if (!_teacherClass) return true;
-                const cls = (profiles[username] || {}).class
-                         || (scores[username]   || {}).class
-                         || '';
-                return cls === _teacherClass;
-            })
-            .map(username =>
-                parseStudent(username, scores[username] || {}, profiles[username] || {}, evals[username] || null)
+        allStudents = (rows || []).map(row => {
+            // Build scores object from testscores rows
+            const scoresObj = {};
+            let lastActivity = 0;
+            (row.testscores || []).forEach(ts => {
+                scoresObj[ts.module] = ts.score;
+                const t = new Date(ts.last_activity).getTime();
+                if (t > lastActivity) lastActivity = t;
+            });
+
+            const evalRow = (row.evaluations || [])[0] || null;
+
+            return parseStudent(
+                row.users.username,
+                { scores: scoresObj, timeSpent: row.time_spent || 0, lastActivity },
+                { email: row.email, studynumber: row.studynumber, studyline: row.studyline, subject: row.subject, class: row.class },
+                evalRow ? { text: evalRow.evaluation_text } : null
             );
+        });
     } catch {
         allStudents = [];
     }
@@ -148,22 +157,28 @@ async function loadData() {
 }
 
 // ── Evaluations ───────────────────────────────────────────────────────────────
-// A teacher saves an evaluation for a student.
-// It is written to evaluations/{studentUsername} AND administration/evaluations/{studentUsername}.
+// Teacher writes an evaluation — stored in the evaluations table (sent_to_admin = true).
 
 async function saveEvaluation(studentUsername, text) {
-    const teacherId = sessionStorage.getItem('kubo_laerer') || 'unknown';
-    const riskLevel = (allStudents.find(s => s.username === studentUsername) || {}).riskLevel || 'unknown';
-    const entry = {
-        text,
-        teacherId,
-        riskLevel,
-        date: Date.now(),
-    };
-    await Promise.all([
-        db.ref('evaluations/' + studentUsername).set(entry),
-        db.ref('administration/evaluations/' + studentUsername).set(entry),
-    ]);
+    const teacherDbId = sessionStorage.getItem('kubo_laerer_id');
+    const riskLevel   = (allStudents.find(s => s.username === studentUsername) || {}).riskLevel || 'unknown';
+
+    // Resolve student's numeric id from username
+    const { data: user } = await db
+        .from('users')
+        .select('id')
+        .eq('username', studentUsername)
+        .single();
+
+    if (!user) throw new Error('Student ikke fundet');
+
+    await db.from('evaluations').upsert({
+        student_id:      user.id,
+        teacher_id:      parseInt(teacherDbId),
+        risk_level:      riskLevel,
+        evaluation_text: text,
+        sent_to_admin:   true,
+    }, { onConflict: 'student_id,teacher_id' });
 }
 
 function parseStudent(username, data, profile, evalEntry) {

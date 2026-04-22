@@ -9,14 +9,29 @@ async function hashPw(pw) {
 
 async function doLogin(username, password) {
     try {
-        const snapshot = await db.ref('students/' + username).once('value');
-        if (!snapshot.exists()) return false;
         const hash = await hashPw(password);
-        if (hash !== snapshot.val().hash) return false;
-        sessionStorage.setItem('kubo_user', username);
-        // Restore preferred language
-        const lang = snapshot.val().preferredLanguage;
-        if (lang) sessionStorage.setItem('kubo_lang', lang);
+        const { data, error } = await db
+            .from('users')
+            .select('id')
+            .eq('username', username)
+            .eq('password', hash)
+            .eq('role', 'student')
+            .single();
+
+        if (error || !data) return false;
+
+        // Load preferred language from student profile
+        const { data: student } = await db
+            .from('students')
+            .select('preferred_language')
+            .eq('id', data.id)
+            .single();
+
+        sessionStorage.setItem('kubo_user',    username);
+        sessionStorage.setItem('kubo_user_id', data.id);
+        if (student?.preferred_language) {
+            sessionStorage.setItem('kubo_lang', student.preferred_language);
+        }
         return true;
     } catch {
         return false;
@@ -26,74 +41,80 @@ async function doLogin(username, password) {
 // profile = { studynumber, email, studyline, subject, class, preferredLanguage }
 async function doRegister(username, password, profile = {}) {
     try {
-        const snapshot = await db.ref('students/' + username).once('value');
-        if (snapshot.exists()) return 'taken';
+        // Check username is not taken
+        const { data: existing } = await db
+            .from('users')
+            .select('id')
+            .eq('username', username)
+            .maybeSingle();
+
+        if (existing) return 'taken';
+
         const hash = await hashPw(password);
-        await db.ref('students/' + username).set({
-            hash,
-            studynumber:       profile.studynumber       || '',
-            email:             profile.email             || '',
-            studyline:         profile.studyline         || '',
-            subject:           profile.subject           || '',
-            class:             profile.class             || '',
-            preferredLanguage: profile.preferredLanguage || 'da',
+
+        // Insert user
+        const { data: user, error } = await db
+            .from('users')
+            .insert({ username, password: hash, role: 'student' })
+            .select('id')
+            .single();
+
+        if (error) return 'Noget gik galt. Prøv igen.';
+
+        // Insert student profile
+        const { error: pErr } = await db.from('students').insert({
+            id:                 user.id,
+            studynumber:        profile.studynumber       || null,
+            email:              profile.email             || null,
+            studyline:          profile.studyline         || null,
+            subject:            profile.subject           || null,
+            class:              profile.class             || null,
+            preferred_language: profile.preferredLanguage || 'da',
         });
+
+        if (pErr) return 'Noget gik galt. Prøv igen.';
         return 'ok';
     } catch {
         return 'Noget gik galt. Prøv igen.';
     }
 }
 
-async function getStudentProfile(username) {
-    try {
-        const snap = await db.ref('students/' + username).once('value');
-        if (!snap.exists()) return null;
-        const v = snap.val();
-        return {
-            studynumber:       v.studynumber       || '',
-            email:             v.email             || '',
-            studyline:         v.studyline         || '',
-            subject:           v.subject           || '',
-            class:             v.class             || '',
-            preferredLanguage: v.preferredLanguage || 'da',
-        };
-    } catch {
-        return null;
-    }
-}
-
 async function savePreferredLanguage(lang) {
-    const user = getCurrentUser();
-    if (!user || typeof db === 'undefined') return;
-    await db.ref('students/' + user + '/preferredLanguage').set(lang);
+    const userId = sessionStorage.getItem('kubo_user_id');
+    if (!userId) return;
+    await db.from('students').update({ preferred_language: lang }).eq('id', userId);
     sessionStorage.setItem('kubo_lang', lang);
 }
 
 function doLogout() {
     sessionStorage.removeItem('kubo_user');
+    sessionStorage.removeItem('kubo_user_id');
     window.location.href = '/pages/login.html';
 }
 
-function getCurrentUser() {
-    return sessionStorage.getItem('kubo_user');
-}
+function getCurrentUser()   { return sessionStorage.getItem('kubo_user'); }
+function getCurrentUserId() { return sessionStorage.getItem('kubo_user_id'); }
 
 function requireLogin() {
-    if (!getCurrentUser()) {
-        window.location.href = '/pages/login.html';
-    }
+    if (!getCurrentUser()) window.location.href = '/pages/login.html';
 }
 
 // ── Teacher auth ──────────────────────────────────────────────────────────────
-// Teachers are stored at teachers/{teacherId} with a hashed password and profile.
 
 async function doTeacherLogin(teacherId, password) {
     try {
-        const snap = await db.ref('teachers/' + teacherId).once('value');
-        if (!snap.exists()) return false;
         const hash = await hashPw(password);
-        if (hash !== snap.val().hash) return false;
-        sessionStorage.setItem('kubo_laerer', teacherId);
+        const { data, error } = await db
+            .from('users')
+            .select('id')
+            .eq('username', teacherId)
+            .eq('password', hash)
+            .eq('role', 'teacher')
+            .single();
+
+        if (error || !data) return false;
+        sessionStorage.setItem('kubo_laerer',    teacherId);
+        sessionStorage.setItem('kubo_laerer_id', data.id);
         return true;
     } catch {
         return false;
@@ -103,44 +124,38 @@ async function doTeacherLogin(teacherId, password) {
 // profile = { teachernumber, email, studyline, class, subject }
 async function doTeacherRegister(teacherId, password, profile = {}) {
     try {
-        const snap = await db.ref('teachers/' + teacherId).once('value');
-        if (snap.exists()) return 'taken';
+        const { data: existing } = await db
+            .from('users')
+            .select('id')
+            .eq('username', teacherId)
+            .maybeSingle();
+
+        if (existing) return 'taken';
+
         const hash = await hashPw(password);
-        await db.ref('teachers/' + teacherId).set({
-            hash,
+
+        const { data: user, error } = await db
+            .from('users')
+            .insert({ username: teacherId, password: hash, role: 'teacher' })
+            .select('id')
+            .single();
+
+        if (error) return 'Noget gik galt. Prøv igen.';
+
+        await db.from('teachers').insert({
+            id:            user.id,
             teachernumber: profile.teachernumber || teacherId,
-            email:         profile.email         || '',
-            studyline:     profile.studyline      || '',
-            class:         profile.class          || '',
-            subject:       profile.subject        || '',
+            email:         profile.email         || null,
+            studyline:     profile.studyline      || null,
+            class:         profile.class          || null,
+            subject:       profile.subject        || null,
         });
+
         return 'ok';
     } catch {
         return 'Noget gik galt. Prøv igen.';
     }
 }
 
-async function getTeacherProfile(teacherId) {
-    try {
-        const snap = await db.ref('teachers/' + teacherId).once('value');
-        if (!snap.exists()) return null;
-        const v = snap.val();
-        return {
-            teachernumber: v.teachernumber || teacherId,
-            email:         v.email         || '',
-            studyline:     v.studyline      || '',
-            class:         v.class          || '',
-            subject:       v.subject        || '',
-        };
-    } catch {
-        return null;
-    }
-}
-
-function getCurrentTeacher() {
-    return sessionStorage.getItem('kubo_laerer');
-}
-
-function doTeacherLogout() {
-    sessionStorage.removeItem('kubo_laerer');
-}
+function getCurrentTeacher()   { return sessionStorage.getItem('kubo_laerer'); }
+function getCurrentTeacherId() { return sessionStorage.getItem('kubo_laerer_id'); }

@@ -1,19 +1,44 @@
-const currentUser = getCurrentUser(); // henter brugernavn fra auth.js
+const currentUserId = typeof getCurrentUserId === 'function' ? getCurrentUserId() : null;
 
 async function loadEvents() {
-    if (!currentUser) return {};   // not logged in — start with empty calendar
+    if (!currentUserId) return {};   // not logged in — start with empty calendar
     try {
-        const snapshot = await db.ref('events/' + currentUser).once('value');
-        return snapshot.exists() ? (snapshot.val() || {}) : {};
+        const { data, error } = await db
+            .from('calendar_events')
+            .select('event_date, event_text')
+            .eq('student_id', currentUserId);
+
+        if (error || !data) return {};
+
+        // Group rows into { "yyyy-m-d": ["event1", "event2"] }
+        const grouped = {};
+        data.forEach(row => {
+            const key = row.event_date;   // stored as "YYYY-MM-DD"
+            if (!grouped[key]) grouped[key] = [];
+            grouped[key].push(row.event_text);
+        });
+        return grouped;
     } catch {
         return {};
     }
 }
 
 async function saveAllEvents(allEvents) {
-    if (!currentUser) return;      // not logged in — nothing to save
+    if (!currentUserId) return;      // not logged in — nothing to save
     try {
-        await db.ref('events/' + currentUser).set(allEvents);
+        // Delete all existing events for this student, then re-insert
+        await db.from('calendar_events').delete().eq('student_id', currentUserId);
+
+        const rows = [];
+        Object.entries(allEvents).forEach(([date, events]) => {
+            events.forEach(text => {
+                rows.push({ student_id: currentUserId, event_date: date, event_text: text });
+            });
+        });
+
+        if (rows.length > 0) {
+            await db.from('calendar_events').insert(rows);
+        }
     } catch {
         // silent fail
     }

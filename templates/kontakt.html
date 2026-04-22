@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Kontakt</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- i18n.js håndterer oversættelse af tekster til dansk/engelsk -->
     <script src="../js/i18n.js"></script>
 </head>
 <body>
@@ -19,12 +20,15 @@
                 <li><a href="spil.html">Spil</a></li>
                 <li><a href="kalender.html">Visuel Kalender</a></li>
                 <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="abonnement.html">Abonnement</a></li>
+                <!-- class="active" fremhæver dette menupunkt i CSS -->
                 <li><a href="kontakt.html" class="active">Kontakt</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Page Header -->
+    <!-- PAGE HEADER: Stor overskrift øverst på siden -->
+    <!-- data-i18n="contact.h1" = i18n.js erstatter teksten med den oversatte version -->
     <div class="page-header">
         <h1 data-i18n="contact.h1">✉️ Kontakt os</h1>
         <p data-i18n="contact.sub">Har du spørgsmål, feedback eller ønsker du at samarbejde med KUBO? Vi hører gerne fra dig!</p>
@@ -32,35 +36,45 @@
 
     <main class="section">
         <div class="container">
+            <!-- CSS grid/flex layout der sætter formular og info side om side -->
             <div class="contact-grid">
 
-                <!-- Kontaktformular -->
+                <!-- KONTAKTFORMULAR -->
+                <!-- action="..." sender formularen til en ekstern e-mail-tjeneste (formsubmit.co) -->
+                <!-- method="POST" sender data sikkert i HTTP-body, ikke synligt i URL -->
                 <div class="contact-form-card">
                     <h2 data-i18n="contact.form.h2">Send os en besked</h2>
                     <form action="https://formsubmit.co/your@email.com" method="POST">
 
+                        <!-- for="name" linker label til input med id="name" — god praksis for tilgængelighed -->
                         <label for="name" data-i18n="contact.name.lbl">Navn</label>
+                        <!-- required = browseren kræver at feltet udfyldes -->
                         <input type="text" id="name" name="name" required data-i18n-ph="contact.name.ph" placeholder="Dit fulde navn">
 
                         <label for="email" data-i18n="contact.email.lbl">Email</label>
+                        <!-- type="email" = browseren validerer email-format automatisk -->
                         <input type="email" id="email" name="email" required data-i18n-ph="contact.email.ph" placeholder="din@email.dk">
 
                         <label for="message" data-i18n="contact.msg.lbl">Besked</label>
+                        <!-- <textarea> = flerlinje tekstfelt, rows="6" = 6 linjer høj -->
                         <textarea id="message" name="message" rows="6" required data-i18n-ph="contact.msg.ph" placeholder="Skriv din besked her..."></textarea>
 
+                        <!-- type="submit" sender formularen til URL'en i action-attributten -->
                         <button type="submit" class="btn btn-primary" style="margin-top:1.25rem;width:100%;text-align:center;border:none;" data-i18n="contact.btn">Send besked</button>
                     </form>
                 </div>
 
-                <!-- Kontaktinfo -->
+                <!-- KONTAKTINFO: Informationskort ved siden af formularen -->
                 <div class="contact-info-card">
                     <h3 data-i18n="contact.info.h3">Om KUBO</h3>
                     <p data-i18n="contact.info.p">KUBO er en læringsplatform skabt til elever med talblindhed (dyscalculia). Vi tror på, at alle kan lære matematik — det handler bare om at finde den rigtige tilgang.</p>
 
+                    <!-- Hvert info-punkt er et div med ikon og tekst side om side (CSS flex) -->
                     <div class="contact-info-item" style="margin-top:1.5rem;">
                         <span class="icon">🎯</span>
                         <div>
                             <strong>Vores mission</strong>
+                            <!-- var(--text-muted) = CSS variabel defineret i style.css -->
                             <p style="margin:0;color:var(--text-muted);font-size:0.95rem;">At minimere det spildte talent ved at gøre matematik tilgængeligt for alle.</p>
                         </div>
                     </div>
@@ -81,6 +95,7 @@
                         </div>
                     </div>
 
+                    <!-- Citatkort nederst -->
                     <div style="margin-top:2rem;padding:1.25rem;background:linear-gradient(135deg,#FFF7ED,#EEF2FF);border-radius:var(--radius);border:1px solid var(--border);">
                         <p style="margin:0;font-weight:700;color:var(--secondary);font-size:0.95rem;">"KUBO minimerer det spildte talent"</p>
                     </div>

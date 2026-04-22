@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Tidsstyring</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Chart.js er et eksternt bibliotek til at tegne grafer og diagrammer -->
+    <!-- CDN = Content Delivery Network — hentes fra internettet i stedet for lokalt -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- i18n.js = internationalization — oversætter tekster til dansk/engelsk -->
     <script src="../js/i18n.js"></script>
 </head>
 <body>
@@ -19,13 +22,16 @@
                 <li><a href="moduler.html">Læringsmoduler</a></li>
                 <li><a href="spil.html">Spil</a></li>
                 <li><a href="kalender.html">Visuel Kalender</a></li>
+                <!-- class="active" markerer dette som det aktuelle menupunkt -->
                 <li><a href="tidsstyring.html" class="active">Tidsstyring</a></li>
+                <li><a href="abonnement.html">Abonnement</a></li>
                 <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Page Header -->
+    <!-- PAGE HEADER -->
+    <!-- data-i18n="time.h1" = i18n.js erstatter teksten baseret på valgt sprog -->
     <div class="page-header">
         <h1 data-i18n="time.h1">⏳ Tidsstyring</h1>
         <p data-i18n="time.sub">Fordel din tid på opgaver visuelt — med farverige lagkagediagrammer der tæller ned i realtid.</p>
@@ -33,32 +39,41 @@
 
     <main class="section">
         <div class="container-narrow">
+
+            <!-- TIDSSTYRING KORT: Hovedelement med inputfelter og knapper -->
             <div class="section-card" id="tidsstyring">
                 <h2>⏳ Planlæg din tid</h2>
                 <p>Fordel din tid på opgaver ved lige fordeling eller procentbaseret vægt. Perfekt til eksamen!</p>
 
+                <!-- type="number" = kun tal tilladt som input -->
                 <label for="totalTime">Total tid (min):</label>
                 <input type="number" id="totalTime" min="1" placeholder="fx 60">
 
                 <label for="taskCount">Antal opgaver:</label>
                 <input type="number" id="taskCount" min="1" placeholder="fx 4">
 
+                <!-- type="button" sender IKKE en formular — kører JavaScript-funktioner direkte -->
                 <div class="buttons">
                     <button type="button" id="setupTasks">Generer opgaver</button>
                     <button type="button" id="autoDivide">Lige fordeling</button>
                 </div>
 
+                <!-- Tom div — fyldes dynamisk med JavaScript når brugeren klikker "Generer opgaver" -->
                 <div id="taskInputs" style="margin-top:1rem;"></div>
 
                 <button type="button" id="startTimer" class="primary" style="margin-top:1.5rem;">Start timer</button>
 
+                <!-- <canvas> er HTML5-elementet som Chart.js tegner lagkagediagrammet på -->
+                <!-- JavaScript styrer hvad der vises på canvas-elementet -->
                 <div class="chart-container">
                     <canvas id="timeChart"></canvas>
                 </div>
             </div>
 
+            <!-- VEJLEDNINGS-KORT: Forklarer brugeren hvordan funktionen bruges -->
             <div class="section-card" style="background:linear-gradient(135deg,#EEF2FF,#FFF7ED);border-color:#C7D2FE;">
                 <h3>💡 Sådan bruger du tidsstyring</h3>
+                <!-- <ol> = ordered list (nummereret liste) -->
                 <ol style="margin-top:0.5rem;">
                     <li>Skriv den totale tid du har til rådighed (fx 60 minutter)</li>
                     <li>Skriv antallet af opgaver du skal nå</li>
@@ -75,6 +90,7 @@
         <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
     </footer>
 
+    <!-- tidsstyring.js indeholder al logik for timer og Chart.js-diagrammet -->
     <script src="../js/tidsstyring.js" defer></script>
     <script src="../js/floating-timer.js" defer></script>
 

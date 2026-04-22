@@ -1,45 +1,44 @@
-// ── Firebase result saving ───────────────────────────────────────────────────
-// Scores are stored at testscores/{username}, which is the shared node
-// linking students (by username) and teachers (by class field).
-
-// Cache the student's class for the session to avoid repeated DB reads.
-let _cachedStudentClass = null;
-
-async function _getStudentClass(user) {
-    if (_cachedStudentClass !== null) return _cachedStudentClass;
-    try {
-        const snap = await db.ref('students/' + user + '/class').once('value');
-        _cachedStudentClass = snap.val() || '';
-    } catch {
-        _cachedStudentClass = '';
-    }
-    return _cachedStudentClass;
-}
+// ── SQL result saving ─────────────────────────────────────────────────────────
+// Scores are stored in the testscores table, linked to students by student_id.
+// Teachers see students in their class via the students.class column.
 
 function saveScore(module, score) {
-    const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
-    if (!user || typeof db === 'undefined') return;
+    const userId = typeof getCurrentUserId === 'function' ? getCurrentUserId() : null;
+    if (!userId || typeof db === 'undefined') return;
 
-    const ref = db.ref('testscores/' + user + '/scores/' + module);
-    ref.once('value').then(async snap => {
-        const prev = snap.val() || 0;
-        if (score > prev) {
-            await ref.set(score);
-            // Keep class denormalized in testscores so teacher queries work
-            const cls = await _getStudentClass(user);
-            if (cls) db.ref('testscores/' + user + '/class').set(cls);
-        }
-    });
-    db.ref('testscores/' + user + '/lastActivity').set(Date.now());
+    // Read current score, only save if new score is higher
+    db.from('testscores')
+        .select('score')
+        .eq('student_id', userId)
+        .eq('module', module)
+        .maybeSingle()
+        .then(({ data }) => {
+            const prev = data?.score || 0;
+            if (score > prev) {
+                db.from('testscores').upsert({
+                    student_id:    userId,
+                    module,
+                    score,
+                    last_activity: new Date().toISOString(),
+                }, { onConflict: 'student_id,module' });
+            }
+        });
 }
 
 window.addEventListener('beforeunload', () => {
-    const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
-    if (!user || typeof db === 'undefined') return;
-    db.ref('testscores/' + user + '/timeSpent').once('value').then(snap => {
-        const prev = snap.val() || 0;
-        db.ref('testscores/' + user + '/timeSpent').set(prev + seconds);
-    });
+    const userId = typeof getCurrentUserId === 'function' ? getCurrentUserId() : null;
+    if (!userId || typeof db === 'undefined' || !seconds) return;
+    // Add session time to student's total time_spent
+    db.from('students')
+        .select('time_spent')
+        .eq('id', userId)
+        .single()
+        .then(({ data }) => {
+            const prev = data?.time_spent || 0;
+            db.from('students')
+                .update({ time_spent: prev + seconds })
+                .eq('id', userId);
+        });
 });
 
 // ── Exercises ────────────────────────────────────────────────────────────────
