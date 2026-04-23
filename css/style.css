@@ -4,6 +4,16 @@
    ============================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+@import url('https://fonts.cdnfonts.com/css/opendyslexic');
+
+/* Dysleksi-venlig tilstand — aktiveres med knappen i navbar */
+.dyslexia-font,
+.dyslexia-font * {
+    font-family: 'OpenDyslexic', sans-serif !important;
+    letter-spacing: 0.05em;
+    line-height: 1.8;
+    word-spacing: 0.15em;
+}
 
 /* === CSS Custom Properties === */
 :root {
@@ -46,6 +56,40 @@ body {
     color: var(--text);
     background-color: var(--bg);
     padding-top: var(--nav-height);
+}
+
+/* === Accessibility === */
+
+/* Spring til indhold-link — usynlig medmindre fokuseret med tastatur */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    background: var(--secondary);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    font-weight: 700;
+    z-index: 99999;
+    transition: top 0.2s;
+}
+.skip-link:focus {
+    top: 1rem;
+}
+
+/* Synlig fokus-ring på alle interaktive elementer */
+:focus-visible {
+    outline: 3px solid var(--secondary);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Kalenderdage og knapper skal også have fokus-styling */
+.day:focus-visible,
+.btn:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--secondary);
+    outline-offset: 3px;
 }
 
 img {

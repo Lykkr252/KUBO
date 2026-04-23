@@ -12,6 +12,7 @@
     <script src="../js/i18n.js"></script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Spring til indhold</a>
 
     <!-- NAVBAR -->
     <nav class="navbar">
@@ -45,7 +46,7 @@
     </script>
 
     <!-- Floating page timer -->
-    <div id="pageTimer">⏱️ <span id="timeDisplay">00:00</span><button id="timerToggleBtn" onclick="toggleTimer()" title="Start">▶</button><button onclick="resetTimer()" title="Nulstil">↻</button></div>
+    <div id="pageTimer" role="timer" aria-label="Sidetimer">⏱️ <span id="timeDisplay" aria-live="polite">00:00</span><button id="timerToggleBtn" onclick="toggleTimer()" aria-label="Start timer">▶</button><button onclick="resetTimer()" aria-label="Nulstil timer">↻</button></div>
 
     <!-- Page Header -->
     <div class="page-header">
@@ -53,7 +54,7 @@
         <p data-i18n="mod.sub">Interaktive øvelser i klokken, tal, geometri, brøker og meget mere. Tag det i dit eget tempo!</p>
     </div>
 
-    <main class="section">
+    <main class="section" id="main-content">
         <div class="container-narrow">
 
             <!-- Klokkeopgave -->

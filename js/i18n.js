@@ -577,6 +577,31 @@
     btn.onmouseout  = () => { btn.style.background = 'transparent'; btn.style.color = '#4f46e5'; };
     btn.textContent = _lang === 'da' ? '🇬🇧 EN' : '🇩🇰 DA';
     target.appendChild(btn);
+
+    // Dyslexia font toggle button
+    const dyslexiaBtn = document.createElement('button');
+    dyslexiaBtn.id = 'dyslexiaToggleBtn';
+    const dyslexiaOn = localStorage.getItem('kubo_dyslexia') === 'true';
+    if (dyslexiaOn) document.body.classList.add('dyslexia-font');
+    dyslexiaBtn.style.cssText =
+      'padding:0.25rem 0.7rem;font-size:0.82rem;font-family:inherit;font-weight:700;' +
+      'border:2px solid #f97316;border-radius:8px;background:transparent;' +
+      'color:#f97316;cursor:pointer;transition:all 0.2s;margin-left:0.5rem;';
+    dyslexiaBtn.onmouseover = () => { dyslexiaBtn.style.background = '#f97316'; dyslexiaBtn.style.color = '#fff'; };
+    dyslexiaBtn.onmouseout  = () => { dyslexiaBtn.style.background = 'transparent'; dyslexiaBtn.style.color = '#f97316'; };
+    dyslexiaBtn.textContent = '𝐀 Dysleksi';
+    dyslexiaBtn.title = 'Skift til dysleksi-venlig skrifttype';
+    dyslexiaBtn.onclick = () => {
+      const active = document.body.classList.toggle('dyslexia-font');
+      localStorage.setItem('kubo_dyslexia', active);
+      dyslexiaBtn.style.background = active ? '#f97316' : 'transparent';
+      dyslexiaBtn.style.color      = active ? '#fff'    : '#f97316';
+    };
+    if (dyslexiaOn) {
+      dyslexiaBtn.style.background = '#f97316';
+      dyslexiaBtn.style.color = '#fff';
+    }
+    target.appendChild(dyslexiaBtn);
   }
 
   // ── Language picker popup ─────────────────────────────────────────────────

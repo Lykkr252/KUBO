@@ -17,6 +17,7 @@
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Spring til indhold</a>
 
     <!-- NAVBAR med login/logout-knap i højre side -->
     <nav class="navbar">
@@ -61,7 +62,7 @@
         <p data-i18n="cal.sub">Klik på en dag for at tilføje begivenheder. Tilpas farver, symboler og udseende frit.</p>
     </div>
 
-    <main class="section">
+    <main class="section" id="main-content">
         <div class="container-narrow">
 
             <!-- Knap der åbner indstillingsmodalen — id bruges af JavaScript -->
@@ -73,13 +74,13 @@
             <div class="calendar-wrapper">
                 <!-- Månedsnavigation med forrige/næste knapper -->
                 <div class="month-header">
-                    <button id="prevBtn" data-i18n="cal.prev">◀ Forrige</button>
+                    <button id="prevBtn" data-i18n="cal.prev" aria-label="Forrige måned">◀ Forrige</button>
                     <div class="month-title">
                         <!-- Disse er tomme — JavaScript fylder dem med måned og år -->
                         <h2 id="monthName"></h2>
                         <p id="year"></p>
                     </div>
-                    <button id="nextBtn" data-i18n="cal.next">Næste ▶</button>
+                    <button id="nextBtn" data-i18n="cal.next" aria-label="Næste måned">Næste ▶</button>
                 </div>
 
                 <!-- Ugedage-header over kalendergitteret -->
@@ -109,7 +110,7 @@
             <div class="event-modal-header">
                 <h2>⚙ Tilpas kalender</h2>
                 <!-- Luk-knap — id bruges af JavaScript til at lukke modalen -->
-                <button id="closeSettings" class="modal-close-btn">✕</button>
+                <button id="closeSettings" class="modal-close-btn" aria-label="Luk indstillinger">✕</button>
             </div>
 
             <!-- Toggle-knapper (on/off switches) til at vise/skjule elementer -->
@@ -162,7 +163,7 @@
             <div class="event-modal-header">
                 <!-- Titlen udfyldes af JavaScript med den valgte dato -->
                 <h2 id="eventModalTitle"></h2>
-                <button id="closeEventModal" class="modal-close-btn">✕</button>
+                <button id="closeEventModal" class="modal-close-btn" aria-label="Luk begivenhed">✕</button>
             </div>
             <!-- Liste over begivenheder for den valgte dag — udfyldes af JavaScript -->
             <div id="eventList" class="event-list"></div>

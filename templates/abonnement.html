@@ -20,6 +20,7 @@
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Spring til indhold</a>
     <!-- BODY indeholder alt der vises på siden -->
 
     <!-- NAV: Navigationsmenu øverst på siden -->
@@ -45,7 +46,7 @@
     </nav>
 
     <!-- MAIN: Sidens primære indhold -->
-    <main>
+    <main id="main-content">
         <section class="section">
             <div class="container">
 
@@ -115,9 +116,10 @@
     <div id="infoModal" class="modal-overlay">
         <div class="modal-content">
             <!-- &times; er HTML-entitet for × (kryds/luk-tegn) -->
-            <span class="close-btn" id="lukInfo">&times;</span>
+            <span class="close-btn" id="lukInfo" role="button" tabindex="0" aria-label="Luk">&times;</span>
             <h3 style="color: #3498DB;">Diagnostisk Minitest</h3>
-            <p>Dette er en kort test, der hjælper læreren med at spotte elevens strategiske forståelse fremfor blot at måle rigtigt/forkert.</p>
+            <p>Dette er en kort test, der hjælper læreren med at spotte elevens strategiske forståelse fremfor blot at
+                måle rigtigt/forkert.</p>
         </div>
     </div>
 
@@ -135,14 +137,14 @@
         const lukInfo = document.getElementById("lukInfo");      // "×"-knappen der lukker popup
 
         // Når brugeren klikker på "?" — vis modal ved at sætte display til "block"
-        åbenInfo.onclick = function() { infoModal.style.display = "block"; }
+        åbenInfo.onclick = function () { infoModal.style.display = "block"; }
 
         // Når brugeren klikker på "×" — skjul modal igen
-        lukInfo.onclick = function() { infoModal.style.display = "none"; }
+        lukInfo.onclick = function () { infoModal.style.display = "none"; }
 
         // Når brugeren klikker uden for popup-boksen (på det mørke overlay) — luk den også
         // event.target er det element man klikkede på
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == infoModal) { infoModal.style.display = "none"; }
         }
     </script>
@@ -150,4 +152,5 @@
     <!-- Eksternt JS til flydende timer — defer betyder det indlæses efter HTML er klar -->
     <script src="../js/floating-timer.js" defer></script>
 </body>
+
 </html>

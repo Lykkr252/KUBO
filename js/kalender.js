@@ -3,10 +3,12 @@ const currentUserId = typeof getCurrentUserId === 'function' ? getCurrentUserId(
 async function loadEvents() {
     if (!currentUserId) return {};   // not logged in — start with empty calendar
     try {
+        // ⬇⬇⬇ FREMLÆGGELSE: HER HENTER VI DATA FRA SUPABASE-DATABASEN ⬇⬇⬇
         const { data, error } = await db
             .from('calendar_events')
             .select('event_date, event_text')
             .eq('student_id', currentUserId);
+        // ⬆⬆⬆ =============================================== ⬆⬆⬆
 
         if (error || !data) return {};
 

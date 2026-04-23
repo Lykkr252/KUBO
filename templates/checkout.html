@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Spring til indhold</a>
 
     <!-- NAVBAR: Gentages på alle sider — giver brugeren nem navigation -->
     <nav class="navbar">
@@ -24,7 +25,7 @@
         </div>
     </nav>
 
-    <main>
+    <main id="main-content">
         <section class="section">
             <div class="container">
                 <div class="section-title">
@@ -88,7 +89,7 @@
     <!-- Skjult til at starte med — JavaScript viser den med display="block" -->
     <div id="succesModal" class="modal-overlay">
         <div class="modal-content">
-            <span class="close-btn" id="lukSucces">&times;</span>
+            <span class="close-btn" id="lukSucces" role="button" tabindex="0" aria-label="Luk">×</span>
             <h3 style="color: #2ECC71;">✅ Tak for din bestilling!</h3>
             <p>Din profil er nu oprettet i vores system. Vi har sendt en kvittering til din e-mailadresse.</p>
             <a href="../index.html" class="buy-button outline" style="display: block; margin-top: 20px;">Gå til forsiden</a>
