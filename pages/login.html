@@ -52,6 +52,28 @@
                     <label data-i18n="reg.pass2.lbl">Bekræft adgangskode</label>
                     <input type="password" id="regPass2" data-i18n-ph="reg.pass2.ph" placeholder="Gentag adgangskode">
                 </div>
+                <hr style="border:none;border-top:1px solid #e2e8f0;margin:0.75rem 0">
+                <p style="font-size:0.8rem;color:#94a3b8;margin-bottom:0.5rem">Valgfrie oplysninger (kan udfyldes senere)</p>
+                <div class="form-group">
+                    <label>Studienummer</label>
+                    <input type="text" id="regStudynumber" placeholder="fx 12345">
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="regEmail" placeholder="din@email.dk">
+                </div>
+                <div class="form-group">
+                    <label>Studieretning</label>
+                    <input type="text" id="regStudyline" placeholder="fx HF, HTX, STX">
+                </div>
+                <div class="form-group">
+                    <label>Fag</label>
+                    <input type="text" id="regSubject" placeholder="fx Matematik">
+                </div>
+                <div class="form-group">
+                    <label>Klasse</label>
+                    <input type="text" id="regClass" placeholder="fx 2A">
+                </div>
                 <button class="btn btn-primary" style="width:100%" onclick="handleRegister()" data-i18n="reg.btn">Opret konto</button>
             </div>
 
@@ -85,8 +107,17 @@
             if (p !== p2) return showMsg('Adgangskoderne matcher ikke.');
             if (u.length < 3) return showMsg('Brugernavn skal være mindst 3 tegn.');
             if (p.length < 4) return showMsg('Adgangskode skal være mindst 4 tegn.');
-            const result = await doRegister(u, p);
+            const profile = {
+                studynumber: document.getElementById('regStudynumber').value.trim(),
+                email:       document.getElementById('regEmail').value.trim(),
+                studyline:   document.getElementById('regStudyline').value.trim(),
+                subject:     document.getElementById('regSubject').value.trim(),
+                class:       document.getElementById('regClass').value.trim(),
+                preferredLanguage: sessionStorage.getItem('kubo_lang') || 'da',
+            };
+            const result = await doRegister(u, p, profile);
             if (result === 'taken') return showMsg('Brugernavnet er allerede taget.');
+            if (result !== 'ok') return showMsg(result);
             showMsg('Konto oprettet! Logger ind...', 'green');
             await doLogin(u, p);
             setTimeout(() => window.location.href = '../index.html', 800);

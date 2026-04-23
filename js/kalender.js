@@ -1,6 +1,7 @@
 const currentUser = getCurrentUser(); // henter brugernavn fra auth.js
 
 async function loadEvents() {
+    if (!currentUser) return {};   // not logged in — start with empty calendar
     try {
         const snapshot = await db.ref('events/' + currentUser).once('value');
         return snapshot.exists() ? (snapshot.val() || {}) : {};
@@ -10,6 +11,7 @@ async function loadEvents() {
 }
 
 async function saveAllEvents(allEvents) {
+    if (!currentUser) return;      // not logged in — nothing to save
     try {
         await db.ref('events/' + currentUser).set(allEvents);
     } catch {

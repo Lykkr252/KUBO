@@ -474,7 +474,9 @@
 
   // ── Public helpers ────────────────────────────────────────────────────────
 
-  let _lang = localStorage.getItem('kubo_lang') || 'da';
+  // Check sessionStorage first: doLogin() stores the Firebase language pref there.
+  // Fall back to localStorage (persisted across sessions), then default to Danish.
+  let _lang = sessionStorage.getItem('kubo_lang') || localStorage.getItem('kubo_lang') || 'da';
 
   window.t = function (key, vars) {
     const str = (TRANS[_lang] && TRANS[_lang][key]) ||
@@ -490,6 +492,7 @@
   function applyLang(lang) {
     _lang = lang;
     localStorage.setItem('kubo_lang', lang);
+    sessionStorage.setItem('kubo_lang', lang);
     document.documentElement.lang = lang;
 
     const tr = TRANS[lang] || TRANS.da;
@@ -545,7 +548,12 @@
 
   window.applyLang = applyLang;
   window.switchLang = function () {
-    applyLang(_lang === 'da' ? 'en' : 'da');
+    const newLang = _lang === 'da' ? 'en' : 'da';
+    applyLang(newLang);
+    // Persist the choice to Firebase if the student is logged in
+    if (typeof savePreferredLanguage === 'function') {
+      savePreferredLanguage(newLang);
+    }
   };
 
   // ── Inject language toggle into navbar ────────────────────────────────────

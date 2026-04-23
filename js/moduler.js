@@ -1,22 +1,44 @@
 // ── Firebase result saving ───────────────────────────────────────────────────
+// Scores are stored at testscores/{username}, which is the shared node
+// linking students (by username) and teachers (by class field).
+
+// Cache the student's class for the session to avoid repeated DB reads.
+let _cachedStudentClass = null;
+
+async function _getStudentClass(user) {
+    if (_cachedStudentClass !== null) return _cachedStudentClass;
+    try {
+        const snap = await db.ref('students/' + user + '/class').once('value');
+        _cachedStudentClass = snap.val() || '';
+    } catch {
+        _cachedStudentClass = '';
+    }
+    return _cachedStudentClass;
+}
 
 function saveScore(module, score) {
     const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
     if (!user || typeof db === 'undefined') return;
-    const ref = db.ref('results/' + user + '/scores/' + module);
-    ref.once('value').then(snap => {
+
+    const ref = db.ref('testscores/' + user + '/scores/' + module);
+    ref.once('value').then(async snap => {
         const prev = snap.val() || 0;
-        if (score > prev) ref.set(score);
+        if (score > prev) {
+            await ref.set(score);
+            // Keep class denormalized in testscores so teacher queries work
+            const cls = await _getStudentClass(user);
+            if (cls) db.ref('testscores/' + user + '/class').set(cls);
+        }
     });
-    db.ref('results/' + user + '/lastActivity').set(Date.now());
+    db.ref('testscores/' + user + '/lastActivity').set(Date.now());
 }
 
 window.addEventListener('beforeunload', () => {
     const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
     if (!user || typeof db === 'undefined') return;
-    db.ref('results/' + user + '/timeSpent').once('value').then(snap => {
+    db.ref('testscores/' + user + '/timeSpent').once('value').then(snap => {
         const prev = snap.val() || 0;
-        db.ref('results/' + user + '/timeSpent').set(prev + seconds);
+        db.ref('testscores/' + user + '/timeSpent').set(prev + seconds);
     });
 });
 

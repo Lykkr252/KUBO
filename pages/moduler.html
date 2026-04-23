@@ -13,7 +13,6 @@
     <script src="../js/i18n.js"></script>
 </head>
 <body>
-    <script>requireLogin();</script>
 
     <!-- NAVBAR -->
     <nav class="navbar">
@@ -27,15 +26,22 @@
                 <li><a href="tidsstyring.html">Tidsstyring</a></li>
                 <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
-            <div style="display:flex;align-items:center;gap:1rem">
-                <span id="navUser" style="font-size:0.85rem;color:#888"></span>
-                <button onclick="doLogout()" class="btn btn-secondary"
-                    style="padding:0.3rem 0.8rem;font-size:0.85rem">Log ud</button>
-            </div>
+            <div id="navAuthArea" style="display:flex;align-items:center;gap:1rem"></div>
         </div>
     </nav>
     <script>
-        document.getElementById('navUser').textContent = '👤 ' + getCurrentUser();
+        (function () {
+            const u = getCurrentUser();
+            const area = document.getElementById('navAuthArea');
+            if (u) {
+                area.innerHTML =
+                    '<span style="font-size:0.85rem;color:#888">👤 ' + u + '</span>' +
+                    '<button onclick="doLogout()" class="btn btn-secondary" style="padding:0.3rem 0.8rem;font-size:0.85rem">Log ud</button>';
+            } else {
+                area.innerHTML =
+                    '<a href="login.html" class="btn btn-primary" style="padding:0.3rem 0.8rem;font-size:0.85rem">Log ind for at gemme</a>';
+            }
+        })();
     </script>
 
     <!-- Floating page timer -->
