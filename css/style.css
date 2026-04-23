@@ -183,7 +183,7 @@ p:last-child {
 
 /* === Hero Section === */
 .hero {
-    background: linear-gradient(135deg, #FFF7ED 0%, #EEF2FF 100%);
+    background: linear-gradient(135deg, rgba(255, 247, 237, 0.9) 0%, rgba(238, 242, 255, 0.9) 100%), url('../Images/index_banner.png') no-repeat center center / cover;
     padding: 5rem 2rem 4rem;
     text-align: center;
 }
