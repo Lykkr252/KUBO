@@ -10,7 +10,6 @@
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
 
-    <!-- NAVBAR: Gentages på alle sider — giver brugeren nem navigation -->
     <nav class="navbar">
         <div class="navbar-inner">
             <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
@@ -40,13 +39,10 @@
                     <p>Udfyld oplysningerne for at oprette din KUBO-profil og starte dit abonnement.</p>
                 </div>
 
-                <!-- FORMULAR: Samler brugerens bestillingsoplysninger -->
-                <!-- id="bestillingsForm" bruges af JavaScript til at fange submit-hændelsen -->
                 <div class="form-container">
                     <form id="bestillingsForm" class="checkout-form">
 
                         <h3>1. Valgt Abonnement</h3>
-                        <!-- <select> er en dropdown-menu — brugeren vælger én option -->
                         <div class="form-group">
                             <label for="valgtPakke">Din pakke:</label>
                             <select id="valgtPakke" name="pakke">
@@ -57,13 +53,11 @@
                         </div>
 
                         <h3>2. Brugeroplysninger</h3>
-                        <!-- type="text" = fritekst, required = feltet skal udfyldes før formularen sendes -->
                         <div class="form-group">
                             <label for="navn">Fulde Navn:</label>
                             <input type="text" id="navn" name="navn" required placeholder="F.eks. Anders Andersen">
                         </div>
 
-                        <!-- type="email" = browseren validerer at inputtet ser ud som en email -->
                         <div class="form-group">
                             <label for="email">E-mail adresse:</label>
                             <input type="email" id="email" name="email" required placeholder="din@email.dk">
@@ -84,7 +78,6 @@
                             </select>
                         </div>
 
-                        <!-- type="submit" sender formularen — JavaScript fanger det med addEventListener -->
                         <button type="submit" class="submit-button">Godkend og Opret Profil</button>
                     </form>
                 </div>
@@ -92,8 +85,6 @@
         </section>
     </main>
 
-    <!-- SUCCES MODAL: Vises efter vellykket bestilling -->
-    <!-- Skjult til at starte med — JavaScript viser den med display="block" -->
     <div id="succesModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-btn" id="lukSucces" role="button" tabindex="0" aria-label="Luk">×</span>
@@ -104,38 +95,30 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p>&copy; 2026 <strong>KUBO</strong> · Kalender, Ur, Bog, Organisering</p>
         <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
     </footer>
 
     <script>
-        // URLSearchParams læser query string fra URL — fx "?pakke=basis"
-        // Bruges til at auto-vælge den rigtige pakke i dropdown når man kommer fra abonnement-siden
         const urlParams = new URLSearchParams(window.location.search);
-        const valgtPakke = urlParams.get('pakke'); // henter værdien af "pakke" fra URL
+        const valgtPakke = urlParams.get('pakke');
         const dropdown = document.getElementById('valgtPakke');
-        if (valgtPakke) {
-            dropdown.value = valgtPakke; // sætter dropdown til den valgte pakke
-        }
+        if (valgtPakke) dropdown.value = valgtPakke;
 
-        // Henter referencer til formularen og modal-elementerne
         const form = document.getElementById("bestillingsForm");
         const succesModal = document.getElementById("succesModal");
         const lukSucces = document.getElementById("lukSucces");
 
-        // addEventListener lytter efter "submit"-hændelsen på formularen
         form.addEventListener("submit", function(event) {
-            event.preventDefault();  // stopper siden fra at genindlæse (standard form-opførsel)
-            succesModal.style.display = "block";  // viser succes-popup
+            event.preventDefault();
+            succesModal.style.display = "block";
         });
 
-        // Lukker popup når brugeren klikker på ×
         lukSucces.onclick = function() {
             succesModal.style.display = "none";
         }
     </script>
 
-    <!-- defer = scriptet indlæses efter HTML er klar -->
     <script src="../js/floating-timer.js" defer></script>
     <script src="../js/navbar.js"></script>
 </body>

@@ -78,6 +78,7 @@ function showGateError(msg) {
 
 function teacherLogout() {
     sessionStorage.removeItem('kubo_laerer');
+    sessionStorage.removeItem('kubo_laerer_id');
     location.reload();
 }
 
@@ -88,67 +89,35 @@ if (_savedTeacher) {
     loadData();
 }
 
-// ── Data loading ──────────────────────────────────────────────────────────────
-// students table      — profile (email, class, studyline, etc.)
-// testscores table    — module scores, linked by student_id
-// evaluations table   — teacher evaluations, linked by student_id + teacher_id
-// Teacher sees only students in the same class (teachers.class = students.class)
+// ── Data loading (localStorage) ───────────────────────────────────────────────
 
 let allStudents   = [];
 let _teacherClass = '';
 
-async function loadData() {
-    const teacherDbId = sessionStorage.getItem('kubo_laerer_id') || '';
-    const teacherName = sessionStorage.getItem('kubo_laerer')    || '';
+function loadData() {
+    const teacherName = sessionStorage.getItem('kubo_laerer') || '';
 
-    // 1. Load teacher's class
-    if (teacherDbId) {
-        const { data: teacher } = await db
-            .from('teachers')
-            .select('class')
-            .eq('id', teacherDbId)
-            .maybeSingle();
-        _teacherClass = teacher?.class || '';
-        updateTeacherLabel(teacherName, _teacherClass);
-    }
+    // Load all registered users and build student list from localStorage
+    let users;
+    try { users = JSON.parse(localStorage.getItem('kubo_users')) || {}; } catch { users = {}; }
 
-    // 2. Load students with their scores and evaluations
-    try {
-        let query = db
-            .from('students')
-            .select(`
-                id, studynumber, email, studyline, subject, class, time_spent,
-                users!inner ( username ),
-                testscores ( module, score, last_activity ),
-                evaluations ( evaluation_text, risk_level )
-            `);
+    const teacherData = users[teacherName] || {};
+    _teacherClass = teacherData.class || '';
+    updateTeacherLabel(teacherName, _teacherClass);
 
-        if (_teacherClass) query = query.eq('class', _teacherClass);
-
-        const { data: rows } = await query;
-
-        allStudents = (rows || []).map(row => {
-            // Build scores object from testscores rows
-            const scoresObj = {};
-            let lastActivity = 0;
-            (row.testscores || []).forEach(ts => {
-                scoresObj[ts.module] = ts.score;
-                const t = new Date(ts.last_activity).getTime();
-                if (t > lastActivity) lastActivity = t;
-            });
-
-            const evalRow = (row.evaluations || [])[0] || null;
-
+    allStudents = Object.entries(users)
+        .filter(([, u]) => u.role === 'student')
+        .filter(([, u]) => !_teacherClass || u.class === _teacherClass)
+        .map(([username, u]) => {
+            let scores;
+            try { scores = JSON.parse(localStorage.getItem(`kubo_scores_${username}`)) || {}; } catch { scores = {}; }
             return parseStudent(
-                row.users.username,
-                { scores: scoresObj, timeSpent: row.time_spent || 0, lastActivity },
-                { email: row.email, studynumber: row.studynumber, studyline: row.studyline, subject: row.subject, class: row.class },
-                evalRow ? { text: evalRow.evaluation_text } : null
+                username,
+                { scores, timeSpent: 0, lastActivity: 0 },
+                { email: u.email, studynumber: u.studynumber, studyline: u.studyline, subject: u.subject, class: u.class },
+                null
             );
         });
-    } catch {
-        allStudents = [];
-    }
 
     document.getElementById('loadingMsg').style.display = 'none';
     document.getElementById('studentTable').style.display = '';
@@ -156,29 +125,12 @@ async function loadData() {
     renderTable();
 }
 
-// ── Evaluations ───────────────────────────────────────────────────────────────
-// Teacher writes an evaluation — stored in the evaluations table (sent_to_admin = true).
+// ── Evaluations (localStorage) ────────────────────────────────────────────────
 
-async function saveEvaluation(studentUsername, text) {
-    const teacherDbId = sessionStorage.getItem('kubo_laerer_id');
-    const riskLevel   = (allStudents.find(s => s.username === studentUsername) || {}).riskLevel || 'unknown';
-
-    // Resolve student's numeric id from username
-    const { data: user } = await db
-        .from('users')
-        .select('id')
-        .eq('username', studentUsername)
-        .single();
-
-    if (!user) throw new Error('Student ikke fundet');
-
-    await db.from('evaluations').upsert({
-        student_id:      user.id,
-        teacher_id:      parseInt(teacherDbId),
-        risk_level:      riskLevel,
-        evaluation_text: text,
-        sent_to_admin:   true,
-    }, { onConflict: 'student_id,teacher_id' });
+function saveEvaluation(studentUsername, text) {
+    const teacherName = sessionStorage.getItem('kubo_laerer') || 'unknown';
+    const key = `kubo_eval_${teacherName}_${studentUsername}`;
+    localStorage.setItem(key, text);
 }
 
 function parseStudent(username, data, profile, evalEntry) {
@@ -345,22 +297,16 @@ function toggleDetail(st, tr) {
     tr.after(detailTr);
 }
 
-async function submitEvaluation(username) {
+function submitEvaluation(username) {
     const ta  = document.getElementById('eval-' + username);
     const msg = document.getElementById('eval-msg-' + username);
     if (!ta) return;
     const text = ta.value.trim();
     if (!text) { msg.style.color = '#dc2626'; msg.textContent = 'Skriv en vurdering først.'; return; }
-    msg.style.color = '#94a3b8'; msg.textContent = 'Gemmer...';
-    try {
-        await saveEvaluation(username, text);
-        msg.style.color = '#16a34a'; msg.textContent = 'Sendt til administration!';
-        // Update cached student so re-opening shows the saved text
-        const st = allStudents.find(s => s.username === username);
-        if (st) st.evaluation = text;
-    } catch {
-        msg.style.color = '#dc2626'; msg.textContent = 'Fejl – prøv igen.';
-    }
+    saveEvaluation(username, text);
+    msg.style.color = '#16a34a'; msg.textContent = 'Gemt!';
+    const st = allStudents.find(s => s.username === username);
+    if (st) st.evaluation = text;
 }
 
 function moduleChip(m) {

@@ -1,10 +1,8 @@
 {
   "scripts": {
-    "start": "live-server --port=3000 --open=index.html"
+    "start": "live-server --port=3000 --open=templates/index.html"
   },
-  "dependencies": {
-    "firebase": "^12.11.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "live-server": "^1.2.2"
   }

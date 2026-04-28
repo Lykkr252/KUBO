@@ -1,38 +1,20 @@
 <!DOCTYPE html>
-<!-- DOCTYPE fortæller browseren at dette er en HTML5-side -->
 <html lang="da">
-<!-- lang="da" siger at sidens sprog er dansk — bruges af skærmlæsere og søgemaskiner -->
 
 <head>
-    <!-- HEAD-sektionen indeholder metadata — vises ikke direkte på siden -->
-
-    <!-- UTF-8 sikrer at danske bogstaver (æ, ø, å) vises korrekt -->
     <meta charset="UTF-8">
-
-    <!-- viewport gør siden responsiv på mobil — width=device-width betyder siden fylder skærmens bredde -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Sidens titel — vises i browser-fanen -->
     <title>KUBO - Abonnementer</title>
-
-    <!-- Linker til eksternt CSS-stylesheet — ../css/ går én mappe op fra templates/ -->
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/i18n.js"></script>
 </head>
 
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
-    <!-- BODY indeholder alt der vises på siden -->
 
-    <!-- NAV: Navigationsmenu øverst på siden -->
-    <!-- <nav> er et semantisk HTML-element der markerer navigationssektionen -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <!-- Logo som link tilbage til forsiden -->
             <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
-
-            <!-- <ul> = unordered list (punktliste uden numre) — bruges til at lave menupunkter -->
-            <!-- Hvert <li> er et menupunkt med et <a>-link -->
             <ul class="navbar-nav">
                 <li><a href="index.html">Forside</a></li>
                 <li class="dropdown">
@@ -51,54 +33,40 @@
         </div>
     </nav>
 
-    <!-- MAIN: Sidens primære indhold -->
     <main id="main-content">
         <section class="section">
             <div class="container">
-
-                <!-- Sektion-overskrift -->
                 <div class="section-title">
                     <h2>Vælg dit KUBO-abonnement</h2>
                     <p>Få adgang til visuelle værktøjer, der gør hverdagen nemmere.</p>
                 </div>
 
-                <!-- PRISKORT-CONTAINER: Holder alle tre abonnementskort -->
-                <!-- CSS bruger flex eller grid til at sætte kortene ved siden af hinanden -->
                 <div class="pricing-container">
 
-                    <!-- KORT 1: Basis-abonnement -->
-                    <!-- <article> er et semantisk element til selvstændigt indhold (fx et produkt) -->
                     <article class="pricing-card">
                         <h3>KUBO Basis</h3>
-                        <!-- Pris med <span> til at style "/ md." anderledes i CSS -->
                         <p class="pris">49 kr. <span>/ md.</span></p>
                         <p class="maalgruppe">Til elever og forældre</p>
-                        <!-- <ul> med features — punktliste over hvad der er inkluderet -->
                         <ul class="features">
                             <li>Visuel kalender</li>
                             <li>Lagkage-timer</li>
                             <li>Gemmer personlige indstillinger</li>
                         </ul>
-                        <!-- Link til checkout-siden — ?pakke=basis sender info med i URL'en (query string) -->
                         <a href="checkout.html?pakke=basis" class="buy-button">Vælg Basis</a>
                     </article>
 
-                    <!-- KORT 2: Klasse-abonnement -->
-                    <!-- class="highlight" giver dette kort en anden styling i CSS (fx fremhævet farve) -->
                     <article class="pricing-card highlight">
                         <h3>KUBO Klasse</h3>
                         <p class="pris">399 kr. <span>/ md.</span></p>
                         <p class="maalgruppe">Til lærere (Op til 30 elever)</p>
                         <ul class="features">
                             <li>Alt i Basis</li>
-                            <!-- Spørgsmålstegnet åbner en modal (popup) når man klikker — se JavaScript nedenfor -->
                             <li>Diagnostisk minitest <span class="info-ikon" id="åbenInfo">?</span></li>
                             <li>Digital portfolio til evaluering</li>
                         </ul>
                         <a href="checkout.html?pakke=klasse" class="buy-button">Vælg Klasse</a>
                     </article>
 
-                    <!-- KORT 3: Skole-abonnement -->
                     <article class="pricing-card">
                         <h3>KUBO Skole</h3>
                         <p class="pris">Kontakt os</p>
@@ -108,7 +76,6 @@
                             <li>Dataeksport til administration</li>
                             <li>Fuld systemintegration</li>
                         </ul>
-                        <!-- class="outline" giver knappen en anden stil (fx kun ramme, ingen baggrund) -->
                         <a href="kontakt.html" class="buy-button outline">Kontakt os</a>
                     </article>
 
@@ -117,11 +84,8 @@
         </section>
     </main>
 
-    <!-- MODAL (POPUP): Skjult boks der vises når man klikker på "?" -->
-    <!-- display:none i CSS/JS gør den usynlig til at starte med -->
     <div id="infoModal" class="modal-overlay">
         <div class="modal-content">
-            <!-- &times; er HTML-entitet for × (kryds/luk-tegn) -->
             <span class="close-btn" id="lukInfo" role="button" tabindex="0" aria-label="Luk">&times;</span>
             <h3 style="color: #3498DB;">Diagnostisk Minitest</h3>
             <p>Dette er en kort test, der hjælper læreren med at spotte elevens strategiske forståelse fremfor blot at
@@ -129,33 +93,23 @@
         </div>
     </div>
 
-    <!-- FOOTER: Sidefod med copyright og kontaktlink -->
     <footer>
-        <p>&copy; 2026 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p>&copy; 2026 <strong>KUBO</strong> · Kalender, Ur, Bog, Organisering</p>
         <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
     </footer>
 
-    <!-- JAVASCRIPT: Styrer modal (popup) funktionaliteten -->
     <script>
-        // Henter HTML-elementer ved deres id — så JavaScript kan styre dem
-        const infoModal = document.getElementById("infoModal");  // Selve popup-boksen
-        const åbenInfo = document.getElementById("åbenInfo");    // "?"-knappen der åbner popup
-        const lukInfo = document.getElementById("lukInfo");      // "×"-knappen der lukker popup
+        const infoModal = document.getElementById("infoModal");
+        const åbenInfo = document.getElementById("åbenInfo");
+        const lukInfo = document.getElementById("lukInfo");
 
-        // Når brugeren klikker på "?" — vis modal ved at sætte display til "block"
         åbenInfo.onclick = function () { infoModal.style.display = "block"; }
-
-        // Når brugeren klikker på "×" — skjul modal igen
         lukInfo.onclick = function () { infoModal.style.display = "none"; }
-
-        // Når brugeren klikker uden for popup-boksen (på det mørke overlay) — luk den også
-        // event.target er det element man klikkede på
         window.onclick = function (event) {
             if (event.target == infoModal) { infoModal.style.display = "none"; }
         }
     </script>
 
-    <!-- Eksternt JS til flydende timer — defer betyder det indlæses efter HTML er klar -->
     <script src="../js/floating-timer.js" defer></script>
     <script src="../js/navbar.js"></script>
 </body>

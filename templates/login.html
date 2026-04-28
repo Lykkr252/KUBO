@@ -5,49 +5,32 @@
     <meta charset="UTF-8">
     <title>KUBO - Log ind</title>
     <link rel="stylesheet" href="../css/style.css">
-    <!-- i18n.js oversætter tekster til dansk/engelsk -->
     <script src="../js/i18n.js"></script>
-    <!-- Supabase JavaScript SDK — bruges til at kommunikere med databasen -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <!-- supabase-init.js opretter forbindelsen til Supabase med URL og API-nøgle -->
-    <script src="../js/supabase-init.js"></script>
 </head>
 
 <body>
-    <!-- Login-siden har INGEN navbar — brugeren er ikke logget ind endnu -->
-
-    <!-- auth-wrapper centrerer login-kortet på skærmen med CSS flex -->
     <div class="auth-wrapper">
         <div class="auth-card">
-            <!-- Logo som link tilbage til forsiden -->
             <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
             <p class="auth-subtitle" data-i18n="login.subtitle">Log ind for at gemme din kalender</p>
 
-            <!-- TABS: To knapper der skifter mellem Login og Opret konto -->
-            <!-- class="active" styles den valgte tab med CSS -->
             <div class="auth-tabs">
                 <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')" data-i18n="login.tab.in">Log ind</button>
                 <button class="auth-tab" id="tabRegister" onclick="switchTab('register')" data-i18n="login.tab.reg">Opret konto</button>
             </div>
 
-            <!-- LOGIN FORMULAR: Vises som standard -->
             <div id="loginForm">
                 <div class="form-group">
                     <label data-i18n="login.user.lbl">Brugernavn</label>
-                    <!-- type="text" = fritekst input -->
                     <input type="text" id="loginUser" data-i18n-ph="login.user.ph" placeholder="Dit brugernavn">
                 </div>
                 <div class="form-group">
                     <label data-i18n="login.pass.lbl">Adgangskode</label>
-                    <!-- type="password" = inputtet vises som prikker i stedet for bogstaver -->
                     <input type="password" id="loginPass" data-i18n-ph="login.pass.ph" placeholder="Din adgangskode">
                 </div>
-                <!-- onclick kalder handleLogin() funktionen nedenfor -->
                 <button class="btn btn-primary" style="width:100%" onclick="handleLogin()" data-i18n="login.btn">Log ind</button>
             </div>
 
-            <!-- REGISTRERINGSFORMULAR: Skjult til at starte med (display:none) -->
-            <!-- Vises når brugeren klikker "Opret konto"-tab -->
             <div id="registerForm" style="display:none">
                 <div class="form-group">
                     <label data-i18n="reg.user.lbl">Brugernavn</label>
@@ -59,15 +42,12 @@
                 </div>
                 <div class="form-group">
                     <label data-i18n="reg.pass2.lbl">Bekræft adgangskode</label>
-                    <!-- Bruges til at tjekke at begge passwords matcher i JavaScript -->
                     <input type="password" id="regPass2" data-i18n-ph="reg.pass2.ph" placeholder="Gentag adgangskode">
                 </div>
 
-                <!-- <hr> = horisontal linje der adskiller sektioner visuelt -->
                 <hr style="border:none;border-top:1px solid #e2e8f0;margin:0.75rem 0">
                 <p style="font-size:0.8rem;color:#94a3b8;margin-bottom:0.5rem">Valgfrie oplysninger (kan udfyldes senere)</p>
 
-                <!-- Valgfrie profilfelter — gemmes i databasen men kræves ikke -->
                 <div class="form-group">
                     <label>Studienummer</label>
                     <input type="text" id="regStudynumber" placeholder="fx 12345">
@@ -86,70 +66,58 @@
                 </div>
                 <div class="form-group">
                     <label>Klasse</label>
-                    <!-- class-feltet bruges til at linke elever til den rigtige lærer i databasen -->
                     <input type="text" id="regClass" placeholder="fx 2A">
                 </div>
                 <button class="btn btn-primary" style="width:100%" onclick="handleRegister()" data-i18n="reg.btn">Opret konto</button>
             </div>
 
-            <!-- Fejl/succesbesked — skjult til start, vises af showMsg() -->
             <p id="authMsg" style="color:red;margin-top:1rem;display:none"></p>
         </div>
     </div>
 
-    <!-- auth.js indeholder doLogin() og doRegister() som kommunikerer med Supabase -->
     <script src="../js/auth.js" defer></script>
     <script>
-        // Skifter mellem Login og Opret konto ved at vise/skjule de to formularer
         function switchTab(tab) {
-            // Ternær operator: hvis tab === 'login', vis loginForm, ellers skjul den
             document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
             document.getElementById('registerForm').style.display = tab === 'register' ? '' : 'none';
-            // classList.toggle tilføjer/fjerner 'active'-klassen på de to tab-knapper
             document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
             document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
         }
 
-        // Håndterer login — kaldt når brugeren klikker "Log ind"
-        // async/await bruges fordi doLogin() henter data fra databasen (asynkron handling)
         async function handleLogin() {
-            const u = document.getElementById('loginUser').value.trim(); // .trim() fjerner mellemrum
+            const u = document.getElementById('loginUser').value.trim();
             const p = document.getElementById('loginPass').value;
-            if (!u || !p) return showMsg('Udfyld alle felter.'); // tidlig retur hvis felter er tomme
-            const ok = await doLogin(u, p); // venter på svar fra Supabase
-            if (ok) window.location.href = 'index.html'; // omdirigerer til forsiden ved succes
+            if (!u || !p) return showMsg('Udfyld alle felter.');
+            const ok = await doLogin(u, p);
+            if (ok) window.location.href = 'index.html';
             else showMsg('Forkert brugernavn eller adgangskode.');
         }
 
-        // Håndterer oprettelse af ny konto
         async function handleRegister() {
             const u = document.getElementById('regUser').value.trim();
             const p = document.getElementById('regPass').value;
             const p2 = document.getElementById('regPass2').value;
             if (!u || !p || !p2) return showMsg('Udfyld alle felter.');
-            if (p !== p2) return showMsg('Adgangskoderne matcher ikke.'); // validering
+            if (p !== p2) return showMsg('Adgangskoderne matcher ikke.');
             if (u.length < 3) return showMsg('Brugernavn skal være mindst 3 tegn.');
             if (p.length < 4) return showMsg('Adgangskode skal være mindst 4 tegn.');
 
-            // Samler profildata i et objekt — sendes til Supabase via doRegister()
             const profile = {
                 studynumber: document.getElementById('regStudynumber').value.trim(),
                 email:       document.getElementById('regEmail').value.trim(),
                 studyline:   document.getElementById('regStudyline').value.trim(),
                 subject:     document.getElementById('regSubject').value.trim(),
                 class:       document.getElementById('regClass').value.trim(),
-                preferredLanguage: sessionStorage.getItem('kubo_lang') || 'da', // henter gemt sprog
+                preferredLanguage: sessionStorage.getItem('kubo_lang') || 'da',
             };
             const result = await doRegister(u, p, profile);
             if (result === 'taken') return showMsg('Brugernavnet er allerede taget.');
             if (result !== 'ok') return showMsg(result);
             showMsg('Konto oprettet! Logger ind...', 'green');
-            await doLogin(u, p); // logger automatisk ind efter oprettelse
-            // setTimeout venter 800ms før den omdirigerer — så brugeren kan se beskeden
+            await doLogin(u, p);
             setTimeout(() => window.location.href = 'index.html', 800);
         }
 
-        // Viser en besked til brugeren — farve er rød som standard, kan ændres til 'green'
         function showMsg(txt, color = 'red') {
             const el = document.getElementById('authMsg');
             el.textContent = txt; el.style.color = color; el.style.display = 'block';

@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Læreroversigt</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script src="../js/supabase-init.js"></script>
     <script src="../js/i18n.js"></script>
     <style>
         /* ── Teacher gate overlay ── */
@@ -160,7 +158,7 @@
 <div id="gate">
     <div class="gate-card">
         <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
-        <p>Læreroversigt — log ind med din lærerkonto</p>
+        <p>Læreroversigt, log ind med din lærerkonto</p>
 
         <!-- Login / Register tabs -->
         <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
@@ -234,20 +232,20 @@ function gateTab(mode) {
         <div class="summary-grid">
             <div class="stat-card orange">
                 <div class="stat-label">Elever i alt</div>
-                <div class="stat-value" id="statTotal">—</div>
+                <div class="stat-value" id="statTotal">-</div>
             </div>
             <div class="stat-card indigo">
                 <div class="stat-label">Gns. score</div>
-                <div class="stat-value" id="statAvgScore">—</div>
+                <div class="stat-value" id="statAvgScore">-</div>
                 <div class="stat-sub">ud af 27 point</div>
             </div>
             <div class="stat-card green">
                 <div class="stat-label">Fuldført (≥ 20 pt)</div>
-                <div class="stat-value" id="statCompleted">—</div>
+                <div class="stat-value" id="statCompleted">-</div>
             </div>
             <div class="stat-card red">
                 <div class="stat-label">Dyskalkulirisiko</div>
-                <div class="stat-value" id="statRisk">—</div>
+                <div class="stat-value" id="statRisk">-</div>
                 <div class="stat-sub">mistænkt eller høj risiko</div>
             </div>
         </div>
