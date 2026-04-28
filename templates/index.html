@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Læring for Talblinde</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/i18n.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/i18n.js"></script>
 </head>
 
 <body>
@@ -18,13 +18,18 @@
             <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
                 <li><a href="index.html" class="active">Forside</a></li>
-                <li><a href="templates/about.html">Om os</a></li>
-                <li><a href="templates/moduler.html">Læringsmoduler</a></li>
-                <li><a href="templates/spil.html">Spil</a></li>
-                <li><a href="templates/kalender.html">Visuel Kalender</a></li>
-                <li><a href="templates/tidsstyring.html">Tidsstyring</a></li>
-                <li><a href="templates/abonnement.html">Abonnement</a></li>
-                <li><a href="templates/kontakt.html">Kontakt</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button">Læringsmoduler <span class="dropdown-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="moduler.html">Talblindhedstest</a></li>
+                        <li><a href="spil.html">Spil</a></li>
+                        <li><a href="kalender.html">Visuel Kalender</a></li>
+                        <li><a href="tidsstyring.html">Lagkage Timer</a></li>
+                    </ul>
+                </li>
+                <li><a href="abonnement.html">Abonnement</a></li>
+                <li><a href="about.html">Om os</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
         </div>
     </nav>
@@ -33,15 +38,15 @@
     <section class="hero" id="main-content">
         <div class="hero-inner">
             <span class="hero-badge" data-i18n="index.badge">Kalender · Ur · Bog · Organisering</span>
-            <h1 data-i18n-html="index.hero.h1">Matematik er ikke svært —<br><span>den skal bare forklares rigtigt</span>
+            <h1 data-i18n-html="index.hero.h1">Matematik er ikke svært <br><span>den skal bare forklares rigtigt</span>
             </h1>
             <p data-i18n="index.hero.p">KUBO er en tryg læringsplatform for elever med talblindhed. Vi gør tal, tid og
                 struktur forståelig som
                 med farver, billeder og tålmodighed.</p>
             <div class="hero-buttons">
-                <a href="templates/moduler.html" class="btn btn-primary" data-i18n="index.hero.btn1">Start
+                <a href="moduler.html" class="btn btn-primary" data-i18n="index.hero.btn1">Start
                     læringsmoduler</a>
-                <a href="templates/kalender.html" class="btn btn-secondary" data-i18n="index.hero.btn2">Visuel Kalender</a>
+                <a href="kalender.html" class="btn btn-secondary" data-i18n="index.hero.btn2">Visuel Kalender</a>
             </div>
         </div>
     </section>
@@ -58,28 +63,28 @@
                 <h3 data-i18n="feat.mod.title">Læringsmoduler</h3>
                 <p data-i18n="feat.mod.p">Interaktive øvelser i klokken, tal, geometri, brøker og meget mere —
                     personliggør det til præcis det niveau, du er på.</p>
-                <a href="templates/moduler.html" data-i18n="feat.mod.link">Gå til moduler →</a>
+                <a href="moduler.html" data-i18n="feat.mod.link">Gå til moduler →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">🎮</span>
                 <h3 data-i18n="feat.games.title">Spil</h3>
                 <p data-i18n="feat.games.p">Lær gennem leg med sjove og farverige spil, der gør matematik til en positiv
                     oplevelse.</p>
-                <a href="templates/spil.html" data-i18n="feat.games.link">Se spil →</a>
+                <a href="spil.html" data-i18n="feat.games.link">Se spil →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">📅</span>
                 <h3 data-i18n="feat.cal.title">Visuel Kalender</h3>
                 <p data-i18n="feat.cal.p">En farverig kalender med symboler, der gør det nemt at holde styr på dage og
                     opgaver.</p>
-                <a href="templates/kalender.html" data-i18n="feat.cal.link">Åbn kalender →</a>
+                <a href="kalender.html" data-i18n="feat.cal.link">Åbn kalender →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">⏳</span>
                 <h3 data-i18n="feat.time.title">Tidsstyring</h3>
                 <p data-i18n="feat.time.p">Del din tid op på opgaver med lagkagediagrammer — visuelt, enkelt og
                     effektivt til eksamen.</p>
-                <a href="templates/tidsstyring.html" data-i18n="feat.time.link">Prøv tidsstyring →</a>
+                <a href="tidsstyring.html" data-i18n="feat.time.link">Prøv tidsstyring →</a>
             </div>
         </div>
     </section>
@@ -115,7 +120,7 @@
                     <p>Ifølge Sunde &amp; Pind (2016) er det centralt at identificere matematisk sårbarhed tidligt og
                         arbejde med det gennem både forebyggende og diagnosticerende indsats. Det handler om at afdække,
                         hvordan barnet forstår tal og tid
-                        — og ikke kun via generelle præstationstests, men gennem tests der afdækker <strong>strategisk
+                        og ikke kun via generelle præstationstests, men gennem tests der afdækker <strong>strategisk
                             forståelse og indre begrebsmodeller</strong>.</p>
                     <p>Det er her KUBO kan spille en vigtig rolle som et praktisk didaktisk supplement til
                         diagnosticerende og forebyggende indsats.</p>
@@ -146,11 +151,12 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="templates/kontakt.html">Kontakt os</a></p>
+        <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
     </footer>
 
-    <script src="js/floating-timer.js" defer></script>
+    <script src="../js/floating-timer.js" defer></script>
 
+    <script src="../js/navbar.js"></script>
 </body>
 
 </html>
