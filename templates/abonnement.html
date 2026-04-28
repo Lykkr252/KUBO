@@ -29,18 +29,23 @@
     <nav class="navbar">
         <div class="navbar-inner">
             <!-- Logo som link tilbage til forsiden -->
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
 
             <!-- <ul> = unordered list (punktliste uden numre) — bruges til at lave menupunkter -->
             <!-- Hvert <li> er et menupunkt med et <a>-link -->
             <ul class="navbar-nav">
-                <li><a href="../index.html">Forside</a></li>
-                <li><a href="about.html">Om os</a></li>
-                <li><a href="moduler.html">Læringsmoduler</a></li>
-                <li><a href="spil.html">Spil</a></li>
-                <li><a href="kalender.html">Visuel Kalender</a></li>
-                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="index.html">Forside</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button">Læringsmoduler <span class="dropdown-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="moduler.html">Talblindhedstest</a></li>
+                        <li><a href="spil.html">Spil</a></li>
+                        <li><a href="kalender.html">Visuel Kalender</a></li>
+                        <li><a href="tidsstyring.html">Lagkage Timer</a></li>
+                    </ul>
+                </li>
                 <li><a href="abonnement.html" class="active">Abonnement</a></li>
+                <li><a href="about.html">Om os</a></li>
                 <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
         </div>
@@ -152,6 +157,7 @@
 
     <!-- Eksternt JS til flydende timer — defer betyder det indlæses efter HTML er klar -->
     <script src="../js/floating-timer.js" defer></script>
+    <script src="../js/navbar.js"></script>
 </body>
 
 </html>

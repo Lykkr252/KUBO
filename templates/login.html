@@ -20,7 +20,7 @@
     <div class="auth-wrapper">
         <div class="auth-card">
             <!-- Logo som link tilbage til forsiden -->
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
             <p class="auth-subtitle" data-i18n="login.subtitle">Log ind for at gemme din kalender</p>
 
             <!-- TABS: To knapper der skifter mellem Login og Opret konto -->
@@ -117,7 +117,7 @@
             const p = document.getElementById('loginPass').value;
             if (!u || !p) return showMsg('Udfyld alle felter.'); // tidlig retur hvis felter er tomme
             const ok = await doLogin(u, p); // venter på svar fra Supabase
-            if (ok) window.location.href = '../index.html'; // omdirigerer til forsiden ved succes
+            if (ok) window.location.href = 'index.html'; // omdirigerer til forsiden ved succes
             else showMsg('Forkert brugernavn eller adgangskode.');
         }
 
@@ -146,7 +146,7 @@
             showMsg('Konto oprettet! Logger ind...', 'green');
             await doLogin(u, p); // logger automatisk ind efter oprettelse
             // setTimeout venter 800ms før den omdirigerer — så brugeren kan se beskeden
-            setTimeout(() => window.location.href = '../index.html', 800);
+            setTimeout(() => window.location.href = 'index.html', 800);
         }
 
         // Viser en besked til brugeren — farve er rød som standard, kan ændres til 'green'

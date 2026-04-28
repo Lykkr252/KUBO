@@ -14,15 +14,20 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="../index.html">Forside</a></li>
-                <li><a href="about.html" class="active">Om os</a></li>
-                <li><a href="moduler.html">Læringsmoduler</a></li>
-                <li><a href="spil.html">Spil</a></li>
-                <li><a href="kalender.html">Visuel Kalender</a></li>
-                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="index.html">Forside</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button">Læringsmoduler <span class="dropdown-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="moduler.html">Talblindhedstest</a></li>
+                        <li><a href="spil.html">Spil</a></li>
+                        <li><a href="kalender.html">Visuel Kalender</a></li>
+                        <li><a href="tidsstyring.html">Lagkage Timer</a></li>
+                    </ul>
+                </li>
                 <li><a href="abonnement.html">Abonnement</a></li>
+                <li><a href="about.html" class="active">Om os</a></li>
                 <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
         </div>
@@ -99,6 +104,7 @@
                         <h3>Lykke Kristensen</h3>
                         <p>CEO and Creative Director</p>
                         <p class="text-muted">lykkri@kubo.dk</p>
+                        <a href="https://www.linkedin.com/in/lykke-kristensen122/" target="_blank" rel="noopener noreferrer" class="linkedin-link">LinkedIn</a>
                     </div>
 
                     <div class="feature-card">
@@ -106,6 +112,7 @@
                         <h3>Isabella Bisset</h3>
                         <p>CFO and Office Manager</p>
                         <p class="text-muted">isabi@kubo.dk</p>
+                        <a href="https://www.linkedin.com/in/isabellabisset/" target="_blank" rel="noopener noreferrer" class="linkedin-link">LinkedIn</a>
                     </div>
 
                     <div class="feature-card">
@@ -113,6 +120,7 @@
                         <h3>Mads Skou Larsen</h3>
                         <p>CTO and Sales Director</p>
                         <p class="text-muted">masla@kubo.dk</p>
+                        <a href="https://www.linkedin.com/in/madssl/" target="_blank" rel="noopener noreferrer" class="linkedin-link">LinkedIn</a>
                     </div>
 
                 </div>
@@ -134,6 +142,7 @@
         <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
     </footer>
 
+    <script src="../js/navbar.js"></script>
 </body>
 
 </html>
