@@ -474,7 +474,7 @@
 
   // ── Public helpers ────────────────────────────────────────────────────────
 
-  // Check sessionStorage first: doLogin() stores the Firebase language pref there.
+  // Check sessionStorage first: doLogin() stores the Supabase language pref there.
   // Fall back to localStorage (persisted across sessions), then default to Danish.
   let _lang = sessionStorage.getItem('kubo_lang') || localStorage.getItem('kubo_lang') || 'da';
 

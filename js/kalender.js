@@ -1,52 +1,15 @@
 const currentUserId = typeof getCurrentUserId === 'function' ? getCurrentUserId() : null;
+const _CAL_KEY = currentUserId ? `kubo_calendar_${currentUserId}` : 'kubo_calendar_guest';
 
-async function loadEvents() {
-    if (!currentUserId) return {};   // not logged in — start with empty calendar
-    try {
-        // ⬇⬇⬇ FREMLÆGGELSE: HER HENTER VI DATA FRA SUPABASE-DATABASEN ⬇⬇⬇
-        const { data, error } = await db
-            .from('calendar_events')
-            .select('event_date, event_text')
-            .eq('student_id', currentUserId);
-        // ⬆⬆⬆ =============================================== ⬆⬆⬆
-
-        if (error || !data) return {};
-
-        // Group rows into { "yyyy-m-d": ["event1", "event2"] }
-        const grouped = {};
-        data.forEach(row => {
-            const key = row.event_date;   // stored as "YYYY-MM-DD"
-            if (!grouped[key]) grouped[key] = [];
-            grouped[key].push(row.event_text);
-        });
-        return grouped;
-    } catch {
-        return {};
-    }
+function loadEvents() {
+    try { return JSON.parse(localStorage.getItem(_CAL_KEY)) || {}; } catch { return {}; }
 }
 
-async function saveAllEvents(allEvents) {
-    if (!currentUserId) return;      // not logged in — nothing to save
-    try {
-        // Delete all existing events for this student, then re-insert
-        await db.from('calendar_events').delete().eq('student_id', currentUserId);
-
-        const rows = [];
-        Object.entries(allEvents).forEach(([date, events]) => {
-            events.forEach(text => {
-                rows.push({ student_id: currentUserId, event_date: date, event_text: text });
-            });
-        });
-
-        if (rows.length > 0) {
-            await db.from('calendar_events').insert(rows);
-        }
-    } catch {
-        // silent fail
-    }
+function saveAllEvents(allEvents) {
+    localStorage.setItem(_CAL_KEY, JSON.stringify(allEvents));
 }
 
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", function () {
     let currentDate = new Date();
 
     const grid = document.getElementById("calendarGrid");
@@ -65,7 +28,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         "Juli", "August", "September", "Oktober", "November", "December"
     ];
 
-    // Default visual settings
     let settings = loadSettings();
 
     function loadSettings() {
@@ -91,8 +53,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // ── Events storage ───────────────────────────────────────────────────────
-    let activeDay = null;
-    let allEvents = await loadEvents();
+    let activeDay  = null;
+    let allEvents  = loadEvents();
 
     function eventKey(year, month, day) {
         return `${year}-${month}-${day}`;
@@ -102,16 +64,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         return allEvents[eventKey(year, month, day)] || [];
     }
 
-    async function saveEvents(year, month, day, events) {
+    function saveEvents(year, month, day, events) {
         const key = eventKey(year, month, day);
-
-        if (events.length === 0) {
-            delete allEvents[key];
-        } else {
-            allEvents[key] = events;
-        }
-
-        await saveAllEvents(allEvents);
+        if (events.length === 0) delete allEvents[key];
+        else allEvents[key] = events;
+        saveAllEvents(allEvents);
     }
 
     // ── Navigation ───────────────────────────────────────────────────────────
@@ -142,9 +99,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     function populateSettingsModal() {
         document.getElementById("toggleNumbers").checked = settings.showNumbers;
         document.getElementById("toggleSymbols").checked = settings.showSymbols;
-        document.getElementById("toggleColors").checked = settings.showColors;
+        document.getElementById("toggleColors").checked  = settings.showColors;
 
-        // Render the 7 color pickers
         const colorGrid = document.getElementById("colorPickers");
         colorGrid.innerHTML = "";
         settings.colors.forEach((color, i) => {
@@ -172,7 +128,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             colorGrid.appendChild(wrap);
         });
 
-        // Render the 7 symbol inputs
         const symbolGrid = document.getElementById("symbolInputs");
         symbolGrid.innerHTML = "";
         settings.symbols.forEach((sym, i) => {
@@ -196,64 +151,39 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    // Live-toggle the checkboxes
     document.getElementById("toggleNumbers").addEventListener("change", (e) => {
-        settings.showNumbers = e.target.checked;
-        saveSettings();
-        render();
+        settings.showNumbers = e.target.checked; saveSettings(); render();
     });
-
     document.getElementById("toggleSymbols").addEventListener("change", (e) => {
-        settings.showSymbols = e.target.checked;
-        saveSettings();
-        render();
+        settings.showSymbols = e.target.checked; saveSettings(); render();
     });
-
     document.getElementById("toggleColors").addEventListener("change", (e) => {
-        settings.showColors = e.target.checked;
-        saveSettings();
-        render();
+        settings.showColors = e.target.checked; saveSettings(); render();
     });
 
     document.getElementById("resetSettings").addEventListener("click", () => {
-        settings = defaultSettings();
-        saveSettings();
-        populateSettingsModal();
-        render();
+        settings = defaultSettings(); saveSettings(); populateSettingsModal(); render();
     });
 
     // ── Event modal ──────────────────────────────────────────────────────────
     closeEventModal.addEventListener("click", () => {
-        eventModal.style.display = "none";
-        activeDay = null;
-        render();
+        eventModal.style.display = "none"; activeDay = null; render();
     });
 
     eventModal.addEventListener("click", (e) => {
-        if (e.target === eventModal) {
-            eventModal.style.display = "none";
-            activeDay = null;
-            render();
-        }
+        if (e.target === eventModal) { eventModal.style.display = "none"; activeDay = null; render(); }
     });
 
-    addEventBtn.addEventListener("click", () => {
-        addEvent();
-    });
+    addEventBtn.addEventListener("click", () => { addEvent(); });
+    newEventInput.addEventListener("keydown", (e) => { if (e.key === "Enter") addEvent(); });
 
-    newEventInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") addEvent();
-    });
-
-    async function addEvent() {
+    function addEvent() {
         const text = newEventInput.value.trim();
         if (!text || !activeDay) return;
-
         const { year, month, day } = activeDay;
         const events = [...getEvents(year, month, day)];
         events.push(text);
-
-        await saveEvents(year, month, day, events);
+        saveEvents(year, month, day, events);
         newEventInput.value = "";
         renderEventList();
         render();
@@ -261,10 +191,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function renderEventList() {
         if (!activeDay) return;
-
         const { year, month, day } = activeDay;
         const events = getEvents(year, month, day);
-
         eventList.innerHTML = "";
 
         if (events.length === 0) {
@@ -280,15 +208,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <span class="event-text">${escapeHtml(ev)}</span>
                 <button class="event-delete-btn" data-idx="${idx}">✕</button>
             `;
-
-            item.querySelector(".event-delete-btn").addEventListener("click", async () => {
+            item.querySelector(".event-delete-btn").addEventListener("click", () => {
                 const evs = [...getEvents(year, month, day)];
                 evs.splice(idx, 1);
-                await saveEvents(year, month, day, evs);
+                saveEvents(year, month, day, evs);
                 renderEventList();
                 render();
             });
-
             eventList.appendChild(item);
         });
     }
@@ -299,28 +225,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function escapeHtml(str) {
-        return str
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;");
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
     function openDayModal(year, month, day) {
         const weekdayNames = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
         const date = new Date(year, month, day);
-
         eventModalTitle.textContent = `${weekdayNames[date.getDay()]} d. ${day}. ${monthNames[month]} ${year}`;
         activeDay = { year, month, day };
         renderEventList();
         newEventInput.value = "";
         eventModal.style.display = "flex";
-
         setTimeout(() => newEventInput.focus(), 100);
     }
 
     // ── Render calendar ──────────────────────────────────────────────────────
     function render() {
-        const year = currentDate.getFullYear();
+        const year  = currentDate.getFullYear();
         const month = currentDate.getMonth();
         const today = new Date();
 
@@ -329,31 +250,23 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         grid.innerHTML = "";
 
-        const firstDay = new Date(year, month, 1).getDay();
+        const firstDay    = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const offset = (firstDay + 6) % 7;
+        const offset      = (firstDay + 6) % 7;
 
-        for (let i = 0; i < offset; i++) {
-            grid.appendChild(document.createElement("div"));
-        }
+        for (let i = 0; i < offset; i++) grid.appendChild(document.createElement("div"));
 
         for (let day = 1; day <= daysInMonth; day++) {
-            const events = getEvents(year, month, day);
-            const isToday =
-                today.getFullYear() === year &&
-                today.getMonth() === month &&
-                today.getDate() === day;
-
+            const events  = getEvents(year, month, day);
+            const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
             const colorIdx = (day - 1) % settings.colors.length;
-            const symIdx = (day - 1) % settings.symbols.length;
+            const symIdx   = (day - 1) % settings.symbols.length;
 
             const el = document.createElement("div");
             el.className = "day" + (isToday ? " day-today" : "");
             el.title = "Klik for at tilføje begivenhed";
 
-            if (settings.showColors && !isToday) {
-                el.style.backgroundColor = settings.colors[colorIdx];
-            }
+            if (settings.showColors && !isToday) el.style.backgroundColor = settings.colors[colorIdx];
 
             if (settings.showSymbols) {
                 const symEl = document.createElement("span");
@@ -372,7 +285,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (events.length > 0) {
                 const dotsEl = document.createElement("div");
                 dotsEl.className = "event-dots";
-
                 const max = Math.min(events.length, 3);
                 for (let d = 0; d < max; d++) {
                     const dot = document.createElement("span");
@@ -380,14 +292,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     dot.style.background = getEventColor(d);
                     dotsEl.appendChild(dot);
                 }
-
                 if (events.length > 3) {
                     const more = document.createElement("span");
                     more.className = "event-more";
                     more.textContent = `+${events.length - 3}`;
                     dotsEl.appendChild(more);
                 }
-
                 el.appendChild(dotsEl);
 
                 const preview = document.createElement("div");

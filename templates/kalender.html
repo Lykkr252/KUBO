@@ -19,7 +19,6 @@
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
 
-    <!-- NAVBAR med login/logout-knap i højre side -->
     <nav class="navbar">
         <div class="navbar-inner">
             <a href="{{ url_for('home') }}" class="navbar-logo">KU<span>BO</span></a>
@@ -33,31 +32,25 @@
                 <li><a href="{{ url_for('abonnement') }}">Abonnement</a></li>
                 <li><a href="{{ url_for('kontakt') }}">Kontakt</a></li>
             </ul>
-            <!-- Tom div — fyldes dynamisk af JavaScript nedenfor -->
             <div id="navAuthArea" style="display:flex;align-items:center;gap:1rem"></div>
         </div>
     </nav>
 
-    <!-- IIFE (Immediately Invoked Function Expression): kører med det samme -->
-    <!-- Tjekker om brugeren er logget ind og viser enten navn+logout eller login-knap -->
     <script>
         (function () {
-            const u = getCurrentUser(); // henter brugernavn fra sessionStorage
+            const u = getCurrentUser();
             const area = document.getElementById('navAuthArea');
             if (u) {
-                // Bruger er logget ind — vis navn og log ud-knap
                 area.innerHTML =
                     '<span style="font-size:0.85rem;color:#888">👤 ' + u + '</span>' +
                     '<button onclick="doLogout()" class="btn btn-secondary" style="padding:0.3rem 0.8rem;font-size:0.85rem">Log ud</button>';
             } else {
-                // Bruger er ikke logget ind — vis "Log ind for at gemme"-knap
                 area.innerHTML =
                     '<a href="{{ url_for('login') }}" class="btn btn-primary" style="padding:0.3rem 0.8rem;font-size:0.85rem">Log ind for at gemme</a>';
             }
         })();
     </script>
 
-    <!-- PAGE HEADER -->
     <div class="page-header">
         <h1 data-i18n="cal.h1">📅 Visuel Kalender</h1>
         <p data-i18n="cal.sub">Klik på en dag for at tilføje begivenheder. Tilpas farver, symboler og udseende frit.</p>
@@ -66,25 +59,20 @@
     <main class="section" id="main-content">
         <div class="container-narrow">
 
-            <!-- Knap der åbner indstillingsmodalen — id bruges af JavaScript -->
             <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
                 <button id="openSettings" class="settings-btn" data-i18n="cal.settings.btn">⚙ Tilpas kalender</button>
             </div>
 
-            <!-- KALENDER-WRAPPER: Indeholder nav-pile, ugedage og selve kalendergitteret -->
             <div class="calendar-wrapper">
-                <!-- Månedsnavigation med forrige/næste knapper -->
                 <div class="month-header">
                     <button id="prevBtn" data-i18n="cal.prev" aria-label="Forrige måned">◀ Forrige</button>
                     <div class="month-title">
-                        <!-- Disse er tomme — JavaScript fylder dem med måned og år -->
                         <h2 id="monthName"></h2>
                         <p id="year"></p>
                     </div>
                     <button id="nextBtn" data-i18n="cal.next" aria-label="Næste måned">Næste ▶</button>
                 </div>
 
-                <!-- Ugedage-header over kalendergitteret -->
                 <div class="weekdays">
                     <div>Man</div>
                     <div>Tir</div>
@@ -95,7 +83,6 @@
                     <div>Søn</div>
                 </div>
 
-                <!-- Tom div — JavaScript genererer alle dage dynamisk her -->
                 <div id="calendarGrid" class="calendar-grid"></div>
             </div>
 
@@ -104,22 +91,17 @@
         </div>
     </main>
 
-    <!-- INDSTILLINGSMODAL: Popup til at tilpasse kalenderens udseende -->
-    <!-- Klassen "modal" er som standard skjult i CSS — kalender.js viser den -->
     <div id="settingsModal" class="modal">
         <div class="modal-content settings-modal-content">
             <div class="event-modal-header">
                 <h2>⚙ Tilpas kalender</h2>
-                <!-- Luk-knap — id bruges af JavaScript til at lukke modalen -->
                 <button id="closeSettings" class="modal-close-btn" aria-label="Luk indstillinger">✕</button>
             </div>
 
-            <!-- Toggle-knapper (on/off switches) til at vise/skjule elementer -->
             <div class="settings-toggles">
                 <label class="toggle-row">
                     <span class="toggle-label">Vis dagstal</span>
                     <span class="switch">
-                        <!-- type="checkbox" = til/fra — checked = slået til som standard -->
                         <input type="checkbox" id="toggleNumbers" checked>
                         <span class="slider"></span>
                     </span>
@@ -140,13 +122,11 @@
                 </label>
             </div>
 
-            <!-- Tom div — JavaScript fylder den med 7 farve-vælgere dynamisk -->
             <div class="settings-section">
                 <h3>Baggrundsfarver <span class="settings-hint">(7 farver, der gentages)</span></h3>
                 <div id="colorPickers" class="color-pickers-grid"></div>
             </div>
 
-            <!-- Tom div — JavaScript fylder den med symbol-inputfelter dynamisk -->
             <div class="settings-section">
                 <h3>Symboler <span class="settings-hint">(emoji eller tekst, gentages)</span></h3>
                 <div id="symbolInputs" class="symbol-inputs-grid"></div>
@@ -158,19 +138,14 @@
         </div>
     </div>
 
-    <!-- BEGIVENHEDSMODAL: Popup der vises når man klikker på en dag -->
     <div id="eventModal" class="modal">
         <div class="modal-content event-modal-content">
             <div class="event-modal-header">
-                <!-- Titlen udfyldes af JavaScript med den valgte dato -->
                 <h2 id="eventModalTitle"></h2>
                 <button id="closeEventModal" class="modal-close-btn" aria-label="Luk begivenhed">✕</button>
             </div>
-            <!-- Liste over begivenheder for den valgte dag — udfyldes af JavaScript -->
             <div id="eventList" class="event-list"></div>
-            <!-- Inputfelt til at tilføje ny begivenhed -->
             <div class="event-add-row">
-                <!-- maxlength="100" begrænser input til maks 100 tegn -->
                 <input type="text" id="newEventInput" placeholder="Tilføj begivenhed, fx 'Matematik aflevering'..." maxlength="100">
                 <button id="addEventBtn" class="btn btn-primary btn-sm">Tilføj</button>
             </div>
@@ -186,6 +161,7 @@
     <script src="{{ url_for('static', filename='js/kalender.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/floating-timer.js') }}" defer></script>
 
+    <script src="../js/navbar.js"></script>
 </body>
 
 </html>

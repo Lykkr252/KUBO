@@ -1,45 +1,16 @@
-// ── SQL result saving ─────────────────────────────────────────────────────────
-// Scores are stored in the testscores table, linked to students by student_id.
-// Teachers see students in their class via the students.class column.
+// ── Score saving (localStorage) ───────────────────────────────────────────────
 
 function saveScore(module, score) {
     const userId = typeof getCurrentUserId === 'function' ? getCurrentUserId() : null;
-    if (!userId || typeof db === 'undefined') return;
-
-    // Read current score, only save if new score is higher
-    db.from('testscores')
-        .select('score')
-        .eq('student_id', userId)
-        .eq('module', module)
-        .maybeSingle()
-        .then(({ data }) => {
-            const prev = data?.score || 0;
-            if (score > prev) {
-                db.from('testscores').upsert({
-                    student_id:    userId,
-                    module,
-                    score,
-                    last_activity: new Date().toISOString(),
-                }, { onConflict: 'student_id,module' });
-            }
-        });
+    if (!userId) return;
+    const key = `kubo_scores_${userId}`;
+    let scores;
+    try { scores = JSON.parse(localStorage.getItem(key)) || {}; } catch { scores = {}; }
+    if (score > (scores[module] || 0)) {
+        scores[module] = score;
+        localStorage.setItem(key, JSON.stringify(scores));
+    }
 }
-
-window.addEventListener('beforeunload', () => {
-    const userId = typeof getCurrentUserId === 'function' ? getCurrentUserId() : null;
-    if (!userId || typeof db === 'undefined' || !seconds) return;
-    // Add session time to student's total time_spent
-    db.from('students')
-        .select('time_spent')
-        .eq('id', userId)
-        .single()
-        .then(({ data }) => {
-            const prev = data?.time_spent || 0;
-            db.from('students')
-                .update({ time_spent: prev + seconds })
-                .eq('id', userId);
-        });
-});
 
 // ── Exercises ────────────────────────────────────────────────────────────────
 

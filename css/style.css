@@ -6,7 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 @import url('https://fonts.cdnfonts.com/css/opendyslexic');
 
-/* Dysleksi-venlig tilstand — aktiveres med knappen i navbar */
+/* Dysleksi-venlig tilstand */
 .dyslexia-font,
 .dyslexia-font * {
     font-family: 'OpenDyslexic', sans-serif !important;
@@ -60,7 +60,7 @@ body {
 
 /* === Accessibility === */
 
-/* Spring til indhold-link — usynlig medmindre fokuseret med tastatur */
+/* Spring til indhold-link */
 .skip-link {
     position: absolute;
     top: -100px;
@@ -73,6 +73,7 @@ body {
     z-index: 99999;
     transition: top 0.2s;
 }
+
 .skip-link:focus {
     top: 1rem;
 }
@@ -196,7 +197,7 @@ p:last-child {
 .navbar-nav {
     display: flex;
     align-items: center;
-    gap: 0.1rem;
+    gap: 0;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -204,10 +205,10 @@ p:last-child {
 
 .navbar-nav a {
     display: inline-block;
-    padding: 0.4rem 0.55rem;
+    padding: 0.4rem 0.4rem;
     color: var(--text-muted);
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     text-decoration: none;
     border-radius: 8px;
     white-space: nowrap;
@@ -224,6 +225,63 @@ p:last-child {
 .navbar-nav a.active {
     color: var(--primary);
     border-bottom-color: var(--primary);
+}
+
+/* === Dropdown === */
+.navbar-nav .dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.dropdown-arrow {
+    font-size: 0.65rem;
+    transition: transform 0.2s;
+    display: inline-block;
+    line-height: 1;
+}
+
+.dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    list-style: none;
+    padding: 0.35rem 0;
+    margin: 0;
+    min-width: 175px;
+    z-index: 200;
+}
+
+.dropdown.open .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 0.5rem 1rem;
+    border-bottom: none !important;
+    border-radius: 0 !important;
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+
+.dropdown-menu li a:hover {
+    background: var(--bg);
+    color: var(--text);
 }
 
 /* === Hero Section === */
@@ -444,6 +502,21 @@ main .section-card button:hover {
     color: var(--primary-dark);
 }
 
+.linkedin-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.35rem 0.9rem;
+    border: 2px solid var(--primary);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.linkedin-link:hover {
+    background: var(--primary);
+    color: white !important;
+}
+
 /* === Two-column audience cards === */
 .audience-grid {
     display: grid;
@@ -493,6 +566,51 @@ main .section-card button:hover {
 .callout p {
     font-size: 1rem;
     opacity: 0.9;
+}
+
+/* === CTA Banner === */
+.cta-banner {
+    background: linear-gradient(135deg, var(--secondary) 0%, #7C3AED 100%);
+    color: white;
+    padding: 5rem 2rem;
+    text-align: center;
+}
+
+.cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.cta-banner h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.cta-banner p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.btn-cta {
+    background: white;
+    color: var(--secondary);
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.9rem 2.5rem;
+    border-radius: 999px;
+    display: inline-block;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+    text-decoration: none;
+}
+
+.btn-cta:hover {
+    background: var(--bg);
+    color: var(--secondary-dark);
+    transform: translateY(-2px);
+    text-decoration: none;
 }
 
 /* === Section Card (white rounded panel for page sections) === */
@@ -1769,17 +1887,18 @@ hr {
 .sudoku-board {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
     gap: 0;
     border: 3px solid var(--text);
     border-radius: var(--radius);
-    overflow: hidden;
+    clip-path: inset(0 round var(--radius));
+    aspect-ratio: 1;
     max-width: 450px;
     margin: 1.5rem 0;
     width: 100%;
 }
 
 .sudoku-cell {
-    aspect-ratio: 1;
     border: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -2029,12 +2148,12 @@ hr {
 .pricing-card {
     background-color: #ffffff;
     border: 2px solid #e0e6ed;
-    border-radius: 15px; 
+    border-radius: 15px;
     padding: 30px;
     width: 300px;
     box-sizing: border-box;
-    text-align: left; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
@@ -2042,7 +2161,7 @@ hr {
 
 .pricing-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .pricing-card h3 {
@@ -2054,7 +2173,7 @@ hr {
 }
 
 .pricing-card.highlight {
-    border: 3px solid #3498DB; 
+    border: 3px solid #3498DB;
     transform: scale(1.05);
 }
 
@@ -2096,7 +2215,7 @@ hr {
 .features li {
     padding: 8px 0 8px 25px;
     color: #444;
-    border-bottom: 1px dashed #eee; 
+    border-bottom: 1px dashed #eee;
     position: relative;
 }
 
@@ -2104,17 +2223,17 @@ hr {
     content: "✔";
     position: absolute;
     left: 0;
-    color: #2ECC71; 
+    color: #2ECC71;
 }
 
 .buy-button {
     display: block;
     text-align: center;
-    background-color: #3498DB; 
+    background-color: #3498DB;
     color: white;
     padding: 14px 20px;
     text-decoration: none;
-    border-radius: 8px; 
+    border-radius: 8px;
     font-weight: bold;
     font-size: 16px;
     transition: background-color 0.3s;
@@ -2146,7 +2265,7 @@ hr {
     padding: 40px;
     border-radius: 15px;
     border: 2px solid #e0e6ed;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .checkout-form h3 {
@@ -2213,28 +2332,32 @@ hr {
    ========================================= */
 
 .modal-overlay {
-    display: none; 
+    display: none;
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1000; 
+    z-index: 1000;
 }
 
 .modal-content {
     background-color: #ffffff;
-    margin: 15% auto; 
+    margin: 15% auto;
     padding: 30px;
     border-radius: 15px;
     width: 80%;
     max-width: 450px;
     text-align: center;
     position: relative;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .close-btn {
     position: absolute;
-    top: 15px; right: 20px;
+    top: 15px;
+    right: 20px;
     font-size: 28px;
     font-weight: bold;
     color: #999;

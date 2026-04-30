@@ -41,37 +41,27 @@
             <!-- CSS grid/flex layout der sætter formular og info side om side -->
             <div class="contact-grid">
 
-                <!-- KONTAKTFORMULAR -->
-                <!-- action="..." sender formularen til en ekstern e-mail-tjeneste (formsubmit.co) -->
-                <!-- method="POST" sender data sikkert i HTTP-body, ikke synligt i URL -->
                 <div class="contact-form-card">
                     <h2 data-i18n="contact.form.h2">Send os en besked</h2>
                     <form action="https://formsubmit.co/your@email.com" method="POST">
 
-                        <!-- for="name" linker label til input med id="name" — god praksis for tilgængelighed -->
                         <label for="name" data-i18n="contact.name.lbl">Navn</label>
-                        <!-- required = browseren kræver at feltet udfyldes -->
                         <input type="text" id="name" name="name" required data-i18n-ph="contact.name.ph" placeholder="Dit fulde navn">
 
                         <label for="email" data-i18n="contact.email.lbl">Email</label>
-                        <!-- type="email" = browseren validerer email-format automatisk -->
                         <input type="email" id="email" name="email" required data-i18n-ph="contact.email.ph" placeholder="din@email.dk">
 
                         <label for="message" data-i18n="contact.msg.lbl">Besked</label>
-                        <!-- <textarea> = flerlinje tekstfelt, rows="6" = 6 linjer høj -->
                         <textarea id="message" name="message" rows="6" required data-i18n-ph="contact.msg.ph" placeholder="Skriv din besked her..."></textarea>
 
-                        <!-- type="submit" sender formularen til URL'en i action-attributten -->
                         <button type="submit" class="btn btn-primary" style="margin-top:1.25rem;width:100%;text-align:center;border:none;" data-i18n="contact.btn">Send besked</button>
                     </form>
                 </div>
 
-                <!-- KONTAKTINFO: Informationskort ved siden af formularen -->
                 <div class="contact-info-card">
                     <h3 data-i18n="contact.info.h3">Om KUBO</h3>
-                    <p data-i18n="contact.info.p">KUBO er en læringsplatform skabt til elever med talblindhed (dyscalculia). Vi tror på, at alle kan lære matematik — det handler bare om at finde den rigtige tilgang.</p>
+                    <p data-i18n="contact.info.p">KUBO er en læringsplatform skabt til elever med talblindhed (dyscalculia). Vi tror på, at alle kan lære matematik. Det handler bare om at finde den rigtige tilgang.</p>
 
-                    <!-- Hvert info-punkt er et div med ikon og tekst side om side (CSS flex) -->
                     <div class="contact-info-item" style="margin-top:1.5rem;">
                         <span class="icon">🎯</span>
                         <div>
@@ -114,6 +104,7 @@
 
     <script src="{{ url_for('static', filename='js/floating-timer.js') }}" defer></script>
 
+    <script src="../js/navbar.js"></script>
 </body>
 </html>
 
