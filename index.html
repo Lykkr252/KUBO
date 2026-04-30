@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Læring for Talblinde</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/i18n.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+<script src="{{ url_for('static', filename='js/floating-timer.js') }}" defer></script>
 </head>
 
 <body>
@@ -15,16 +16,16 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="{{ url_for('home') }}" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="index.html" class="active">Forside</a></li>
-                <li><a href="templates/about.html">Om os</a></li>
-                <li><a href="templates/moduler.html">Læringsmoduler</a></li>
-                <li><a href="templates/spil.html">Spil</a></li>
-                <li><a href="templates/kalender.html">Visuel Kalender</a></li>
-                <li><a href="templates/tidsstyring.html">Tidsstyring</a></li>
-                <li><a href="templates/abonnement.html">Abonnement</a></li>
-                <li><a href="templates/kontakt.html">Kontakt</a></li>
+                <li><a href="{{ url_for('home') }}" class="active">Forside</a></li>
+                <li><a href="{{ url_for('about') }}">Om os</a></li>
+                <li><a href="{{ url_for('moduler') }}">Læringsmoduler</a></li>
+                <li><a href="{{ url_for('spil') }}">Spil</a></li>
+                <li><a href="{{ url_for('kalender') }}">Visuel Kalender</a></li>
+                <li><a href="{{ url_for('tidsstyring') }}">Tidsstyring</a></li>
+                <li><a href="{{ url_for('abonnement') }}">Abonnement</a></li>
+                <li><a href="{{ url_for('kontakt') }}">Kontakt</a></li>
             </ul>
         </div>
     </nav>
@@ -39,9 +40,9 @@
                 struktur forståelig som
                 med farver, billeder og tålmodighed.</p>
             <div class="hero-buttons">
-                <a href="templates/moduler.html" class="btn btn-primary" data-i18n="index.hero.btn1">Start
+                <a href="{{ url_for('moduler') }}" class="btn btn-primary" data-i18n="index.hero.btn1">Start
                     læringsmoduler</a>
-                <a href="templates/kalender.html" class="btn btn-secondary" data-i18n="index.hero.btn2">Visuel Kalender</a>
+                <a href="{{ url_for('kalender') }}" class="btn btn-secondary" data-i18n="index.hero.btn2">Visuel Kalender</a>
             </div>
         </div>
     </section>
@@ -58,28 +59,28 @@
                 <h3 data-i18n="feat.mod.title">Læringsmoduler</h3>
                 <p data-i18n="feat.mod.p">Interaktive øvelser i klokken, tal, geometri, brøker og meget mere —
                     personliggør det til præcis det niveau, du er på.</p>
-                <a href="templates/moduler.html" data-i18n="feat.mod.link">Gå til moduler →</a>
+                <a href="{{ url_for('moduler') }}" data-i18n="feat.mod.link">Gå til moduler →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">🎮</span>
                 <h3 data-i18n="feat.games.title">Spil</h3>
                 <p data-i18n="feat.games.p">Lær gennem leg med sjove og farverige spil, der gør matematik til en positiv
                     oplevelse.</p>
-                <a href="templates/spil.html" data-i18n="feat.games.link">Se spil →</a>
+                <a href="{{ url_for('spil') }}" data-i18n="feat.games.link">Se spil →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">📅</span>
                 <h3 data-i18n="feat.cal.title">Visuel Kalender</h3>
                 <p data-i18n="feat.cal.p">En farverig kalender med symboler, der gør det nemt at holde styr på dage og
                     opgaver.</p>
-                <a href="templates/kalender.html" data-i18n="feat.cal.link">Åbn kalender →</a>
+                <a href="{{ url_for('kalender') }}" data-i18n="feat.cal.link">Åbn kalender →</a>
             </div>
             <div class="feature-card">
                 <span class="icon">⏳</span>
                 <h3 data-i18n="feat.time.title">Tidsstyring</h3>
                 <p data-i18n="feat.time.p">Del din tid op på opgaver med lagkagediagrammer — visuelt, enkelt og
                     effektivt til eksamen.</p>
-                <a href="templates/tidsstyring.html" data-i18n="feat.time.link">Prøv tidsstyring →</a>
+                <a href="{{ url_for('tidsstyring') }}" data-i18n="feat.time.link">Prøv tidsstyring →</a>
             </div>
         </div>
     </section>
@@ -146,11 +147,12 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="templates/kontakt.html">Kontakt os</a></p>
+        <p style="margin-top:0.5rem;"><a href="{{ url_for('kontakt') }}">Kontakt os</a></p>
     </footer>
 
-    <script src="js/floating-timer.js" defer></script>
+
 
 </body>
 
 </html>
+

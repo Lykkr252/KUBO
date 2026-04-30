@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Læreroversigt</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script src="../js/supabase-init.js"></script>
-    <script src="../js/i18n.js"></script>
+    <script src="{{ url_for('static', filename='js/supabase-init.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
     <style>
         /* ── Teacher gate overlay ── */
         #gate {
@@ -159,7 +159,7 @@
 <!-- ── Teacher login gate ──────────────────────────────────────────────── -->
 <div id="gate">
     <div class="gate-card">
-        <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+        <a href="{{ url_for('home') }}" class="navbar-logo">KU<span>BO</span></a>
         <p>Læreroversigt — log ind med din lærerkonto</p>
 
         <!-- Login / Register tabs -->
@@ -219,7 +219,7 @@ function gateTab(mode) {
 <div id="dashboard">
     <nav class="teacher-nav">
         <div style="display:flex;align-items:center;gap:1rem">
-            <a href="../index.html" class="logo">KU<span>BO</span></a>
+            <a href="{{ url_for('home') }}" class="logo">KU<span>BO</span></a>
             <h1>Læreroversigt</h1>
         </div>
         <div class="right">
@@ -297,7 +297,10 @@ function gateTab(mode) {
     </div>
 </div>
 
-<script src="../js/auth.js"></script>
-<script src="../js/laerer.js"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script src="{{ url_for('static', filename='js/laerer.js') }}"></script>
 </body>
 </html>
+
+
+

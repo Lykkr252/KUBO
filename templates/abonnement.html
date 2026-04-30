@@ -16,8 +16,8 @@
     <title>KUBO - Abonnementer</title>
 
     <!-- Linker til eksternt CSS-stylesheet — ../css/ går én mappe op fra templates/ -->
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/i18n.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
 </head>
 
 <body>
@@ -29,19 +29,19 @@
     <nav class="navbar">
         <div class="navbar-inner">
             <!-- Logo som link tilbage til forsiden -->
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="{{ url_for('home') }}" class="navbar-logo">KU<span>BO</span></a>
 
             <!-- <ul> = unordered list (punktliste uden numre) — bruges til at lave menupunkter -->
             <!-- Hvert <li> er et menupunkt med et <a>-link -->
             <ul class="navbar-nav">
-                <li><a href="../index.html">Forside</a></li>
-                <li><a href="about.html">Om os</a></li>
-                <li><a href="moduler.html">Læringsmoduler</a></li>
-                <li><a href="spil.html">Spil</a></li>
-                <li><a href="kalender.html">Visuel Kalender</a></li>
-                <li><a href="tidsstyring.html">Tidsstyring</a></li>
-                <li><a href="abonnement.html" class="active">Abonnement</a></li>
-                <li><a href="kontakt.html">Kontakt</a></li>
+                <li><a href="{{ url_for('home') }}">Forside</a></li>
+                <li><a href="{{ url_for('about') }}">Om os</a></li>
+                <li><a href="{{ url_for('moduler') }}">Læringsmoduler</a></li>
+                <li><a href="{{ url_for('spil') }}">Spil</a></li>
+                <li><a href="{{ url_for('kalender') }}">Visuel Kalender</a></li>
+                <li><a href="{{ url_for('tidsstyring') }}">Tidsstyring</a></li>
+                <li><a href="{{ url_for('abonnement') }}" class="active">Abonnement</a></li>
+                <li><a href="{{ url_for('kontakt') }}">Kontakt</a></li>
             </ul>
         </div>
     </nav>
@@ -75,7 +75,7 @@
                             <li>Gemmer personlige indstillinger</li>
                         </ul>
                         <!-- Link til checkout-siden — ?pakke=basis sender info med i URL'en (query string) -->
-                        <a href="checkout.html?pakke=basis" class="buy-button">Vælg Basis</a>
+                        <a href="{{ url_for('checkout') }}?pakke=basis" class="buy-button">Vælg Basis</a>
                     </article>
 
                     <!-- KORT 2: Klasse-abonnement -->
@@ -90,7 +90,7 @@
                             <li>Diagnostisk minitest <span class="info-ikon" id="åbenInfo">?</span></li>
                             <li>Digital portfolio til evaluering</li>
                         </ul>
-                        <a href="checkout.html?pakke=klasse" class="buy-button">Vælg Klasse</a>
+                        <a href="{{ url_for('checkout') }}?pakke=klasse" class="buy-button">Vælg Klasse</a>
                     </article>
 
                     <!-- KORT 3: Skole-abonnement -->
@@ -104,7 +104,7 @@
                             <li>Fuld systemintegration</li>
                         </ul>
                         <!-- class="outline" giver knappen en anden stil (fx kun ramme, ingen baggrund) -->
-                        <a href="kontakt.html" class="buy-button outline">Kontakt os</a>
+                        <a href="{{ url_for('kontakt') }}" class="buy-button outline">Kontakt os</a>
                     </article>
 
                 </div>
@@ -127,7 +127,7 @@
     <!-- FOOTER: Sidefod med copyright og kontaktlink -->
     <footer>
         <p>&copy; 2026 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
+        <p style="margin-top:0.5rem;"><a href="{{ url_for('kontakt') }}">Kontakt os</a></p>
     </footer>
 
     <!-- JAVASCRIPT: Styrer modal (popup) funktionaliteten -->
@@ -151,7 +151,9 @@
     </script>
 
     <!-- Eksternt JS til flydende timer — defer betyder det indlæses efter HTML er klar -->
-    <script src="../js/floating-timer.js" defer></script>
+    <script src="{{ url_for('static', filename='js/floating-timer.js') }}" defer></script>
 </body>
 
 </html>
+
+

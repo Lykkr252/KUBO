@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Visuel Kalender</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- Supabase SDK — bruges til at gemme og hente kalenderbegivenheder fra databasen -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <!-- supabase-init.js opretter db-variablen der bruges i kalender.js -->
-    <script src="../js/supabase-init.js"></script>
+    <script src="{{ url_for('static', filename='js/supabase-init.js') }}"></script>
     <!-- auth.js indeholder getCurrentUser() og doLogout() -->
-    <script src="../js/auth.js"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <!-- i18n.js oversætter tekster baseret på valgt sprog -->
-    <script src="../js/i18n.js"></script>
+    <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
 </head>
 
 <body>
@@ -22,16 +22,16 @@
     <!-- NAVBAR med login/logout-knap i højre side -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="{{ url_for('home') }}" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="../index.html">Forside</a></li>
-                <li><a href="about.html">Om os</a></li>
-                <li><a href="moduler.html">Læringsmoduler</a></li>
-                <li><a href="spil.html">Spil</a></li>
-                <li><a href="kalender.html" class="active">Visuel Kalender</a></li>
-                <li><a href="tidsstyring.html">Tidsstyring</a></li>
-                <li><a href="abonnement.html">Abonnement</a></li>
-                <li><a href="kontakt.html">Kontakt</a></li>
+                <li><a href="{{ url_for('home') }}">Forside</a></li>
+                <li><a href="{{ url_for('about') }}">Om os</a></li>
+                <li><a href="{{ url_for('moduler') }}">Læringsmoduler</a></li>
+                <li><a href="{{ url_for('spil') }}">Spil</a></li>
+                <li><a href="{{ url_for('kalender') }}" class="active">Visuel Kalender</a></li>
+                <li><a href="{{ url_for('tidsstyring') }}">Tidsstyring</a></li>
+                <li><a href="{{ url_for('abonnement') }}">Abonnement</a></li>
+                <li><a href="{{ url_for('kontakt') }}">Kontakt</a></li>
             </ul>
             <!-- Tom div — fyldes dynamisk af JavaScript nedenfor -->
             <div id="navAuthArea" style="display:flex;align-items:center;gap:1rem"></div>
@@ -52,7 +52,7 @@
             } else {
                 // Bruger er ikke logget ind — vis "Log ind for at gemme"-knap
                 area.innerHTML =
-                    '<a href="login.html" class="btn btn-primary" style="padding:0.3rem 0.8rem;font-size:0.85rem">Log ind for at gemme</a>';
+                    '<a href="{{ url_for('login') }}" class="btn btn-primary" style="padding:0.3rem 0.8rem;font-size:0.85rem">Log ind for at gemme</a>';
             }
         })();
     </script>
@@ -179,13 +179,17 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
+        <p style="margin-top:0.5rem;"><a href="{{ url_for('home') }}">Tilbage til forsiden</a></p>
     </footer>
 
     <!-- kalender.js indeholder al logik: generering af dage, gem/hent fra Supabase, modal-håndtering -->
-    <script src="../js/kalender.js" defer></script>
-    <script src="../js/floating-timer.js" defer></script>
+    <script src="{{ url_for('static', filename='js/kalender.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/floating-timer.js') }}" defer></script>
 
 </body>
 
 </html>
+
+
+
+

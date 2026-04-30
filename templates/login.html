@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>KUBO - Log ind</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- i18n.js oversætter tekster til dansk/engelsk -->
-    <script src="../js/i18n.js"></script>
+    <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
     <!-- Supabase JavaScript SDK — bruges til at kommunikere med databasen -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <!-- supabase-init.js opretter forbindelsen til Supabase med URL og API-nøgle -->
-    <script src="../js/supabase-init.js"></script>
+    <script src="{{ url_for('static', filename='js/supabase-init.js') }}"></script>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
     <div class="auth-wrapper">
         <div class="auth-card">
             <!-- Logo som link tilbage til forsiden -->
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="{{ url_for('home') }}" class="navbar-logo">KU<span>BO</span></a>
             <p class="auth-subtitle" data-i18n="login.subtitle">Log ind for at gemme din kalender</p>
 
             <!-- TABS: To knapper der skifter mellem Login og Opret konto -->
@@ -98,7 +98,7 @@
     </div>
 
     <!-- auth.js indeholder doLogin() og doRegister() som kommunikerer med Supabase -->
-    <script src="../js/auth.js" defer></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}" defer></script>
     <script>
         // Skifter mellem Login og Opret konto ved at vise/skjule de to formularer
         function switchTab(tab) {
@@ -117,7 +117,7 @@
             const p = document.getElementById('loginPass').value;
             if (!u || !p) return showMsg('Udfyld alle felter.'); // tidlig retur hvis felter er tomme
             const ok = await doLogin(u, p); // venter på svar fra Supabase
-            if (ok) window.location.href = '../index.html'; // omdirigerer til forsiden ved succes
+            if (ok) window.location.href = "{{ url_for('home') }}"; // omdirigerer til forsiden ved succes
             else showMsg('Forkert brugernavn eller adgangskode.');
         }
 
@@ -146,7 +146,7 @@
             showMsg('Konto oprettet! Logger ind...', 'green');
             await doLogin(u, p); // logger automatisk ind efter oprettelse
             // setTimeout venter 800ms før den omdirigerer — så brugeren kan se beskeden
-            setTimeout(() => window.location.href = '../index.html', 800);
+            setTimeout(() => window.location.href = "{{ url_for('home') }}", 800);
         }
 
         // Viser en besked til brugeren — farve er rød som standard, kan ændres til 'green'
@@ -158,3 +158,6 @@
 </body>
 
 </html>
+
+
+
