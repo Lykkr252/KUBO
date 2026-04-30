@@ -25,51 +25,22 @@ const MAX_TOTAL = MODULES.reduce((s, m) => s + m.max, 0);       // 27
 const MAX_RISK  = MODULES.filter(m => m.risiko).reduce((s, m) => s + m.max, 0); // 15
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
-// Teachers have individual accounts stored at teachers/{teacherId}.
-// Auth functions (doTeacherLogin, doTeacherRegister, etc.) live in auth.js.
 
-async function tryLogin() {
-    const idVal  = (document.getElementById('teacherIdInput').value  || '').trim();
-    const pwVal  = (document.getElementById('teacherPwInput').value  || '');
-    const isReg  = document.getElementById('gateRegMode') &&
-                   document.getElementById('gateRegMode').checked;
+const LAERER_PIN = 'LAERER2025';
 
-    if (!idVal || !pwVal) return showGateError('Udfyld ID og adgangskode.');
-
-    if (isReg) {
-        // Registration mode
-        const profile = {
-            teachernumber: idVal,
-            email:     (document.getElementById('gateEmail')     || {}).value || '',
-            studyline: (document.getElementById('gateStudyline') || {}).value || '',
-            class:     (document.getElementById('gateClass')     || {}).value || '',
-            subject:   (document.getElementById('gateSubject')   || {}).value || '',
-        };
-        const result = await doTeacherRegister(idVal, pwVal, profile);
-        if (result === 'taken') return showGateError('Lærer-ID er allerede i brug.');
-        if (result !== 'ok')   return showGateError(result);
-        // Fall through to login after registration
-    }
-
-    const ok = await doTeacherLogin(idVal, pwVal);
-    if (!ok) return showGateError('Forkert ID eller adgangskode.');
-
-    openDashboard(idVal);
+function tryLogin() {
+    const entered = document.getElementById('pinInput').value.trim();
+    if (!entered) return showGateError('Indtast lærerkode.');
+    if (entered !== LAERER_PIN) return showGateError('Forkert lærerkode. Prøv igen.');
+    sessionStorage.setItem('kubo_laerer', '1');
+    openDashboard();
     loadData();
 }
 
-function openDashboard(teacherId) {
+function openDashboard() {
     document.getElementById('gate').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('teacherLabel').textContent = 'Lærer: ' + teacherId;
-}
-
-function updateTeacherLabel(teacherId, teacherClass) {
-    const label = document.getElementById('teacherLabel');
-    if (!label) return;
-    label.textContent = teacherClass
-        ? `Lærer: ${teacherId} · Klasse: ${teacherClass}`
-        : `Lærer: ${teacherId}`;
+    document.getElementById('teacherLabel').textContent = 'Logget ind som lærer';
 }
 
 function showGateError(msg) {
@@ -78,36 +49,25 @@ function showGateError(msg) {
 
 function teacherLogout() {
     sessionStorage.removeItem('kubo_laerer');
-    sessionStorage.removeItem('kubo_laerer_id');
     location.reload();
 }
 
 // Resume session if already authenticated
-const _savedTeacher = sessionStorage.getItem('kubo_laerer');
-if (_savedTeacher) {
-    openDashboard(_savedTeacher);
+if (sessionStorage.getItem('kubo_laerer')) {
+    openDashboard();
     loadData();
 }
 
 // ── Data loading (localStorage) ───────────────────────────────────────────────
 
-let allStudents   = [];
-let _teacherClass = '';
+let allStudents = [];
 
 function loadData() {
-    const teacherName = sessionStorage.getItem('kubo_laerer') || '';
-
-    // Load all registered users and build student list from localStorage
     let users;
     try { users = JSON.parse(localStorage.getItem('kubo_users')) || {}; } catch { users = {}; }
 
-    const teacherData = users[teacherName] || {};
-    _teacherClass = teacherData.class || '';
-    updateTeacherLabel(teacherName, _teacherClass);
-
     allStudents = Object.entries(users)
         .filter(([, u]) => u.role === 'student')
-        .filter(([, u]) => !_teacherClass || u.class === _teacherClass)
         .map(([username, u]) => {
             let scores;
             try { scores = JSON.parse(localStorage.getItem(`kubo_scores_${username}`)) || {}; } catch { scores = {}; }
@@ -128,9 +88,7 @@ function loadData() {
 // ── Evaluations (localStorage) ────────────────────────────────────────────────
 
 function saveEvaluation(studentUsername, text) {
-    const teacherName = sessionStorage.getItem('kubo_laerer') || 'unknown';
-    const key = `kubo_eval_${teacherName}_${studentUsername}`;
-    localStorage.setItem(key, text);
+    localStorage.setItem(`kubo_eval_${studentUsername}`, text);
 }
 
 function parseStudent(username, data, profile, evalEntry) {

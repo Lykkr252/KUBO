@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html lang="da">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,12 +18,17 @@
             <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
                 <li><a href="index.html" class="active">Forside</a></li>
-                <li><a href="templates/about.html">Om os</a></li>
-                <li><a href="templates/moduler.html">Læringsmoduler</a></li>
-                <li><a href="templates/spil.html">Spil</a></li>
-                <li><a href="templates/kalender.html">Visuel Kalender</a></li>
-                <li><a href="templates/tidsstyring.html">Tidsstyring</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button">Læringsmoduler <span class="dropdown-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="templates/moduler.html">Talblindhedstest</a></li>
+                        <li><a href="templates/spil.html">Spil</a></li>
+                        <li><a href="templates/kalender.html">Visuel Kalender</a></li>
+                        <li><a href="templates/tidsstyring.html">Lagkage Timer</a></li>
+                    </ul>
+                </li>
                 <li><a href="templates/abonnement.html">Abonnement</a></li>
+                <li><a href="templates/about.html">Om os</a></li>
                 <li><a href="templates/kontakt.html">Kontakt</a></li>
             </ul>
         </div>
@@ -32,7 +38,7 @@
     <section class="hero" id="main-content">
         <div class="hero-inner">
             <span class="hero-badge" data-i18n="index.badge">Kalender · Ur · Bog · Organisering</span>
-            <h1 data-i18n-html="index.hero.h1">Matematik er ikke svært —<br><span>den skal bare forklares rigtigt</span>
+            <h1 data-i18n-html="index.hero.h1">Matematik er ikke svært <br><span>den skal bare forklares rigtigt</span>
             </h1>
             <p data-i18n="index.hero.p">KUBO er en tryg læringsplatform for elever med talblindhed. Vi gør tal, tid og
                 struktur forståelig som
@@ -50,13 +56,13 @@
         <div class="section-title">
             <h2 data-i18n="feat.title">Alt hvad du behøver</h2>
             <p data-i18n="feat.sub">KUBO samler de vigtigste redskaber for elever med talblindhed på ét sted.</p>
+            <a href="templates/abonnement.html" class="btn btn-primary" style="margin-top:1.5rem;display:inline-block;">Abonnér her</a>
         </div>
         <div class="feature-grid">
             <div class="feature-card">
                 <span class="icon">📚</span>
                 <h3 data-i18n="feat.mod.title">Læringsmoduler</h3>
-                <p data-i18n="feat.mod.p">Interaktive øvelser i klokken, tal, geometri, brøker og meget mere —
-                    personliggør det til præcis det niveau, du er på.</p>
+                <p data-i18n="feat.mod.p">Interaktive øvelser i klokken, tal, geometri, brøker og meget mere, personliggør det til præcis det niveau, du er på.</p>
                 <a href="templates/moduler.html" data-i18n="feat.mod.link">Gå til moduler →</a>
             </div>
             <div class="feature-card">
@@ -76,8 +82,7 @@
             <div class="feature-card">
                 <span class="icon">⏳</span>
                 <h3 data-i18n="feat.time.title">Tidsstyring</h3>
-                <p data-i18n="feat.time.p">Del din tid op på opgaver med lagkagediagrammer — visuelt, enkelt og
-                    effektivt til eksamen.</p>
+                <p data-i18n="feat.time.p">Del din tid op på opgaver med lagkagediagrammer, visuelt, enkelt og effektivt til eksamen.</p>
                 <a href="templates/tidsstyring.html" data-i18n="feat.time.link">Prøv tidsstyring →</a>
             </div>
         </div>
@@ -114,7 +119,7 @@
                     <p>Ifølge Sunde &amp; Pind (2016) er det centralt at identificere matematisk sårbarhed tidligt og
                         arbejde med det gennem både forebyggende og diagnosticerende indsats. Det handler om at afdække,
                         hvordan barnet forstår tal og tid
-                        — og ikke kun via generelle præstationstests, men gennem tests der afdækker <strong>strategisk
+                        og ikke kun via generelle præstationstests, men gennem tests der afdækker <strong>strategisk
                             forståelse og indre begrebsmodeller</strong>.</p>
                     <p>Det er her KUBO kan spille en vigtig rolle som et praktisk didaktisk supplement til
                         diagnosticerende og forebyggende indsats.</p>
@@ -122,7 +127,7 @@
                         <li>Visuel støtte til tid og tal</li>
                         <li>Formativ adgang til barnets tænkning</li>
                         <li>Understøtter principper for effektiv diagnostik</li>
-                        <li>Skaber rum for udvikling — både fagligt og personligt</li>
+                        <li>Skaber rum for udvikling, fagligt og personligt</li>
                     </ul>
                     <p style="margin-top:1rem;">KUBOs mission er at <strong>mindske spildt talent</strong>. Ved at
                         tilbyde en platform, hvor talblindhed ikke hæmmer deltagelse, skabes rum for udvikling og
@@ -143,13 +148,22 @@
         </div>
     </section>
 
+    <!-- CTA BANNER -->
+    <section class="cta-banner">
+        <div class="cta-inner">
+            <h2>Alt hvad du behøver</h2>
+            <p>Få adgang til alle KUBOs redskaber: læringsmoduler, spil, kalender og tidsstyring, samlet på ét sted.</p>
+            <a href="templates/abonnement.html" class="btn btn-cta">Abonnér her</a>
+        </div>
+    </section>
+
     <footer>
-        <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p>&copy; 2025 <strong>KUBO</strong> · Kalender, Ur, Bog, Organisering</p>
         <p style="margin-top:0.5rem;"><a href="templates/kontakt.html">Kontakt os</a></p>
     </footer>
 
     <script src="js/floating-timer.js" defer></script>
-
+    <script src="js/navbar.js"></script>
 </body>
 
 </html>

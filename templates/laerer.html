@@ -176,44 +176,11 @@
 
         <input type="text" id="teacherIdInput" placeholder="Lærer-ID (fx laerer01)" autocomplete="username"
                onkeydown="if(event.key==='Enter') tryLogin()"
-               style="width:100%;padding:0.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit;margin-bottom:0.75rem;box-sizing:border-box">
-        <input type="password" id="teacherPwInput" placeholder="Adgangskode" autocomplete="current-password"
-               onkeydown="if(event.key==='Enter') tryLogin()"
-               style="width:100%;padding:0.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit;margin-bottom:0.75rem;box-sizing:border-box">
-
-        <!-- Extra fields shown only during registration -->
-        <div id="gateRegFields" style="display:none">
-            <input type="email" id="gateEmail" placeholder="E-mail (valgfri)"
-                   style="width:100%;padding:0.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit;margin-bottom:0.75rem;box-sizing:border-box">
-            <input type="text" id="gateStudyline" placeholder="Studieretning (valgfri)"
-                   style="width:100%;padding:0.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit;margin-bottom:0.75rem;box-sizing:border-box">
-            <input type="text" id="gateClass" placeholder="Klasse (valgfri)"
-                   style="width:100%;padding:0.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit;margin-bottom:0.75rem;box-sizing:border-box">
-            <input type="text" id="gateSubject" placeholder="Fag (valgfri)"
-                   style="width:100%;padding:0.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit;margin-bottom:0.75rem;box-sizing:border-box">
-            <!-- Hidden checkbox signals registration mode to tryLogin(). Default: unchecked = login mode. -->
-            <input type="checkbox" id="gateRegMode" style="display:none">
-        </div>
-
+               style="width:100%;padding:0.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit;margin-bottom:1rem;box-sizing:border-box">
         <button class="btn btn-primary" style="width:100%" onclick="tryLogin()">Log ind</button>
         <p id="gateError" style="color:#dc2626;font-size:0.9rem;margin-top:0.5rem;min-height:1.2rem"></p>
     </div>
 </div>
-
-<script>
-function gateTab(mode) {
-    const isReg = mode === 'reg';
-    document.getElementById('gateRegFields').style.display = isReg ? '' : 'none';
-    document.getElementById('gateRegMode').checked = isReg;   // drives tryLogin() branching
-    document.getElementById('gateTabLogin').style.background  = isReg ? '#fff'    : '#4f46e5';
-    document.getElementById('gateTabLogin').style.color        = isReg ? '#64748b' : '#fff';
-    document.getElementById('gateTabLogin').style.borderColor  = isReg ? '#e2e8f0' : '#4f46e5';
-    document.getElementById('gateTabReg').style.background    = isReg ? '#4f46e5' : '#fff';
-    document.getElementById('gateTabReg').style.color          = isReg ? '#fff'    : '#64748b';
-    document.getElementById('gateTabReg').style.borderColor    = isReg ? '#4f46e5' : '#e2e8f0';
-    document.querySelector('.gate-card button.btn').textContent = isReg ? 'Opret lærerkonto' : 'Log ind';
-}
-</script>
 
 <!-- ── Dashboard (hidden until authenticated) ───────────────────────────── -->
 <div id="dashboard">
