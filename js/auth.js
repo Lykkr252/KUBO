@@ -69,38 +69,3 @@ function requireLogin() {
     if (!getCurrentUser()) window.location.href = 'login.html';
 }
 
-// ── Teacher auth ──────────────────────────────────────────────────────────────
-
-async function doTeacherLogin(teacherId, password) {
-    try {
-        const hash  = await hashPw(password);
-        const users = getUsers();
-        const user  = users[teacherId];
-        if (!user || user.password !== hash || user.role !== 'teacher') return false;
-        sessionStorage.setItem('kubo_laerer',    teacherId);
-        sessionStorage.setItem('kubo_laerer_id', teacherId);
-        return true;
-    } catch { return false; }
-}
-
-async function doTeacherRegister(teacherId, password, profile = {}) {
-    try {
-        const users = getUsers();
-        if (users[teacherId]) return 'taken';
-        const hash = await hashPw(password);
-        users[teacherId] = {
-            password:      hash,
-            role:          'teacher',
-            teachernumber: profile.teachernumber || teacherId,
-            email:         profile.email         || null,
-            studyline:     profile.studyline      || null,
-            class:         profile.class          || null,
-            subject:       profile.subject        || null,
-        };
-        _saveUsers(users);
-        return 'ok';
-    } catch { return 'Noget gik galt. Prøv igen.'; }
-}
-
-function getCurrentTeacher()   { return sessionStorage.getItem('kubo_laerer'); }
-function getCurrentTeacherId() { return sessionStorage.getItem('kubo_laerer_id'); }
