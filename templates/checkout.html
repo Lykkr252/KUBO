@@ -4,36 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Bestilling</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/i18n.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/i18n.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
 
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="index.html">Forside</a></li>
-                <li><a href="about.html">Om os</a></li>
-                <li><a href="moduler.html">Læringsmoduler</a></li>
-                <li><a href="spil.html">Spil</a></li>
-                <li><a href="kalender.html">Visuel Kalender</a></li>
-                <li><a href="tidsstyring.html">Tidsstyring</a></li>
-                <li><a href="abonnement.html" class="active">Abonnement</a></li>
-                <li><a href="kontakt.html">Kontakt</a></li>
+                <li><a href="/">Forside</a></li>
+                <li><a href="/about">Om os</a></li>
+                <li><a href="/moduler">Læringsmoduler</a></li>
+                <li><a href="/spil">Spil</a></li>
+                <li><a href="/kalender">Visuel Kalender</a></li>
+                <li><a href="/tidsstyring">Tidsstyring</a></li>
+                <li><a href="/abonnement" class="active">Abonnement</a></li>
+                <li><a href="/kontakt">Kontakt</a></li>
             </ul>
         </div>
     </nav>
 
+    <div class="page-header">
+        <h1>Gennemfør din bestilling</h1>
+        <p>Udfyld oplysningerne for at oprette din KUBO-profil og starte dit abonnement.</p>
+    </div>
+
     <main id="main-content">
         <section class="section">
             <div class="container">
-                <div class="section-title">
-                    <h2>Gennemfør din bestilling</h2>
-                    <p>Udfyld oplysningerne for at oprette din KUBO-profil og starte dit abonnement.</p>
-                </div>
-
                 <div class="form-container">
                     <form id="bestillingsForm" class="checkout-form">
 
@@ -85,13 +85,13 @@
             <span class="close-btn" id="lukSucces" role="button" tabindex="0" aria-label="Luk">×</span>
             <h3 style="color: #2ECC71;">✅ Tak for din bestilling!</h3>
             <p>Din profil er nu oprettet i vores system. Vi har sendt en kvittering til din e-mailadresse.</p>
-            <a href="index.html" class="buy-button outline" style="display: block; margin-top: 20px;">Gå til forsiden</a>
+            <a href="/" class="buy-button outline" style="display: block; margin-top: 20px;">Gå til forsiden</a>
         </div>
     </div>
 
     <footer>
         <p>&copy; 2026 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
+        <p style="margin-top:0.5rem;"><a href="/kontakt">Kontakt os</a></p>
     </footer>
 
     <script>
@@ -114,7 +114,7 @@
         }
     </script>
 
-    <script src="js/floating-timer.js" defer></script>
-    <script src="js/navbar.js"></script>
+    <script src="/static/js/floating-timer.js" defer></script>
+    <script src="/static/js/navbar.js"></script>
 </body>
 </html>

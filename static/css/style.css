@@ -1,4 +1,4 @@
-/* =============================================
+﻿/* =============================================
    KUBO - Komplet Stylesheet
    Google Font: Nunito (dyslexia-friendly)
    ============================================= */
@@ -78,14 +78,14 @@ body {
     top: 1rem;
 }
 
-/* Synlig fokus-ring på alle interaktive elementer */
+/* Synlig fokus-ring pÃ¥ alle interaktive elementer */
 :focus-visible {
     outline: 3px solid var(--secondary);
     outline-offset: 3px;
     border-radius: 4px;
 }
 
-/* Kalenderdage og knapper skal også have fokus-styling */
+/* Kalenderdage og knapper skal ogsÃ¥ have fokus-styling */
 .day:focus-visible,
 .btn:focus-visible,
 button:focus-visible {
@@ -1936,6 +1936,7 @@ hr {
     padding: 0;
     margin: 0;
     cursor: pointer;
+    appearance: textfield;
     -moz-appearance: textfield;
 }
 
@@ -2060,7 +2061,7 @@ hr {
     }
 }
 
-/* ── AUTH / LOGIN ── */
+/* â”€â”€ AUTH / LOGIN â”€â”€ */
 .auth-wrapper {
     display: flex;
     align-items: center;
@@ -2220,7 +2221,7 @@ hr {
 }
 
 .features li::before {
-    content: "✔";
+    content: "\2713";
     position: absolute;
     left: 0;
     color: #2ECC71;

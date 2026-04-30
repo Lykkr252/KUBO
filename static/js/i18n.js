@@ -22,7 +22,7 @@
 
       // Index hero
       'index.badge':    'Kalender · Ur · Bog · Organisering',
-      'index.hero.h1':  'Matematik er ikke svært —<br><span>den skal bare forklares rigtigt</span>',
+      'index.hero.h1':  'Matematik er ikke svært <br><span>den skal bare forklares rigtigt</span>',
       'index.hero.p':   'KUBO er en tryg læringsplatform for elever med talblindhed. Vi gør tal, tid og struktur forståelig med farver, billeder og tålmodighed.',
       'index.hero.btn1':'Start læringsmoduler',
       'index.hero.btn2':'Visuel Kalender',

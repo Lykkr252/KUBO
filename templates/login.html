@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>KUBO - Log ind</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/i18n.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/i18n.js"></script>
 </head>
 
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
-            <a href="index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <p class="auth-subtitle" data-i18n="login.subtitle">Log ind for at gemme din kalender</p>
 
             <div class="auth-tabs">
@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <script src="js/auth.js" defer></script>
+    <script src="/static/js/auth.js" defer></script>
     <script>
         function switchTab(tab) {
             document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
