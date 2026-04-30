@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Spil</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="../static/js/i18n.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
@@ -13,16 +13,16 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="{{ url_for('home') }}" class="navbar-logo">KU<span>BO</span></a>
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="{{ url_for('home') }}">Forside</a></li>
-                <li><a href="{{ url_for('about') }}">Om os</a></li>
-                <li><a href="{{ url_for('moduler') }}">Læringsmoduler</a></li>
-                <li><a href="{{ url_for('spil') }}" class="active">Spil</a></li>
-                <li><a href="{{ url_for('kalender') }}">Visuel Kalender</a></li>
-                <li><a href="{{ url_for('tidsstyring') }}">Tidsstyring</a></li>
-                <li><a href="{{ url_for('abonnement') }}">Abonnement</a></li>
-                <li><a href="{{ url_for('kontakt') }}">Kontakt</a></li>
+                <li><a href="../index.html">Forside</a></li>
+                <li><a href="about.html">Om os</a></li>
+                <li><a href="moduler.html">Læringsmoduler</a></li>
+                <li><a href="spil.html" class="active">Spil</a></li>
+                <li><a href="kalender.html">Visuel Kalender</a></li>
+                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="abonnement.html">Abonnement</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
         </div>
     </nav>
@@ -90,10 +90,10 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="{{ url_for('home') }}">Tilbage til forsiden</a></p>
+        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/floating-timer.js') }}" defer></script>
+    <script src="../static/js/floating-timer.js" defer></script>
 
     <script>
         // Puzzles: 0 = given cell, 1-9 = pre-filled

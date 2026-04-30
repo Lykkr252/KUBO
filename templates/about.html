@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Om os</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="../static/js/i18n.js"></script>
 </head>
 
 <body>
@@ -14,16 +14,16 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="{{ url_for('home') }}" class="navbar-logo">KU<span>BO</span></a>
+            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="{{ url_for('home') }}">Forside</a></li>
-                <li><a href="{{ url_for('about') }}" class="active">Om os</a></li>
-                <li><a href="{{ url_for('moduler') }}">Læringsmoduler</a></li>
-                <li><a href="{{ url_for('spil') }}">Spil</a></li>
-                <li><a href="{{ url_for('kalender') }}">Visuel Kalender</a></li>
-                <li><a href="{{ url_for('tidsstyring') }}">Tidsstyring</a></li>
-                <li><a href="{{ url_for('abonnement') }}">Abonnement</a></li>
-                <li><a href="{{ url_for('kontakt') }}">Kontakt</a></li>
+                <li><a href="../index.html">Forside</a></li>
+                <li><a href="about.html" class="active">Om os</a></li>
+                <li><a href="moduler.html">Læringsmoduler</a></li>
+                <li><a href="spil.html">Spil</a></li>
+                <li><a href="kalender.html">Visuel Kalender</a></li>
+                <li><a href="tidsstyring.html">Tidsstyring</a></li>
+                <li><a href="abonnement.html">Abonnement</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
         </div>
     </nav>
@@ -95,7 +95,7 @@
                 <div class="feature-grid">
 
                     <div class="feature-card">
-                        <img src="{{ url_for('static', filename='images/lykke.png') }}" alt="Team medlem">
+                        <img src="../static/images/lykke.png" alt="Team medlem">
                         <h3>Lykke Kristensen</h3>
                         <p>CEO and Creative Director</p>
                         <p class="text-muted">lykkri@kubo.dk</p>
@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="feature-card">
-                        <img src="{{ url_for('static', filename='images/isabella_grayscale.png') }}" alt="Team medlem">
+                        <img src="../static/images/isabella_grayscale.png" alt="Team medlem">
                         <h3>Isabella Bisset</h3>
                         <p>CFO and Office Manager</p>
                         <p class="text-muted">isabi@kubo.dk</p>
@@ -111,7 +111,7 @@
                     </div>
 
                     <div class="feature-card">
-                        <img src="{{ url_for('static', filename='images/mads_grayscale.png') }}" alt="Mads">
+                        <img src="../static/images/mads_grayscale.png" alt="Mads">
                         <h3>Mads Skou Larsen</h3>
                         <p>CTO and Sales Director</p>
                         <p class="text-muted">masla@kubo.dk</p>
@@ -134,7 +134,7 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="{{ url_for('kontakt') }}">Kontakt os</a></p>
+        <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
     </footer>
 
     <script src="../js/navbar.js"></script>

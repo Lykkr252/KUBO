@@ -5,7 +5,7 @@ from flask import Flask, redirect, request, render_template, session, url_for
 import mariadb
 
 # Create the actual Flask web application object
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 # The secret key is used to lock and secure the 'session' cookies. 
 # CHANGE THIS to a random string!
 app.secret_key = "some_random_secret_string"
@@ -333,4 +333,4 @@ PORT_NUMBER = 64028
 
 if __name__ == '__main__':
     # CHANGE THIS: Use your assigned Port number!
-    app.run(host='130.225.170.248', port=PORT_NUMBER)
+    app.run(debug=True)
