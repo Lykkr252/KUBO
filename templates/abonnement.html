@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Abonnementer</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <script src="../js/i18n.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/i18n.js"></script>
 </head>
 
 <body>
@@ -14,21 +14,16 @@
 
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="../index.html">Forside</a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" role="button">Læringsmoduler <span class="dropdown-arrow">▾</span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="moduler.html">Talblindhedstest</a></li>
-                        <li><a href="spil.html">Spil</a></li>
-                        <li><a href="kalender.html">Visuel Kalender</a></li>
-                        <li><a href="tidsstyring.html">Lagkage Timer</a></li>
-                    </ul>
-                </li>
-                <li><a href="abonnement.html" class="active">Abonnement</a></li>
-                <li><a href="about.html">Om os</a></li>
-                <li><a href="kontakt.html">Kontakt</a></li>
+                <li><a href="/">Forside</a></li>
+                <li><a href="/about">Om os</a></li>
+                <li><a href="/moduler">Læringsmoduler</a></li>
+                <li><a href="/spil">Spil</a></li>
+                <li><a href="/kalender">Visuel Kalender</a></li>
+                <li><a href="/tidsstyring">Tidsstyring</a></li>
+                <li><a href="/abonnement" class="active">Abonnement</a></li>
+                <li><a href="/kontakt">Kontakt</a></li>
             </ul>
         </div>
     </nav>
@@ -38,9 +33,10 @@
         <p>Få adgang til visuelle værktøjer, der gør hverdagen nemmere.</p>
     </div>
 
-    <main class="section">
+    <main class="section" id="main-content">
         <div class="container">
             <div class="pricing-container">
+
                 <article class="pricing-card">
                     <h3>KUBO Basis</h3>
                     <p class="pris">49 kr. <span>/ md.</span></p>
@@ -50,8 +46,7 @@
                         <li>Lagkage-timer</li>
                         <li>Gemmer personlige indstillinger</li>
                     </ul>
-                    <!-- Link til checkout-siden — ?pakke=basis sender info med i URL'en (query string) -->
-                    <a href="checkout.html?pakke=basis" class="buy-button">Vælg Basis</a>
+                    <a href="/checkout?pakke=basis" class="buy-button">Vælg Basis</a>
                 </article>
 
                 <article class="pricing-card highlight">
@@ -63,7 +58,7 @@
                         <li>Diagnostisk minitest <span class="info-ikon" id="åbenInfo">?</span></li>
                         <li>Digital portfolio til evaluering</li>
                     </ul>
-                    <a href="checkout.html?pakke=klasse" class="buy-button">Vælg Klasse</a>
+                    <a href="/checkout?pakke=klasse" class="buy-button">Vælg Klasse</a>
                 </article>
 
                 <article class="pricing-card">
@@ -75,50 +70,40 @@
                         <li>Dataeksport til administration</li>
                         <li>Fuld systemintegration</li>
                     </ul>
-                    <!-- class="outline" giver knappen en anden stil (fx kun ramme, ingen baggrund) -->
-                    <a href="kontakt.html" class="buy-button outline">Kontakt os</a>
+                    <a href="/kontakt" class="buy-button outline">Kontakt os</a>
                 </article>
+
             </div>
-            </div>
-        </main>
+        </div>
+    </main>
 
     <div id="infoModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-btn" id="lukInfo" role="button" tabindex="0" aria-label="Luk">&times;</span>
             <h3 style="color: #3498DB;">Diagnostisk Minitest</h3>
-            <p>
-                Dette er en kort test, der hjælper læreren med at spotte elevens strategiske forståelse
-                fremfor blot at måle rigtigt/forkert.
-            </p>
+            <p>Dette er en kort test, der hjælper læreren med at spotte elevens strategiske forståelse fremfor blot at måle rigtigt/forkert.</p>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 <strong>KUBO</strong> - Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
+        <p>&copy; 2026 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
+        <p style="margin-top:0.5rem;"><a href="/kontakt">Kontakt os</a></p>
     </footer>
 
     <script>
         const infoModal = document.getElementById("infoModal");
-        const aabenInfo = document.getElementById("aabenInfo");
+        const åbenInfo = document.getElementById("åbenInfo");
         const lukInfo = document.getElementById("lukInfo");
 
-        aabenInfo.addEventListener("click", function () {
-            infoModal.style.display = "block";
-        });
-
-        lukInfo.addEventListener("click", function () {
-            infoModal.style.display = "none";
-        });
-
-        window.addEventListener("click", function (event) {
-            if (event.target === infoModal) {
-                infoModal.style.display = "none";
-            }
-        });
+        åbenInfo.onclick = function () { infoModal.style.display = "block"; }
+        lukInfo.onclick = function () { infoModal.style.display = "none"; }
+        window.onclick = function (event) {
+            if (event.target == infoModal) { infoModal.style.display = "none"; }
+        }
     </script>
 
-    <script src="../js/floating-timer.js" defer></script>
-    <script src="../js/navbar.js"></script> 
+    <script src="/static/js/floating-timer.js" defer></script>
+    <script src="/static/js/navbar.js"></script>
 </body>
+
 </html>

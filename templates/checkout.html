@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Bestilling</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/i18n.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/i18n.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
 
-<!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
                 <li><a href="../index.html">Forside</a></li>
                 <li class="dropdown">
@@ -91,13 +90,13 @@
             <span class="close-btn" id="lukSucces" role="button" tabindex="0" aria-label="Luk">×</span>
             <h3 style="color: #2ECC71;">✅ Tak for din bestilling!</h3>
             <p>Din profil er nu oprettet i vores system. Vi har sendt en kvittering til din e-mailadresse.</p>
-            <a href="../index.html" class="buy-button outline" style="display: block; margin-top: 20px;">Gå til forsiden</a>
+            <a href="/" class="buy-button outline" style="display: block; margin-top: 20px;">Gå til forsiden</a>
         </div>
     </div>
 
     <footer>
         <p>&copy; 2026 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="kontakt.html">Kontakt os</a></p>
+        <p style="margin-top:0.5rem;"><a href="/kontakt">Kontakt os</a></p>
     </footer>
 
     <script>
@@ -120,11 +119,7 @@
         }
     </script>
 
-<!-- defer = scriptet indlæses efter HTML er klar -->
-    <script src="{{ url_for('static', filename='js/floating-timer.js') }}" defer></script>
-    <script src="../js/navbar.js"></script> <!-- TILFØJ DENNE LINJE -->
+    <script src="/static/js/floating-timer.js" defer></script>
+    <script src="/static/js/navbar.js"></script>
 </body>
 </html>
-
-
-

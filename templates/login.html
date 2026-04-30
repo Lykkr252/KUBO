@@ -4,20 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>KUBO - Log ind</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <!-- i18n.js oversætter tekster til dansk/engelsk -->
-    <script src="../static/js/i18n.js"></script>
-    <!-- Supabase JavaScript SDK — bruges til at kommunikere med databasen -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <!-- supabase-init.js opretter forbindelsen til Supabase med URL og API-nøgle -->
-    <script src="../static/js/supabase-init.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/i18n.js"></script>
 </head>
 
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
-            <!-- Logo som link tilbage til forsiden -->
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <p class="auth-subtitle" data-i18n="login.subtitle">Log ind for at gemme din kalender</p>
 
             <div class="auth-tabs">
@@ -81,8 +75,7 @@
         </div>
     </div>
 
-    <!-- auth.js indeholder doLogin() og doRegister() som kommunikerer med Supabase -->
-    <script src="../static/js/auth.js" defer></script>
+    <script src="/static/js/auth.js" defer></script>
     <script>
         function switchTab(tab) {
             document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
@@ -94,9 +87,9 @@
         async function handleLogin() {
             const u = document.getElementById('loginUser').value.trim();
             const p = document.getElementById('loginPass').value;
-            if (!u || !p) return showMsg('Udfyld alle felter.'); // tidlig retur hvis felter er tomme
-            const ok = await doLogin(u, p); // venter på svar fra Supabase
-            if (ok) window.location.href = "../index.html"; // omdirigerer til forsiden ved succes
+            if (!u || !p) return showMsg('Udfyld alle felter.');
+            const ok = await doLogin(u, p);
+            if (ok) window.location.href = "index.html";
             else showMsg('Forkert brugernavn eller adgangskode.');
         }
 
@@ -121,9 +114,8 @@
             if (result === 'taken') return showMsg('Brugernavnet er allerede taget.');
             if (result !== 'ok') return showMsg(result);
             showMsg('Konto oprettet! Logger ind...', 'green');
-            await doLogin(u, p); // logger automatisk ind efter oprettelse
-            // setTimeout venter 800ms før den omdirigerer — så brugeren kan se beskeden
-            setTimeout(() => window.location.href = "../index.html", 800);
+            await doLogin(u, p);
+            setTimeout(() => window.location.href = "index.html", 800);
         }
 
         function showMsg(txt, color = 'red') {
@@ -134,6 +126,3 @@
 </body>
 
 </html>
-
-
-

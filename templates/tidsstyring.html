@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Tidsstyring</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <!-- Chart.js er et eksternt bibliotek til at tegne grafer og diagrammer -->
-    <!-- CDN = Content Delivery Network — hentes fra internettet i stedet for lokalt -->
+    <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- i18n.js = internationalization — oversætter tekster til dansk/engelsk -->
-    <script src="../static/js/i18n.js"></script>
+    <script src="/static/js/i18n.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
@@ -17,7 +14,7 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
                 <li><a href="../index.html">Forside</a></li>
                 <li class="dropdown">
@@ -83,16 +80,11 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
+        <p style="margin-top:0.5rem;"><a href="/">Tilbage til forsiden</a></p>
     </footer>
 
-    <!-- tidsstyring.js indeholder al logik for timer og Chart.js-diagrammet -->
-    <script src="../static/js/tidsstyring.js" defer></script>
-    <script src="../static/js/floating-timer.js" defer></script>
-
-    <script src="../static/js/navbar.js"></script>
+    <script src="/static/js/tidsstyring.js" defer></script>
+    <script src="/static/js/floating-timer.js" defer></script>
+    <script src="/static/js/navbar.js"></script>
 </body>
 </html>
-
-
-

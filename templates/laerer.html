@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Læreroversigt</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script src="../static/js/supabase-init.js"></script>
-    <script src="../static/js/i18n.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/i18n.js"></script>
     <style>
         /* ── Teacher gate overlay ── */
         #gate {
@@ -159,23 +157,9 @@
 <!-- ── Teacher login gate ──────────────────────────────────────────────── -->
 <div id="gate">
     <div class="gate-card">
-        <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
-        <p>Læreroversigt — log ind med din lærerkonto</p>
-
-        <!-- Login / Register tabs -->
-        <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
-            <button id="gateTabLogin" onclick="gateTab('login')"
-                style="flex:1;padding:0.4rem;border-radius:8px;border:2px solid #4f46e5;background:#4f46e5;color:#fff;font-family:inherit;cursor:pointer;font-weight:700">
-                Log ind
-            </button>
-            <button id="gateTabReg" onclick="gateTab('reg')"
-                style="flex:1;padding:0.4rem;border-radius:8px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-family:inherit;cursor:pointer;font-weight:700">
-                Opret konto
-            </button>
-        </div>
-
-        <input type="text" id="teacherIdInput" placeholder="Lærer-ID (fx laerer01)" autocomplete="username"
-               onkeydown="if(event.key==='Enter') tryLogin()"
+        <a href="/" class="navbar-logo">KU<span>BO</span></a>
+        <p>Læreroversigt — indtast lærerkode</p>
+        <input type="password" id="pinInput" placeholder="Lærerkode" onkeydown="if(event.key==='Enter') tryLogin()"
                style="width:100%;padding:0.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit;margin-bottom:1rem;box-sizing:border-box">
         <button class="btn btn-primary" style="width:100%" onclick="tryLogin()">Log ind</button>
         <p id="gateError" style="color:#dc2626;font-size:0.9rem;margin-top:0.5rem;min-height:1.2rem"></p>
@@ -186,7 +170,7 @@
 <div id="dashboard">
     <nav class="teacher-nav">
         <div style="display:flex;align-items:center;gap:1rem">
-            <a href="../index.html" class="logo">KU<span>BO</span></a>
+            <a href="/" class="logo">KU<span>BO</span></a>
             <h1>Læreroversigt</h1>
         </div>
         <div class="right">
@@ -264,10 +248,6 @@
     </div>
 </div>
 
-<script src="../static/js/auth.js"></script>
-<script src="../static/js/laerer.js"></script>
+<script src="/static/js/laerer.js"></script>
 </body>
 </html>
-
-
-

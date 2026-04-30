@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Spil</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <script src="../static/js/i18n.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/i18n.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
@@ -13,7 +13,7 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
+            <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
                 <li><a href="../index.html">Forside</a></li>
                 <li class="dropdown">
@@ -95,16 +95,14 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
+        <p style="margin-top:0.5rem;"><a href="/">Tilbage til forsiden</a></p>
     </footer>
 
-    <script src="../static/js/floating-timer.js" defer></script>
+    <script src="/static/js/floating-timer.js" defer></script>
 
     <script>
-        // Puzzles: 0 = given cell, 1-9 = pre-filled
         const PUZZLES = [
             {
-                // Easy - classic Wikipedia puzzle
                 board: [
                     [5,3,0, 0,7,0, 0,0,0],
                     [6,0,0, 1,9,5, 0,0,0],
@@ -129,7 +127,6 @@
                 ]
             },
             {
-                // Medium
                 board: [
                     [0,0,0, 2,6,0, 7,0,1],
                     [6,8,0, 0,7,0, 0,9,0],
@@ -156,7 +153,7 @@
         ];
 
         let currentPuzzle = 0;
-        let inputs = []; // 9x9 array of input elements or null for pre-filled
+        let inputs = [];
 
         function newGame(puzzleIdx) {
             currentPuzzle = puzzleIdx;
@@ -170,35 +167,26 @@
             const board = document.getElementById("sudokuBoard");
             board.innerHTML = "";
             inputs = [];
-
             const puzzle = PUZZLES[currentPuzzle].board;
-
             for (let r = 0; r < 9; r++) {
                 const rowInputs = [];
                 for (let c = 0; c < 9; c++) {
                     const cell = document.createElement("div");
                     cell.className = "sudoku-cell";
-
-                    // Add thick border for 3x3 box separation
                     if (c % 3 === 0 && c > 0) cell.classList.add("box-left");
                     if (r % 3 === 0 && r > 0) cell.classList.add("box-top");
-
                     if (puzzle[r][c] !== 0) {
                         cell.classList.add("prefilled");
                         cell.textContent = puzzle[r][c];
                         rowInputs.push(null);
                     } else {
                         const inp = document.createElement("input");
-                        inp.type = "number";
-                        inp.min = 1;
-                        inp.max = 9;
+                        inp.type = "number"; inp.min = 1; inp.max = 9;
                         inp.className = "sudoku-input";
                         inp.addEventListener("input", () => {
-                            // Clamp to 1-9, single digit
                             let v = parseInt(inp.value);
                             if (isNaN(v) || v < 1) inp.value = "";
                             else if (v > 9) inp.value = String(v).slice(-1);
-                            // Clear feedback styling on edit
                             inp.classList.remove("cell-correct", "cell-wrong");
                         });
                         cell.appendChild(inp);
@@ -213,38 +201,20 @@
         function checkSudoku() {
             const solution = PUZZLES[currentPuzzle].solution;
             const feedback = document.getElementById("sudokuFeedback");
-            let errors = 0;
-            let empty = 0;
-
+            let errors = 0, empty = 0;
             for (let r = 0; r < 9; r++) {
                 for (let c = 0; c < 9; c++) {
                     const inp = inputs[r][c];
-                    if (!inp) continue; // pre-filled
+                    if (!inp) continue;
                     const val = parseInt(inp.value);
-                    if (!val) {
-                        empty++;
-                        inp.classList.remove("cell-correct", "cell-wrong");
-                    } else if (val === solution[r][c]) {
-                        inp.classList.add("cell-correct");
-                        inp.classList.remove("cell-wrong");
-                    } else {
-                        inp.classList.add("cell-wrong");
-                        inp.classList.remove("cell-correct");
-                        errors++;
-                    }
+                    if (!val) { empty++; inp.classList.remove("cell-correct", "cell-wrong"); }
+                    else if (val === solution[r][c]) { inp.classList.add("cell-correct"); inp.classList.remove("cell-wrong"); }
+                    else { inp.classList.add("cell-wrong"); inp.classList.remove("cell-correct"); errors++; }
                 }
             }
-
-            if (empty > 0) {
-                feedback.textContent = `⚠️ ${empty} felter er tomme. Udfyld dem alle og prøv igen.`;
-                feedback.className = "sudoku-feedback feedback-warning";
-            } else if (errors === 0) {
-                feedback.textContent = "✅ Fantastisk! Du har løst Sudokuen korrekt!";
-                feedback.className = "sudoku-feedback feedback-success";
-            } else {
-                feedback.textContent = `❌ ${errors} fejl. De røde felter er forkerte, prøv igen!`;
-                feedback.className = "sudoku-feedback feedback-error";
-            }
+            if (empty > 0) { feedback.textContent = `⚠️ ${empty} felter er tomme. Udfyld dem alle og prøv igen.`; feedback.className = "sudoku-feedback feedback-warning"; }
+            else if (errors === 0) { feedback.textContent = "✅ Fantastisk! Du har løst Sudokuen korrekt!"; feedback.className = "sudoku-feedback feedback-success"; }
+            else { feedback.textContent = `❌ ${errors} fejl. De røde felter er forkerte, prøv igen!`; feedback.className = "sudoku-feedback feedback-error"; }
         }
 
         function solveSudoku() {
@@ -252,11 +222,7 @@
             for (let r = 0; r < 9; r++) {
                 for (let c = 0; c < 9; c++) {
                     const inp = inputs[r][c];
-                    if (inp) {
-                        inp.value = solution[r][c];
-                        inp.classList.add("cell-correct");
-                        inp.classList.remove("cell-wrong");
-                    }
+                    if (inp) { inp.value = solution[r][c]; inp.classList.add("cell-correct"); inp.classList.remove("cell-wrong"); }
                 }
             }
             const feedback = document.getElementById("sudokuFeedback");
@@ -264,13 +230,9 @@
             feedback.className = "sudoku-feedback feedback-hint";
         }
 
-        // Start with easy puzzle on load
         renderBoard();
     </script>
 
-    <script src="../js/navbar.js"></script>
+    <script src="/static/js/navbar.js"></script>
 </body>
 </html>
-
-
-
