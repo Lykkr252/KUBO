@@ -4,19 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Læringsmoduler</title>
-<<<<<<< HEAD:moduler.html
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/static/js/auth.js"></script>
-    <script src="/static/js/i18n.js"></script>
-=======
     <link rel="stylesheet" href="../static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="../static/js/supabase-init.js"></script>
     <script src="../static/js/auth.js"></script>
     <script src="../static/js/i18n.js"></script>
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
 </head>
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
@@ -24,22 +17,21 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-inner">
-<<<<<<< HEAD:moduler.html
-            <a href="/" class="navbar-logo">KU<span>BO</span></a>
-            <ul class="navbar-nav">
-                <li><a href="/">Forside</a></li>
-=======
             <a href="../index.html" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
                 <li><a href="../index.html">Forside</a></li>
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
-                <li><a href="/about">Om os</a></li>
-                <li><a href="/moduler" class="active">Læringsmoduler</a></li>
-                <li><a href="/spil">Spil</a></li>
-                <li><a href="/kalender">Visuel Kalender</a></li>
-                <li><a href="/tidsstyring">Tidsstyring</a></li>
-                <li><a href="/abonnement">Abonnement</a></li>
-                <li><a href="/kontakt">Kontakt</a></li>
+                <li class="dropdown active">
+                    <a class="dropdown-toggle" role="button">Læringsmoduler <span class="dropdown-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="moduler.html">Talblindhedstest</a></li>
+                        <li><a href="spil.html">Spil</a></li>
+                        <li><a href="kalender.html">Visuel Kalender</a></li>
+                        <li><a href="tidsstyring.html">Lagkage Timer</a></li>
+                    </ul>
+                </li>
+                <li><a href="abonnement.html">Abonnement</a></li>
+                <li><a href="about.html">Om os</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
             <div id="navAuthArea" style="display:flex;align-items:center;gap:1rem"></div>
         </div>
@@ -75,11 +67,7 @@
             <div class="section-card" id="klokken">
                 <h2 data-i18n="mod.clock.h2">🕒 Forstå klokken</h2>
                 <p data-i18n="mod.clock.p">Et ur har to visere: en lille viser (timer) og en stor viser (minutter). Se på uret nedenfor og svar på spørgsmålet.</p>
-<<<<<<< HEAD:moduler.html
-                <img src="/static/assets/images/download.png" alt="Et ur der viser klokken 4:30" width="200">
-=======
                 <img src="../static/assets/images/download.png" alt="Et ur der viser klokken 4:30" width="200">
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
                 <form onsubmit="return checkClockAnswer(event)" style="margin-top:1rem;">
                     <p><strong data-i18n="mod.clock.q">Hvad viser uret?</strong></p>
                     <label><input type="radio" name="tid" value="1"> <span data-i18n="mod.clock.opt1">Klokken er 16:00</span></label>
@@ -94,11 +82,7 @@
             <!-- Ur-præference -->
             <div class="section-card">
                 <h3 data-i18n="mod.urpref.h3">Hvilken type ur foretrækker du?</h3>
-<<<<<<< HEAD:moduler.html
-                <img src="/static/assets/images/analogur_1723.png.png" alt="Analogt ur med viserne klokken 17:23" width="300" style="margin-bottom:1rem;">
-=======
                 <img src="../static/assets/images/analogur_1723.png.png" alt="Analogt ur med viserne klokken 17:23" width="300" style="margin-bottom:1rem;">
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
                 <label for="urPref">Foretrækker du digitalt eller analogt ur?</label>
                 <select id="urPref">
                     <option value="">-- Vælg --</option>
@@ -179,11 +163,7 @@
             <div class="section-card" id="vinkelOpgave">
                 <h3 data-i18n="mod.angle.h3">📐 Opgave: Tæl 90-graders vinkler</h3>
                 <p data-i18n="mod.angle.p">Se på figurerne og skriv, hvor mange 90-graders vinkler der er i alt. Fx har en firkant 4 vinkler af 90°.</p>
-<<<<<<< HEAD:moduler.html
-                <img src="/static/assets/images/hvormangefigurehar90grader.png" alt="opgave med optælling af vinkel" width="400">
-=======
                 <img src="../static/assets/images/hvormangefigurehar90grader.png" alt="opgave med optælling af vinkel" width="400">
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
                 <label for="vinkelSvar">Antal 90° vinkler:</label>
                 <input type="number" id="vinkelSvar" placeholder="Skriv dit svar...">
                 <button onclick="checkVinkel()">Tjek svar</button>
@@ -194,11 +174,7 @@
             <div class="section-card" id="gulvOpgave">
                 <h3 data-i18n="mod.floor.h3">🧱 Opgave: Beregn areal og pris for gulvtæppe</h3>
                 <p>Figuren nedenfor viser et gulvareal sammensat af rektangler. Beregn først arealet i m² og derefter prisen for at lægge gulvtæppe, hvis det koster <strong>77 kr pr. m²</strong>.</p>
-<<<<<<< HEAD:moduler.html
-                <img src="/static/assets/images/udregnafarealminus1.png" alt="Sammensat figur af rektangler" width="400">
-=======
                 <img src="../static/assets/images/udregnafarealminus1.png" alt="Sammensat figur af rektangler" width="400">
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
                 <label for="arealSvar">1️⃣ Areal i m²:</label>
                 <input type="number" id="arealSvar" step="0.01" placeholder="Skriv areal...">
                 <label for="prisSvar">2️⃣ Pris i kr:</label>
@@ -220,11 +196,7 @@
             <div class="section-card" id="OmkredsOpgaveNem">
                 <h3>🧮 Opgave: Tæl omkredsen af figuren</h3>
                 <p>Klik på hver kant af figuren for at tælle omkredsen. Hver kasse svarer til 1 meter.</p>
-<<<<<<< HEAD:moduler.html
-                <img src="/static/assets/images/aflæsningsmodelnem.png" alt="Et 6x5 grid hvor nogle felter er udfyldt" width="400">
-=======
                 <img src="../static/assets/images/aflæsningsmodelnem.png" alt="Et 6x5 grid hvor nogle felter er udfyldt" width="400">
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
                 <label for="omkredsSvar"> Omkreds i meter:</label>
                 <input type="number" id="omkredsSvar" step="1" placeholder="Skriv dit svar...">
                 <button onclick="checkOmkreds()">Tjek omkreds</button>
@@ -235,11 +207,7 @@
             <div class="section-card" id="OmkredsOpgaveSvaer">
                 <h3>🧮 Opgave: Tæl omkredsen af figuren (svær)</h3>
                 <p>Klik på hver kant af figuren for at tælle omkredsen. Hver kasse svarer til 1 meter.</p>
-<<<<<<< HEAD:moduler.html
-                <img src="/static/assets/images/aflæsningsmodelsvær.png" alt="Et 6x5 grid hvor nogle felter er udfyldt" width="400">
-=======
                 <img src="../static/assets/images/aflæsningsmodelsvær.png" alt="Et 6x5 grid hvor nogle felter er udfyldt" width="400">
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
                 <label for="omkredsSvar1"> Omkreds i meter:</label>
                 <input type="number" id="omkredsSvar1" step="1" placeholder="Skriv dit svar...">
                 <button onclick="checkOmkreds()">Tjek omkreds</button>
@@ -409,22 +377,13 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-<<<<<<< HEAD:moduler.html
-        <p style="margin-top:0.5rem;"><a href="/">Tilbage til forsiden</a></p>
-    </footer>
-
-    <script src="/static/js/moduler.js" defer></script>
-    <script src="/static/js/floating-timer.js" defer></script>
-    <script src="/static/js/navbar.js"></script>
-=======
         <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
     </footer>
 
     <script src="../static/js/moduler.js" defer></script>
     <script src="../static/js/floating-timer.js" defer></script>
 
-    <script src="../js/navbar.js"></script>
->>>>>>> e531fd0eef6335ee9d49dc917fb960394c5bfc01:templates/moduler.html
+    <script src="../static/js/navbar.js"></script>
 </body>
 </html>
 

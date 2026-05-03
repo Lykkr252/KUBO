@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Kontakt</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script src="/static/js/i18n.js"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="../static/js/i18n.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Spring til indhold</a>
@@ -15,14 +15,19 @@
         <div class="navbar-inner">
             <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="/">Forside</a></li>
-                <li><a href="/about">Om os</a></li>
-                <li><a href="/moduler">Læringsmoduler</a></li>
-                <li><a href="/spil">Spil</a></li>
-                <li><a href="/kalender">Visuel Kalender</a></li>
-                <li><a href="/tidsstyring">Tidsstyring</a></li>
-                <li><a href="/abonnement">Abonnement</a></li>
-                <li><a href="/kontakt" class="active">Kontakt</a></li>
+                <li><a href="../index.html">Forside</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button">Læringsmoduler <span class="dropdown-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="moduler.html">Talblindhedstest</a></li>
+                        <li><a href="spil.html">Spil</a></li>
+                        <li><a href="kalender.html">Visuel Kalender</a></li>
+                        <li><a href="tidsstyring.html">Lagkage Timer</a></li>
+                    </ul>
+                </li>
+                <li><a href="abonnement.html">Abonnement</a></li>
+                <li><a href="about.html">Om os</a></li>
+                <li><a href="kontakt.html" class="active">Kontakt</a></li>
             </ul>
         </div>
     </nav>
@@ -92,10 +97,10 @@
 
     <footer>
         <p>&copy; 2025 <strong>KUBO</strong> — Kalender, Ur, Bog, Organisering</p>
-        <p style="margin-top:0.5rem;"><a href="/">Tilbage til forsiden</a></p>
+        <p style="margin-top:0.5rem;"><a href="../index.html">Tilbage til forsiden</a></p>
     </footer>
 
-    <script src="/static/js/floating-timer.js" defer></script>
-    <script src="/static/js/navbar.js"></script>
+    <script src="../static/js/floating-timer.js" defer></script>
+    <script src="../static/js/navbar.js"></script>
 </body>
 </html>

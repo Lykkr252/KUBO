@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KUBO - Visuel Kalender</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script src="/static/js/auth.js"></script>
-    <script src="/static/js/i18n.js"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="../static/js/auth.js"></script>
+    <script src="../static/js/i18n.js"></script>
 </head>
 
 <body>
@@ -17,14 +17,19 @@
         <div class="navbar-inner">
             <a href="/" class="navbar-logo">KU<span>BO</span></a>
             <ul class="navbar-nav">
-                <li><a href="/">Forside</a></li>
-                <li><a href="/about">Om os</a></li>
-                <li><a href="/moduler">Læringsmoduler</a></li>
-                <li><a href="/spil">Spil</a></li>
-                <li><a href="/kalender" class="active">Visuel Kalender</a></li>
-                <li><a href="/tidsstyring">Tidsstyring</a></li>
-                <li><a href="/abonnement">Abonnement</a></li>
-                <li><a href="/kontakt">Kontakt</a></li>
+                <li><a href="../index.html">Forside</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button">Læringsmoduler <span class="dropdown-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="moduler.html">Talblindhedstest</a></li>
+                        <li><a href="spil.html">Spil</a></li>
+                        <li><a href="kalender.html" class="active">Visuel Kalender</a></li>
+                        <li><a href="tidsstyring.html">Lagkage Timer</a></li>
+                    </ul>
+                </li>
+                <li><a href="abonnement.html">Abonnement</a></li>
+                <li><a href="about.html">Om os</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
             <div id="navAuthArea" style="display:flex;align-items:center;gap:1rem"></div>
         </div>
@@ -151,9 +156,9 @@
         <p style="margin-top:0.5rem;"><a href="/">Tilbage til forsiden</a></p>
     </footer>
 
-    <script src="/static/js/kalender.js" defer></script>
-    <script src="/static/js/floating-timer.js" defer></script>
-    <script src="/static/js/navbar.js"></script>
+    <script src="../static/js/kalender.js" defer></script>
+    <script src="../static/js/floating-timer.js" defer></script>
+    <script src="../static/js/navbar.js"></script>
 </body>
 
 </html>
