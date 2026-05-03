@@ -333,4 +333,4 @@ PORT_NUMBER = 64028
 
 if __name__ == '__main__':
     # CHANGE THIS: Use your assigned Port number!
-    app.run(debug=True)
+    app.run(debug=True, port=PORT_NUMBER)
