@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>KUBO - Log ind</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script src="/static/js/i18n.js"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="../static/js/i18n.js"></script>
 </head>
 
 <body>
@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <script src="/static/js/auth.js" defer></script>
+    <script src="../static/js/auth.js" defer></script>
     <script>
         function switchTab(tab) {
             document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
@@ -89,7 +89,7 @@
             const p = document.getElementById('loginPass').value;
             if (!u || !p) return showMsg('Udfyld alle felter.');
             const ok = await doLogin(u, p);
-            if (ok) window.location.href = "index.html";
+            if (ok) window.location.href = "../index.html";
             else showMsg('Forkert brugernavn eller adgangskode.');
         }
 
@@ -115,7 +115,7 @@
             if (result !== 'ok') return showMsg(result);
             showMsg('Konto oprettet! Logger ind...', 'green');
             await doLogin(u, p);
-            setTimeout(() => window.location.href = "index.html", 800);
+            setTimeout(() => window.location.href = "../index.html", 800);
         }
 
         function showMsg(txt, color = 'red') {
